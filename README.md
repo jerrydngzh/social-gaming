@@ -10,3 +10,6 @@ Try to make every Commit an isolated work item. If you fix a bug in candy.cpp, a
 
 In every commit message, provide a brief overview of the changes you made, and credit any contributors to that commit. For example, a commit message might look like: 
 'Added unit tests for get_username(). Authors: Andy and Mike'
+
+## Team Frobscottle Contributors 
+- Andy 
