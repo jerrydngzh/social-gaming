@@ -23,3 +23,4 @@ In every commit message, provide a brief overview of the changes you made, and c
 - Andy 
 - Mike
 - Chirag
+- Jerry
