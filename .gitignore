@@ -1,0 +1,6 @@
+.DS_STORE
+
+*-build
+
+# temporarily disable gitlab file from pushing to repo
+.gitlab-ci.yml
