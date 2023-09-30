@@ -1,22 +1,21 @@
 cmake_minimum_required(VERSION 3.24)
-project(gaming)
+project(client)
 
 include(FetchContent)
 
 FetchContent_Declare(
     web-socket-networking
     GIT_REPOSITORY https://github.com/nsumner/web-socket-networking.git
-    GIT_TAG master  
+    GIT_TAG 0.2 
 )
 
-FetchContent_MakeAvailable(websocket_networking)
+FetchContent_MakeAvailable(web-socket-networking)
 
-add_subdirectory(web-socket-networking)
-add_executable(gaming main.cpp) # this adds the source file to the project
-target_link_libraries(gaming  web-socket-networking)
+add_executable(client main.cpp) # this adds the source file to the project
+# target_link_libraries(client  web-socket-networking)
 
-set_target_properties(gaming PROPERTIES
-    CXX_STANDARD 17
+set_target_properties(client PROPERTIES
+    CXX_STANDARD 21
     CXX_STANDARD_REQUIRED ON
 )
 
