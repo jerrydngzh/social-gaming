@@ -10,7 +10,6 @@ enum GameType {
 // defined in the project description. Have switched design
 // from inheritance to composition
 class Game {
-    
 public:
     // Pure virtual function, making it an abstract method
     GameType getTypeOfGame() = {
@@ -30,6 +29,7 @@ public:
     // Virtual destructor (important when working with interfaces)
     virtual ~Game() {}
 private:
+
     GameType typeOfGame;
     std::tuple<int, int> playerRange;
     bool hasAudience;
