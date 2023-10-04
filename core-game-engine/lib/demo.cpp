@@ -7,26 +7,25 @@
 
 
 extern "C" {
-TSLanguage* tree_sitter_json();
+  TSLanguage* tree_sitter_socialgaming();
 }
 
-
 int main(int argc, char* argv[]) {
-    // Concatenate all command-line arguments into a single string
-    std::string inputString;
-    for (int i = 1; i < argc; ++i) {
-        inputString += argv[i];
-        if (i < argc - 1) {
-            inputString += ' '; // Add a space between arguments
-        }
+  // Concatenate all command-line arguments into a single string
+  std::string inputString;
+  for (int i = 1; i < argc; ++i) {
+    inputString += argv[i];
+    if (i < argc - 1) {
+      inputString += ' '; // Add a space between arguments
     }
+  }
   // Create a language and parser.
-  ts::Language language = tree_sitter_json();
-  ts::Parser parser{language};
+  ts::Language language = tree_sitter_socialgaming();
+  ts::Parser parser{ language };
 
   // Parse the provided string into a syntax tree.
   std::string sourcecode = "[1, null]";
-  if (argc > 1){
+  if (argc > 1) {
     sourcecode = inputString;
   }
   ts::Tree tree = parser.parseString(sourcecode);

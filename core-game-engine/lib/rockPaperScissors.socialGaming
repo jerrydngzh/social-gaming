@@ -1,4 +1,4 @@
-[configuration, {
+configuration {
   name: "Rock, Paper, Scissors"
   player range: (2, 4)
   audience: false
@@ -9,7 +9,7 @@
       range: (1, 20)
     }
   }
-},
+}
 
 constants {
   weapons: [
@@ -17,16 +17,17 @@ constants {
     { name: "Paper",    beats: "Rock"     },
     { name: "Scissors", beats: "Paper"    },
   ]
-},
+}
+
 variables {
   winners: []
-},
+}
 
 per-player {
   wins: 0
-},
+}
 
-per-audience {},
+per-audience {}
 
 rules {
   for round in configuration.rounds.upfrom(1) {
@@ -66,4 +67,4 @@ rules {
   }
 
   scores ["wins"];
-}]
+}
