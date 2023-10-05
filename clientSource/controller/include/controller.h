@@ -1,4 +1,7 @@
+#pragma once
+
 #include <string>
+#include <memory>
 
 // Spike server code from: https://github.com/nsumner/web-socket-networking
 // in developing endpoints for the controller to backend

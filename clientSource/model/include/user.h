@@ -1,4 +1,9 @@
+#pragma once
+
 #include <string_view>
+
+
+class GameRoom;
 
 class User {
 public:
@@ -12,7 +17,6 @@ private:
     bool isAudience;
     bool isOwner;
 
-    std::unique_ptr<GameRoom> gameRoomPtr;
-
+    int gameRoomCode;
     std::string_view username;
-}
+};

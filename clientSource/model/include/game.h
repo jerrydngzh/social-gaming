@@ -1,7 +1,11 @@
+#pragma once
+
 #include <cstdlib>
 #include <fstream>
+#include <unordered_map>
+#include <memory>
 
-
+// temporary
 enum GameType {
    RockPaperScissors
 };
@@ -11,10 +15,9 @@ enum GameType {
 // from inheritance to composition
 class Game {
 public:
-    // Pure virtual function, making it an abstract method
-    GameType getTypeOfGame() = {
-        return typeOfGame;
-    };
+    
+    // temporary
+    GameType getTypeOfGame();
     
     // Creates Json File to send to server
     // PRE: No arguments (uses the variables it already has to build it)
@@ -22,12 +25,7 @@ public:
     std::ifstream createJsonFile();
 
     // You can also define other non-pure virtual functions with a default implementation
-    virtual std::tuple<int, int> getPlayerRange() {
-        return getPlayerRange;
-    }
-
-    // Virtual destructor (important when working with interfaces)
-    virtual ~Game() {}
+    std::tuple<int, int> getPlayerRange();
 private:
 
     GameType typeOfGame;
@@ -41,6 +39,6 @@ private:
     // this is how a unique point can be definded
     // std::unique_ptr<MyClass> myPtr = std::make_unique<MyClass>(42);
     // TODO: improve on value type (instead of void*)
-    std::unorded_map<std::string_view, std::unique_ptr<void*>> variables;
-    std::unorded_map<std::string_view, std::unique_ptr<void*>> constants;
+    std::unordered_map<std::string_view, std::unique_ptr<void>> variables;
+    std::unordered_map<std::string_view, std::unique_ptr<void>> constants;
 };
