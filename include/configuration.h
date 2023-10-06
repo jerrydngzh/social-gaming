@@ -13,6 +13,6 @@ class Configuration {
         std::string getGameName() const;
         std::tuple<int, int> getPlayer() const;
         bool getHasAudience() const;
-        bool isPlayerCountInRanger() const;
+        bool isPlayerCountInRanger(const int playerCount) const;
 
 };
