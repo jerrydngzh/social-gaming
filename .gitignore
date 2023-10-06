@@ -38,3 +38,5 @@
 
 # VS Code Specifics
 .vscode/
+
+dummy-server-build/
