@@ -15,7 +15,7 @@ Contains all the information regarding players and pre-game setup
 class GameRoom{
 public: 
     void createGameRoom();
-    GameRoom() : gameCode(0) {};
+    // GameRoom() : gameCode(0) {};
 private:
     const int gameCode;
 
