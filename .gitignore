@@ -38,3 +38,6 @@
 
 # VS Code Specifics
 .vscode/
+
+# build directories
+*-build/
