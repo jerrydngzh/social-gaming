@@ -1,4 +1,4 @@
-#include "../include/game.h"
+#include "include/game.h"
 
 GameType Game::getTypeOfGame() { 
     return GameType::RockPaperScissors;

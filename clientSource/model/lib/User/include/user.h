@@ -8,9 +8,10 @@ class GameRoom;
 class User {
 public:
     bool getIsPlayer();
-    bool getAudience();
-    bool getOwner();
-    User();
+    bool getIsAudience();
+    bool getIsOwner();
+    User(std::string_view username1,bool isPlayerr1,bool isAudience1,bool isOwner1,int code1);
+    std::string_view getUserName();
 
 private:
     bool isPlayer;
