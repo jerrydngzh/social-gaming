@@ -12,15 +12,6 @@ project(client)
 
 # FetchContent_MakeAvailable(web-socket-networking)
 
-# add_subdirectory(model)
-
-# add_executable(client main.cpp) # this adds the source file to the project
-
-# set_target_properties(client PROPERTIES
-#     CXX_STANDARD 17
-#     CXX_STANDARD_REQUIRED ON
-# )
-
 add_subdirectory(model/lib/Game)
 add_subdirectory(model/lib/GameRoom)
 add_subdirectory(model/lib/User)
@@ -40,14 +31,5 @@ set_target_properties(client PROPERTIES
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 
-
-
-# target_link_libraries(client  web-socket-networking)
-
-
-# may need to use these commands 
-# target_include_directories(gaming web-socket-networking/lib/networking/include)
-# add_subdirectory(web-socket-networking/lib/networking/src)
-# target_link_libraries(gaming single-threaded-web-socket-networking)
 
 
