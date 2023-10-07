@@ -2,7 +2,7 @@
 #include <memory>
 // #include "game.h"
 // #include "gameroom.h"
-#include "user.h"
+#include "model/lib/User/include/user.h"
 
 /* TODO:
     1. Main entry point UI:
@@ -27,7 +27,6 @@ int main() {
     std::cout << "Is Player: " << newUser.getIsPlayer() << std::endl;
     std::cout << "Is Audience: " << newUser.getIsAudience() << std::endl;
     std::cout << "Is Owner: " << newUser.getIsOwner() << std::endl;
-
 }
 
 
