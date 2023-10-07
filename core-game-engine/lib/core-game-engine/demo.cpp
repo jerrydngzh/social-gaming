@@ -5,6 +5,7 @@
 #include <iostream>
 #include "treeParser.h"
 #include "util.h"
+#include "configuration.h"
 
 #include <cpp-tree-sitter.h>
 
