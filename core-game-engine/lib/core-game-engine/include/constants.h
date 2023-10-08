@@ -3,6 +3,8 @@
 #include <string>
 #include <cpp-tree-sitter.h>
 
+
+// Handles the constants section of the Game file
 class Constants {
     private:
         ts::Node node;

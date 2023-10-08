@@ -3,6 +3,8 @@
 #include <string>
 #include <cpp-tree-sitter.h>
 
+
+// Handles the rules section of the Game file
 class Rules {
     private:
         ts::Node node;

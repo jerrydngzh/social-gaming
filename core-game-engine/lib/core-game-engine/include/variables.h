@@ -3,6 +3,8 @@
 #include <string>
 #include <cpp-tree-sitter.h>
 
+
+// Handles the variables section of the Game file
 class Variables {
     private:
         ts::Node node;

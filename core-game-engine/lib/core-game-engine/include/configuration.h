@@ -4,6 +4,8 @@
 #include <tuple>
 #include <cpp-tree-sitter.h>
 
+
+// Handles the configuration section of the Game file
 class Configuration {
     private:
         ts::Node node;

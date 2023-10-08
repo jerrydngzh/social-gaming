@@ -3,6 +3,8 @@
 #include <string>
 #include <cpp-tree-sitter.h>
 
+
+// Handles the per_audience section of the Game file
 class PerAudience {
     private:
         ts::Node node;

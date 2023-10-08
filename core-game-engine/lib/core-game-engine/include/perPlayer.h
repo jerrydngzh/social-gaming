@@ -3,6 +3,8 @@
 #include <string>
 #include <cpp-tree-sitter.h>
 
+
+// Handles the per_player section of the Game file
 class PerPlayer {
     private:
         ts::Node node;
