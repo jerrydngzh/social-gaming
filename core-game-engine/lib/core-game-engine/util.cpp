@@ -20,6 +20,7 @@ std::string parseGAMEFromFile(const std::string& filename){
     std::ostringstream buffer;
     buffer << file.rdbuf();
     std::string fileContents = buffer.str();
+
     return fileContents;
 }
 

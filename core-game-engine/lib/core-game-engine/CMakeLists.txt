@@ -11,7 +11,7 @@ include(cmake/CPM.cmake)
 CPMAddPackage(
   NAME cpp-tree-sitter
   GIT_REPOSITORY https://github.com/nsumner/cpp-tree-sitter.git
-  GIT_TAG v0.0.1
+  GIT_TAG v0.0.2
 )
 
 # Downloads a tree-sitter grammar from github and makes it available as a
@@ -29,24 +29,29 @@ add_grammar_from_repo(tree-sitter-sg                        # Defines the librar
 )
 
 
-# Use the library in a demo program.
-add_executable(demo)
-target_sources(demo
+# Use the library in a main program.
+add_executable(main)
+target_sources(main
   PRIVATE
-    demo.cpp
     configuration.cpp
+    constants.cpp
+    main.cpp
+    perAudience.cpp
+    perPlayer.cpp
+    rules.cpp
     treeParser.cpp
     util.cpp
+    variables.cpp
 )
 
-target_link_libraries(demo
+target_link_libraries(main
   tree-sitter-json
   tree-sitter-sg
   cpp-tree-sitter
 )
 
 #include header
-target_include_directories(demo
+target_include_directories(main
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PRIVATE
@@ -54,6 +59,6 @@ target_include_directories(demo
   ${tree-sitter-sg_SOURCE_DIR} # This points to the include directory of tree-sitter-json
 )
 
-install(TARGETS demo PUBLIC_HEADER
+install(TARGETS main PUBLIC_HEADER
   DESTINATION ${PROJECT_BINARY_DIR}/bin
 )
