@@ -4,34 +4,6 @@
 
 ROOT_DIR := $(pwd)
 
-#******************************
-#		MESSAGE (TEST)
-#******************************
-
-MESSAGE_DIR := message
-MESSAGE_BUILD_DIR := message-build
-
-# [INFO]: 
-#	1. Creates new directory
-#   2. Runs cmake
-#	3. Builds the application by calling nested makefile
-build-message:
-	@echo "[INFO] Running CMake on 'message'" ; \
-	rm -rf $(MESSAGE_BUILD_DIR) ; \
-	mkdir $(MESSAGE_BUILD_DIR) ; \
-	cd $(MESSAGE_BUILD_DIR) && cmake ../$(MESSAGE_DIR)
-
-
-# Compiles the C++ code for the project
-compile-message:
-	@echo "[INFO] Running Build on 'message'" ; \
-	$(MAKE) -C $(MESSAGE_BUILD_DIR) --silent
-
-
-# [INFO]: Run the Test Suite for 'message'
-test-message:
-	@cd $(MESSAGE_BUILD_DIR) && test/runAllTests
-
 
 #******************************
 #	CORE GAME ENGINE (TEST)

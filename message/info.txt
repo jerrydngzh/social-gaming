@@ -1,3 +1,0 @@
-This directory is used for testing only, it is not part of our implementation 
-but just to demo a rough directory infrastructure to use with some automation to
-speed up development
