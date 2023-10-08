@@ -4,15 +4,14 @@
 
 ROOT_DIR := $(pwd)
 
-
 #******************************
-#	CORE GAME ENGINE (TEST)
+#	   CORE GAME ENGINE
 #******************************
 
 CORE_GAME_ENGINE_DIR := core-game-engine
 CORE_GAME_ENGINE_BUILD_DIR := core-game-engine-build
 
-# Creates Build directory and runs cmake to set up the project
+# Creates directory and runs cmake to build the project
 build-core-game-engine:
 	@echo "[INFO] Building 'core-game-engine'" ; \
 	rm -rf $(CORE_GAME_ENGINE_BUILD_DIR) ; \
@@ -58,7 +57,6 @@ help:
 # [INFO]: Removes Build Directories
 clean: 
 	@echo "[INFO] Removing Build Directories..." ; \
-	rm -rf $(MESSAGE_BUILD_DIR) ; \
 	rm -rf $(CORE_GAME_ENGINE_BUILD_DIR)
 
 
