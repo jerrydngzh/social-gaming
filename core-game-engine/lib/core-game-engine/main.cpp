@@ -38,21 +38,12 @@ int main(int argc, char* argv[]) {
     ts::Node perAudienceNode = root.getChildByFieldName("per_audience");
     ts::Node rulesNode = root.getChildByFieldName("rules");
     
+    
+    // Create Objects for each of the game sections
     Configuration configurationLibrary(configurationNode);
-    // std::cout << configurationLibrary.getContents(fileContents) << std::endl;
-
     Constants constantsLibrary(constantsNode);
-    // std::cout << constantsLibrary.getContents(fileContents) << std::endl;
-
     PerAudience perAudienceLibrary(perAudienceNode);
-    // std::cout << perAudienceLibrary.getContents(fileContents) << std::endl;
-
     PerPlayer perPlayerLibrary(perPlayerNode);
-    // std::cout << perPlayerLibrary.getContents(fileContents) << std::endl;
-
     Rules rulesLibrary(rulesNode, 10);
-    // std::cout << rulesLibrary.getContents(fileContents) << std::endl;
-
     Variables variablesLibrary(variablesNode);
-    // std::cout << variablesLibrary.getContents(fileContents) << std::endl;
 }
