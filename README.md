@@ -1,5 +1,15 @@
 # Social Gaming
 
+### Makefile (Automation)
+* The following commands can be executed from the root directory
+
+|            Command             |                                                                   Description                                                                  |
+|--------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| `make build-core-game-engine`  | <br>1. Creates a new build directory <br>2. Runs cmake <br><br>                                             |
+| `make compile-core-game-engine`| <br>1. Compiles the `core-game-engine` .cpp files<br><br>
+|  `make run-core-game-engine`   | <br>1. Executes the `core-game-engine` using `main` binary<br>2. Currently configured to use `rock-paper-scissors.game` copied into `game-files` during the build<br><br> |
+| `make clean`                   | <br>1. removes all the build directories<br>                                                                                                           |
+
 ## Git Development 
 ### Git Setup
 Make sure to 
