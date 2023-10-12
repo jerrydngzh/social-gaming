@@ -15,7 +15,7 @@ public:
     void createGameRoom();
     // GameRoom() : gameCode(0) {};
 private:
-    const int gameCode;
+    int gameCode;
 
     // A GameRoom has-a Game (composition)
     std::unique_ptr<Game> game;
