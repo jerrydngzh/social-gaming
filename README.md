@@ -25,6 +25,8 @@ Before making a merge request to `master`, make sure to merge in remote master t
 
 This is to ensure there are no merge conflicts when trying to merge into master! 
 
+## Running Client
+When running the client and prompted to enter the name of the game configuration file, enter `../docs/rock-paper-scissors.game`. This file can be found in the docs folder at the root of the repository. 
 
 ## Team Frobscottle Contributors 
 - Andy 
