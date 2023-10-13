@@ -60,16 +60,24 @@ class Configuration {
 
 
 private:
+    const std::string_view gameFile;
     ts::Node node;
     std::string gameName;
     std::tuple<int, int> players;
     bool hasAudience;
     std::vector<Setting> settings; //setup up stage from nick's requirements
 public:
-    Configuration(const ts::Node& node);
+    static const std::string GAME_NAME_FIELD;
+    static const std::string PLAYERS_FIELD;
+    static const std::string AUDIENCE_FIELD;
+    static const std::string SETUP_FIELD;
+
+    Configuration(const ts::Node& node, const std::string_view& gameFile);
     ~Configuration();
     ts::Node getNode() const;
+    void parsePlayers(const std::string_view& playersString);
     std::string_view getContents(const std::string_view& gameFile) const;
+    std::string_view getGameFile() const;
     std::string getGameName() const;
     std::tuple<int, int> getPlayer() const;
     bool getHasAudience() const;
