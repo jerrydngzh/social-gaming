@@ -51,5 +51,15 @@ Client plays rock paper scissors
 
 
 # Build 
-g++ -o main main.cpp
+g++ -Wall -Wextra -o main main.cpp
 ./main
+
+## Andy's Dev Notes 
+Join 
+- user input works
+- draw works
+- when draw does not work, issue.
+
+
+Create leads to server and client processing, then an error
+libc++abi: terminating due to uncaught exception of type std::out_of_range: basic_string

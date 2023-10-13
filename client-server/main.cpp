@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <sstream>
 
 /* Class */
 class DummyServer {
@@ -17,7 +18,9 @@ public:
         } else {
             
             if (message_from_client == "create") {
-                message_for_client = "game_code " + std::to_string(generateGameCode());
+                int game_code = generateGameCode();
+                std::string game_code_string = std::to_string(game_code);
+                message_for_client = "game_code " + game_code_string;
             }
             
             if (message_from_client == "join") {
@@ -94,13 +97,15 @@ private:
         std::string result = gameResult(p1, p2);
         if (result == "draw") {
             std::string server_message = "";
-            server_message = "Player1 Hand: " + p1 + " | Player2 Hand: " + p2 + "\n";
+            server_message = "game_instruction ";
+            server_message += "Player1 Hand: " + p1 + " | Player2 Hand: " + p2 + "\n";
             server_message += "Draw! Enter rock, paper, or scissors";
             return server_message; 
         } else {
             std::string server_message = "";
-            server_message = "Player1 Hand: " + p1 + " | Player2 Hand: " + p2 + "\n";
-            server_message = "Winner! " + result + "\n";
+            server_message = "game_over ";
+            server_message += "Player1 Hand: " + p1 + " | Player2 Hand: " + p2 + "\n";
+            server_message += "Winner! " + result + "\n";
             return server_message;
         }
     }
@@ -141,15 +146,20 @@ public:
         if (message_from_server == "") {
             // do nothing 
         } else {
-            std::string prefix = "game_code";
-            bool startsWithCode =  message_from_server.compare(0, prefix.length(), prefix) == 0;
-            
-            if (startsWithCode) {
+            std::string prefix_command = ""; 
+            prefix_command = get_string_prefix(message_from_server);
+
+            if(prefix_command == "game_code") {
                 run_game_code();
-            }else{
+            } else if (prefix_command == "game_instruction") {
+                // print game instructions 
                 run_game_instruction();
-                // get game input
-                message_for_server = "rock";
+                // Getting User Move 
+                std::cin >> message_for_server;
+            } else if (prefix_command == "game_over") {
+                std::cout << message_from_server << "\n";
+                // then exits program
+                exit(0);
             }
         }
     }
@@ -164,18 +174,26 @@ public:
         return message_for_server;
     }
 
-    void run_game_code(){
+    std::string get_string_prefix(const std::string& message) {
+        std::istringstream iss(message); 
+        std::string prefix;
+        iss >> prefix; 
+        return prefix;
+    }
 
-        //parses game code from the string
-        std::string prefix = "game_code ";
-        size_t prefixPosition = message_from_server.find(prefix);
+    void run_game_code() {
+        std::istringstream iss(message_from_server);
+        std::string firstWord, secondWord;
         
-        std::string code = "";
-        if(prefixPosition != std::string::npos) {
-            code = message_for_server.substr(prefixPosition + prefix.length());
-        }
+        // Extract the first word
+        iss >> firstWord;
+        
+        // Extract the second word
+        iss >> secondWord;
+        
+        std::string game_code = secondWord;
 
-        std::cout << "The game code is " << code << "\n";
+        std::cout << "The game code is " << game_code << "\n";
 
         std::cout << "Join Game?: yes | no : "; 
         
@@ -184,14 +202,9 @@ public:
 
         if (user_choice == "yes") {
             message_for_server = "join";
-            // std::cout << "Enter the game code";        
-            // std::string user_choice; 
-            // std::cin >> user_choice;
-        } else if (user_choice == "no") {
+        } else {
             exit(0);
         }
-        
-
     }
 
     void run_game_instruction() {
@@ -210,25 +223,6 @@ public:
 
         std::cout << game_instruction << "\n";
     }
-
-    // process 
-        // server_command = first string of server_message 
-        // if server_command == game_code 
-            // run_game_code()
-        // else 
-            // run_game_instructions()
-
-    // run_game_code 
-        // display game_code text
-        // prompt user to join game or no 
-        // if user chooses yes 
-            // get gamecode from user 
-            // send gamecode to server
-        // if user says no
-            // exit
-    
-    // run_game_instruction
-        // display game_instructions text
 
 private:
     std::string message_for_server; // join, create.
