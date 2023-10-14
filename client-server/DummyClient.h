@@ -9,15 +9,20 @@
 class DummyClient {
 public:
     DummyClient();
-    bool create_or_join_game();
+    std::string createOrJoinGame();
+
     void process();
-    void read_message(std::string message);
-    std::string write_message();
-    std::string get_string_prefix(const std::string& message);
-    void run_game_code();
-    void run_game_instruction();
+    void getMessage(std::string message);
+    std::string setMessage();
+    std::string getStringPrefix(const std::string& message);
+    void runGameCode();
+    void runGameInstruction();
+
+    bool getConnectionStatus() const;
 
 private:
-    std::string message_for_server;
-    std::string message_from_server;
+    std::string messageForServer;
+    std::string messageFromServer;
+
+    bool connectionStatus = true;
 };

@@ -5,69 +5,62 @@
 #include "DummyClient.h"
 
 DummyClient::DummyClient() {
-    bool choice = create_or_join_game();
-    if (choice) {
-        message_for_server = "create";
-    } else {
-        message_for_server = "join";
-    }
+    messageForServer = createOrJoinGame();
 }
 
-bool DummyClient::create_or_join_game() {
+std::string DummyClient::createOrJoinGame() {
     std::cout << "create or join game?: create | join : ";
 
-    std::string user_choice;
-    std::cin >> user_choice;
+    // implemented without user input validation. 
 
-    if (user_choice == "create") {
-        return true;
-    }
+    std::string userChoice;
+    std::cin >> userChoice;
 
-    return false;
+    return userChoice;
 }
 
 void DummyClient::process() {
     // Simulate client processing
     std::cout << "Client processing..." << std::endl;
 
-    if (message_from_server == "") {
+    if (messageFromServer == "") {
         // do nothing
     } else {
-        std::string prefix_command = "";
-        prefix_command = get_string_prefix(message_from_server);
+        std::string prefixCommand = "";
+        prefixCommand = getStringPrefix(messageFromServer);
 
-        if (prefix_command == "game_code") {
-            run_game_code();
-        } else if (prefix_command == "game_instruction") {
+        if (prefixCommand == "game_code") {
+            runGameCode();
+        } else if (prefixCommand == "game_instruction") {
             // print game instructions
-            run_game_instruction();
+            runGameInstruction();
             // Getting User Move
-            std::cin >> message_for_server;
-        } else if (prefix_command == "game_over") {
-            std::cout << message_from_server << "\n";
+            std::cin >> messageForServer;
+        } else if (prefixCommand == "game_over") {
+            std::cout << messageFromServer << "\n";
             // then exits program
-            exit(0);
+            connectionStatus = false;
         }
     }
 }
 
-void DummyClient::read_message(std::string message) {
-    message_from_server = message;
+void DummyClient::getMessage(std::string message) {
+    messageFromServer = message;
 }
 
-std::string DummyClient::write_message() {
-    return message_for_server;
+std::string DummyClient::setMessage() {
+    return messageForServer;
 }
 
-std::string DummyClient::get_string_prefix(const std::string& message) {
-    std::istringstream iss(message);
+std::string DummyClient::getStringPrefix(const std::string& message) {
+    std::istringstream iss(message); 
     std::string prefix;
     iss >> prefix;
     return prefix;
 }
 
-void DummyClient::run_game_code() {
-    std::istringstream iss(message_from_server);
+void DummyClient::runGameCode() {
+    std::istringstream iss(messageFromServer);
     std::string firstWord, secondWord;
     
     // Extract the first word
@@ -76,35 +69,39 @@ void DummyClient::run_game_code() {
     // Extract the second word
     iss >> secondWord;
     
-    std::string game_code = secondWord;
+    std::string gameCode = secondWord;
 
-    std::cout << "The game code is " << game_code << "\n";
+    std::cout << "The game code is " << gameCode << "\n";
 
     std::cout << "Join Game?: yes | no : "; 
     
-    std::string user_choice; 
-    std::cin >> user_choice;
+    std::string userChoice; 
+    std::cin >> userChoice;
 
-    if (user_choice == "yes") {
-        message_for_server = "join";
+    if (userChoice == "yes") {
+        messageForServer = "join";
     } else {
-        exit(0);
+        connectionStatus = false;
     }
 }
 
-void DummyClient::run_game_instruction() {
-    std::string game_instruction = "";
+void DummyClient::runGameInstruction() {
+    std::string gameInstruction = "";
 
     // Find the position of the first space
-    size_t firstSpacePos = message_from_server.find(' ');
+    size_t firstSpacePos = messageFromServer.find(' ');
 
     if (firstSpacePos != std::string::npos) {
         // Remove the first word
-        game_instruction = message_from_server.substr(firstSpacePos + 1);
+        gameInstruction = messageFromServer.substr(firstSpacePos + 1);
     } else {
         // Handle the case when there are no spaces in the string
-        game_instruction = "";
+        gameInstruction = "";
     }
 
-    std::cout << game_instruction << "\n";
+    std::cout << gameInstruction << "\n";
+}
+
+bool DummyClient::getConnectionStatus() const {
+    return connectionStatus;
 }
