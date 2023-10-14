@@ -51,7 +51,7 @@ Client plays rock paper scissors
 
 
 # Build 
-g++ -Wall -Wextra -o main main.cpp
+g++ -Wall -Wextra -o main main.cpp DummyClient.cpp
 ./main
 
 ## Andy's Dev Notes 
