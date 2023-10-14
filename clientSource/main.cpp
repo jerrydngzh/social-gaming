@@ -2,8 +2,8 @@
 #include <memory>
 // #include "model/lib/Game/include/game.h"
 // #include "model/lib/GameRoom/include/gameroom.h"
-#include "model/lib/User/include/user.h"
-#include "model/lib/SocialGameFileHandler/include/socialgamefilehandler.h"
+#include "user.h"
+// #include "model/lib/SocialGameFileHandler/include/socialgamefilehandler.h"
 #include <fstream>
 
 /* TODO:
@@ -53,16 +53,16 @@ int main()
     std::cout << "Is Owner: " << newUser.getIsOwner() << std::endl;
 
     std::cout << "Would you like to join or create a game? (type 'join' or 'create'): ";
-    std::string userInput;
-    std::cin >> userInput;
-    if (userInput == "join")
-    {
-        joinGame();
-    }
-    else
-    {
-        SocialGameFileHandler gameFile;
-        int newCode = requestFromServer("give me an invite code lol");
-        std::cout << newCode;
-    }
+    // std::string userInput;
+    // std::cin >> userInput;
+    // if (userInput == "join")
+    // {
+    //     joinGame();
+    // }
+    // else
+    // {
+    //     SocialGameFileHandler gameFile;
+    //     int newCode = requestFromServer("give me an invite code lol");
+    //     std::cout << newCode;
+    // }
 }
