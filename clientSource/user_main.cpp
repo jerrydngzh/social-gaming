@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
-// #include "model/lib/Game/include/game.h"
-// #include "model/lib/GameRoom/include/gameroom.h"
+#include "game.h"
+#include "gameroom.h"
 #include "user.h"
 // #include "model/lib/SocialGameFileHandler/include/socialgamefilehandler.h"
 #include <fstream>

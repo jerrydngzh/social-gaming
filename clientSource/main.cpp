@@ -231,7 +231,7 @@ private:
 };
 
 int main() {
-    DummyClient client;
+    User client;
     DummyServer server;
 
     std::string client_mailbox = "";
