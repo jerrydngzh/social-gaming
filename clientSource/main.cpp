@@ -1,68 +1,36 @@
 #include <iostream>
-#include <memory>
-// #include "model/lib/Game/include/game.h"
-// #include "model/lib/GameRoom/include/gameroom.h"
-#include "model/lib/User/include/user.h"
-#include "model/lib/SocialGameFileHandler/include/socialgamefilehandler.h"
-#include <fstream>
+#include <string>
+#include <cstdlib>
+#include <sstream>
+#include <ctime>
 
-/* TODO:
-    1. Main entry point UI:
-        a. join game (1 flow)
-            - generates an individual
-            - input a game code (random string for now)
-        b. create game (1 flow)
-            - upload a file
-            - generates a "main" display for the game
-            - generates join code
-*/
+#include "client.h"
+#include "dummyserver.h"
 
-// dummy server functions:
-void sendCodeToServer(const int inputCode)
-{
-    std::cout << inputCode << std::endl;
-}
+int main() {
+    Client client;
+    DummyServer server;
 
-int requestFromServer(const std::string request)
-{
-    std::cout << request << std::endl;
-    int newCode = 12345;
-    return newCode;
-}
+    std::string clientMailbox = "";
+    std::string serverMailbox = "";
 
-// Prompts user to input game code and "sends" it to the server
-void joinGame() {
-        std::cout << "Enter the game invite code: ";
-        int inputCode;
-        std::cin >> inputCode;
-        sendCodeToServer(inputCode);
-}
+    bool clientConnected = true;
 
-int main()
-{
+    while (clientConnected) {
+        server.process();
+        clientMailbox = server.setMessage(); // game_instruction user input rock paper or scissors.
 
-    // User user;
-    std::cout << "Hello World\n";
+        client.getMessage(clientMailbox);
+        client.process();
 
-    // TODO: Commented code out as currently running into library not found error for user
-    User newUser("Bob", true, false, true, 123);
+        clientConnected = client.getConnectionStatus();
+        if (clientConnected == false) {
+            break;
+        }
 
-    std::cout << "Username: " << newUser.getUserName() << std::endl;
-    std::cout << "Is Player: " << newUser.getIsPlayer() << std::endl;
-    std::cout << "Is Audience: " << newUser.getIsAudience() << std::endl;
-    std::cout << "Is Owner: " << newUser.getIsOwner() << std::endl;
-
-    std::cout << "Would you like to join or create a game? (type 'join' or 'create'): ";
-    std::string userInput;
-    std::cin >> userInput;
-    if (userInput == "join")
-    {
-        joinGame();
+        serverMailbox = client.setMessage(); // join, create
+        server.getMessage(serverMailbox);
     }
-    else
-    {
-        SocialGameFileHandler gameFile;
-        int newCode = requestFromServer("give me an invite code lol");
-        std::cout << newCode;
-    }
+
+    return 0;
 }
