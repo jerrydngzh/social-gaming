@@ -5,15 +5,15 @@
 
 class GameRoom;
 
-class User {
+class Client {
 public:
-    User();
-    User(std::string_view username1, bool isPlayerr1, bool isAudience1, bool isOwner1, int code1);
+    Client();
+    Client(std::string_view Clientname1, bool isPlayerr1, bool isAudience1, bool isOwner1, int code1);
 
     bool getIsPlayer();
     bool getIsAudience();
     bool getIsOwner();
-    std::string_view getUserName();
+    std::string_view getClientName();
     std::string createOrJoinGame();
 
     void process();
@@ -31,7 +31,7 @@ private:
     bool isOwner;
 
     int gameRoomCode;
-    std::string_view username; 
+    std::string_view Clientname; 
     std::string messageForServer;
     std::string messageFromServer;
 

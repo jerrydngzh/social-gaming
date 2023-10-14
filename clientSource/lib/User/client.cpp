@@ -1,45 +1,45 @@
-#include "include/user.h"
+#include "include/client.h"
 
 #include <iostream>
 #include <string>
 #include <cstdlib>
 #include <sstream>
 
-User::User(std::string_view username1, bool isPlayer1, bool isAudience1, bool isOwner1, int code1)
-    : username(username1), isPlayer(isPlayer1), isAudience(isAudience1), isOwner(isOwner1), gameRoomCode(code1) {}
+Client::Client(std::string_view Clientname1, bool isPlayer1, bool isAudience1, bool isOwner1, int code1)
+    : Clientname(Clientname1), isPlayer(isPlayer1), isAudience(isAudience1), isOwner(isOwner1), gameRoomCode(code1) {}
 
-User::User() {
+Client::Client() {
     messageForServer = createOrJoinGame();
 }
 
-bool User::getIsPlayer() {
+bool Client::getIsPlayer() {
     return isPlayer;
 }
 
-bool User::getIsAudience() {
+bool Client::getIsAudience() {
     return isAudience;
 }
 
-bool User::getIsOwner() {
+bool Client::getIsOwner() {
     return isAudience;
 }
 
-std::string_view User::getUserName(){
-    return username;
+std::string_view Client::getClientName(){
+    return Clientname;
 }
 
-std::string User::createOrJoinGame() {
+std::string Client::createOrJoinGame() {
     std::cout << "create or join game?: create | join : ";
 
-    // implemented without user input validation. 
+    // implemented without Client input validation. 
 
-    std::string userChoice;
-    std::cin >> userChoice;
+    std::string ClientChoice;
+    std::cin >> ClientChoice;
 
-    return userChoice;
+    return ClientChoice;
 }
 
-void User::process() {
+void Client::process() {
     // Simulate client processing
     std::cout << "Client processing..." << std::endl;
 
@@ -54,7 +54,7 @@ void User::process() {
         } else if (prefixCommand == "game_instruction") {
             // print game instructions
             runGameInstruction();
-            // Getting User Move
+            // Getting Client Move
             std::cin >> messageForServer;
         } else if (prefixCommand == "game_over") {
             std::cout << messageFromServer << "\n";
@@ -64,22 +64,22 @@ void User::process() {
     }
 }
 
-void User::getMessage(std::string message) {
+void Client::getMessage(std::string message) {
     messageFromServer = message;
 }
 
-std::string User::setMessage() {
+std::string Client::setMessage() {
     return messageForServer;
 }
 
-std::string User::getStringPrefix(const std::string& message) {
+std::string Client::getStringPrefix(const std::string& message) {
     std::istringstream iss(message); 
     std::string prefix;
     iss >> prefix;
     return prefix;
 }
 
-void User::runGameCode() {
+void Client::runGameCode() {
     std::istringstream iss(messageFromServer);
     std::string firstWord, secondWord;
     
@@ -95,17 +95,17 @@ void User::runGameCode() {
 
     std::cout << "Join Game?: yes | no : "; 
     
-    std::string userChoice; 
-    std::cin >> userChoice;
+    std::string ClientChoice; 
+    std::cin >> ClientChoice;
 
-    if (userChoice == "yes") {
+    if (ClientChoice == "yes") {
         messageForServer = "join";
     } else {
         connectionStatus = false;
     }
 }
 
-void User::runGameInstruction() {
+void Client::runGameInstruction() {
     std::string gameInstruction = "";
 
     // Find the position of the first space
@@ -122,6 +122,6 @@ void User::runGameInstruction() {
     std::cout << gameInstruction << "\n";
 }
 
-bool User::getConnectionStatus() const {
+bool Client::getConnectionStatus() const {
     return connectionStatus;
 }

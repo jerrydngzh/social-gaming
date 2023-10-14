@@ -4,11 +4,11 @@
 #include <sstream>
 #include <ctime>
 
-#include "user.h"
+#include "client.h"
 #include "dummyserver.h"
 
 int main() {
-    User client;
+    Client client;
     DummyServer server;
 
     std::string clientMailbox = "";

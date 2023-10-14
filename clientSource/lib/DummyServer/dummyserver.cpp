@@ -9,13 +9,13 @@ std::string enumToString(RPS rockPaperScissors) {
     switch (rockPaperScissors)
     {
     case ROCK:
-        return "rock";
+        return "Rock";
     case PAPER:
-        return "paper";
+        return "Paper";
     case SCISSORS:
-        return "scissors";
+        return "Scissors";
     }
-    return "rock";
+    return "Rock";
 }
 
 DummyServer::DummyServer(){};
