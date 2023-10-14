@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <sstream>
 
-#include "DummyClient.h"
+#include "user.h"
 
 /* Class */
 class DummyServer {
@@ -118,7 +118,7 @@ private:
 
 
 int main() {
-    DummyClient client;
+    User client;
     DummyServer server;
 
     std::string clientMailbox = "";

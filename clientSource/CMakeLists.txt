@@ -12,11 +12,11 @@ project(client)
 
 # FetchContent_MakeAvailable(web-socket-networking)
 
-add_subdirectory(model/lib/Game)
-add_subdirectory(model/lib/GameRoom)
-add_subdirectory(model/lib/User)
-add_subdirectory(model/lib/SocialGameFileHandler)
-add_subdirectory(model/lib/DummyServer)
+add_subdirectory(lib/Game)
+add_subdirectory(lib/GameRoom)
+add_subdirectory(lib/User)
+add_subdirectory(lib/SocialGameFileHandler)
+add_subdirectory(lib/DummyServer)
 
 add_executable(client main.cpp) # this adds the source file to the project
 
@@ -25,7 +25,6 @@ target_link_libraries(client game)
 target_link_libraries(client user)
 target_link_libraries(client socialgamefilehandler)
 target_link_libraries(client dummyserver)
-
 
 
 set_target_properties(client PROPERTIES
