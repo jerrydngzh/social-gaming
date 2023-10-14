@@ -1,9 +1,22 @@
-#include "dummyserver.h"
+#include "include/dummyserver.h"
 #include <iostream>
 #include <string>
 #include <cstdlib>
 #include <sstream>
 #include <ctime>
+
+std::string enumToString(RPS rockPaperScissors) {
+    switch (rockPaperScissors)
+    {
+    case ROCK:
+        return "rock";
+    case PAPER:
+        return "paper";
+    case SCISSORS:
+        return "scissors";
+    }
+    return "rock";
+}
 
 DummyServer::DummyServer(){};
 
@@ -18,7 +31,6 @@ void DummyServer::process()
     }
     else
     {
-
         if (messageFromClient == "create")
         {
             int gameCode = generateGameCode();
@@ -53,20 +65,20 @@ std::string DummyServer::setMessage()
 // PRIVATE METHODS
 
 // pick a random move for the server as an "AI" opponent
-std::string DummyServer::randomMove()
+RPS DummyServer::randomMove()
 {
     int random = std::rand() % 3;
     switch (random)
     {
     case 0:
-        return "rock";
+        return ROCK;
     case 1:
-        return "paper";
+        return PAPER;
     case 2:
-        return "scissors";
+        return SCISSORS;
     }
     // default in case random doesn't work
-    return "rock";
+    return ROCK;
 }
 
 // generates a game code
@@ -78,33 +90,33 @@ int DummyServer::generateGameCode()
 }
 
 // takes the two moves, plays rps, and returns the winner
-std::string DummyServer::gameResult(std::string player1Move, std::string player2Move)
+std::string DummyServer::gameResult(std::string player1Move, RPS player2Move)
 {
-    if (player1Move == player2Move)
+    if (player1Move == enumToString(player2Move))
     {
         return "draw";
     }
-    if (player1Move == "rock" && player2Move == "paper")
+    if (player1Move == "rock" && player2Move == PAPER)
     {
         return "player2";
     }
-    if (player1Move == "paper" && player2Move == "scissors")
+    if (player1Move == "paper" && player2Move == SCISSORS)
     {
         return "player2";
     }
-    if (player1Move == "scissors" && player2Move == "rock")
+    if (player1Move == "scissors" && player2Move == ROCK)
     {
         return "player2";
     }
-    if (player1Move == "paper" && player2Move == "rock")
+    if (player1Move == "paper" && player2Move == ROCK)
     {
         return "player1";
     }
-    if (player1Move == "scissors" && player2Move == "paper")
+    if (player1Move == "scissors" && player2Move == PAPER)
     {
         return "player1";
     }
-    if (player1Move == "rock" && player2Move == "scissors")
+    if (player1Move == "rock" && player2Move == SCISSORS)
     {
         return "player1";
     }
@@ -114,14 +126,14 @@ std::string DummyServer::gameResult(std::string player1Move, std::string player2
 
 std::string DummyServer::play()
 {
-    std::string p1 = messageFromClient;
-    std::string p2 = randomMove();
-    std::string result = gameResult(p1, p2);
+    std::string clientPlayer = messageFromClient;
+    RPS aiPlayer = randomMove();
+    std::string result = gameResult(clientPlayer, aiPlayer);
     if (result == "draw")
     {
         std::string serverMessage = "";
         serverMessage = "game_instruction ";
-        serverMessage += "Player1 Hand: " + p1 + " | Player2 Hand: " + p2 + "\n";
+        serverMessage += "Player1 Hand: " + clientPlayer + " | Player2 Hand: " + enumToString(aiPlayer) + "\n";
         serverMessage += "Draw! Enter rock, paper, or scissors";
         return serverMessage;
     }
@@ -129,7 +141,7 @@ std::string DummyServer::play()
     {
         std::string serverMessage = "";
         serverMessage = "game_over ";
-        serverMessage += "Player1 Hand: " + p1 + " | Player2 Hand: " + p2 + "\n";
+        serverMessage += "Player1 Hand: " + clientPlayer + " | Player2 Hand: " + enumToString(aiPlayer) + "\n";
         serverMessage += "Winner! " + result + "\n";
         return serverMessage;
     }

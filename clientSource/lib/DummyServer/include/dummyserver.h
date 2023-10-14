@@ -1,5 +1,11 @@
 #include <string>
 
+enum RPS {
+    ROCK, 
+    PAPER, 
+    SCISSORS
+};
+
 class DummyServer {
 public:
     DummyServer();
@@ -14,12 +20,12 @@ public:
     
 private:
     // pick a random move for the server as an "AI" opponent
-    std::string randomMove();
+    RPS randomMove();
 
     // generates a game code
     int generateGameCode();
     // takes the two moves, plays rps, and returns the winner 
-    std::string gameResult(std::string player1Move, std::string player2Move);
+    std::string gameResult(std::string player1Move, RPS player2Move);
     
     std::string play();
 
