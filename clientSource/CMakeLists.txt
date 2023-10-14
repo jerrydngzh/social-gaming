@@ -26,7 +26,7 @@ target_link_libraries(client socialgamefilehandler)
 
 
 set_target_properties(client PROPERTIES
-    CXX_STANDARD 17
+    CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
 )
 

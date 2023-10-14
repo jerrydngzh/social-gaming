@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <fstream>
-#include "SocialGameFileHandler.h"
+#include "socialgamefilehandler.h"
 
 void sendFileToServer(const std::string file)
 {
