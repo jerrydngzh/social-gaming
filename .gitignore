@@ -48,4 +48,4 @@
 .vscode/
 
 # build directories
-*-build/
+*build/
