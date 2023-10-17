@@ -15,6 +15,7 @@
 #include "treeParser.h"
 #include "util.h"
 #include "variables.h"
+#include "game.h"
 
 
 extern "C" {
@@ -94,13 +95,15 @@ int main(int argc, char* argv[]) {
 
   //END OF MISHAS DEBUG INFO *****************************************************************************
 
-  // Create and Initialize Objects for each of the game sections
-  Configuration configurationLibrary(configurationNode, fileContents);
-  Constants constantsLibrary(constantsNode);
-  PerAudience perAudienceLibrary(perAudienceNode);
-  PerPlayer perPlayerLibrary(perPlayerNode);
-  Rules rulesLibrary(rulesNode, 10);
-  Variables variablesLibrary(variablesNode);
+  // Create game by initializing objects for each of the game sections
+  Game game = Game(
+    Configuration(configurationNode, fileContents),
+    Constants(constantsNode),
+    PerAudience(perAudienceNode),
+    PerPlayer(perPlayerNode),
+    Rules(rulesNode, 10),
+    Variables(variablesNode)
+  );
 
   //rulesLibrary.runGame()?
 }
