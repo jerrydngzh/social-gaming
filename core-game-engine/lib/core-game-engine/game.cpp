@@ -22,6 +22,7 @@ Game::Game(
 
 Game::~Game() {}
 
-void Game::startGame() {
-    rulesLibrary.recurse(rulesLibrary.getNode());
+void Game::startGame(ts::Tree tree) {
+    Interpreter gameRunner(this, tree);
+    gameRunner.recurse(rulesLibrary.getNode());
 }

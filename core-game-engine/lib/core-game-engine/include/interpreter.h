@@ -12,17 +12,18 @@ class Interpreter {
 private:
     Game game;
     ts::Tree tree;
+    const static ts::Language language;
 
 public:
     Interpreter(Game game, ts::Tree tree);
     ~Interpreter();
-    void recurse(ts::Node n);
+    void recurse(ts::Node& n);
     const static std::map<ts::Symbol, Action*> actions;
     static ts::Symbol toSymbol(const std::string_view& symbolName);
 
     class Action {
     public:
-        virtual void execute(ts::Node node) = 0;
+        virtual void execute(ts::Node& node) = 0;
         virtual ~Action() {}
     };
 };

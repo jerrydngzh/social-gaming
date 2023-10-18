@@ -104,5 +104,5 @@ int main(int argc, char* argv[]) {
     Variables(variablesNode)
   );
 
-  game.startGame();
+  game.startGame(tree);
 }

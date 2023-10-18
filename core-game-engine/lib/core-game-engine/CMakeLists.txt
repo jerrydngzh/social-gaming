@@ -43,6 +43,7 @@ target_sources(main
     util.cpp
     variables.cpp
     game.cpp
+    interpreter.cpp
 )
 
 target_link_libraries(main

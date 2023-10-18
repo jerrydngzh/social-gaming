@@ -17,7 +17,6 @@ private:
     ts::Node node;
     int currentRound;
     int numRounds;
-    const static ts::Language language;
 
 public:
     Rules(const ts::Node& node, const int numRounds);
@@ -26,7 +25,4 @@ public:
     std::string_view getContents(const std::string_view& gameFile) const;
     const int getCurrentRound();
     const int getNumRounds();
-    void recurse(ts::Node n);
-    const static std::map<ts::Symbol, Action*> actions;
-    static ts::Symbol toSymbol(const std::string_view& symbolName);
 };
