@@ -14,21 +14,22 @@
 
 // Holds all sections of the game and initializes game logic
 class Game {
-    private:
-        Configuration configurationLibrary;
-        Constants constantsLibrary;
-        PerAudience perAudienceLibrary;
-        PerPlayer perPlayerLibrary;
-        Rules rulesLibrary;
-        Variables variablesLibrary;
-    public:
-        Game (
-            const Configuration& configurationLibrary,
-            const Constants& constantsLibrary,
-            const PerAudience& perAudienceLibrary,
-            const PerPlayer& perPlayerLibrary,
-            const Rules& rulesLibrary,
-            const Variables& variablesLibrary);
-        ~Game ();
-        void startGame();
+private:
+    Configuration configurationLibrary;
+    Constants constantsLibrary;
+    PerAudience perAudienceLibrary;
+    PerPlayer perPlayerLibrary;
+    Rules rulesLibrary;
+    Variables variablesLibrary;
+public:
+    Game(
+        const Configuration& configurationLibrary,
+        const Constants& constantsLibrary,
+        const PerAudience& perAudienceLibrary,
+        const PerPlayer& perPlayerLibrary,
+        const Rules& rulesLibrary,
+        const Variables& variablesLibrary);
+    ~Game();
+    void startGame();
+    void recurse(const ts::Node& node);
 };

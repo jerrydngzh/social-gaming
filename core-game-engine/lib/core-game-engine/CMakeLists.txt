@@ -42,6 +42,7 @@ target_sources(main
     treeParser.cpp
     util.cpp
     variables.cpp
+    game.cpp
 )
 
 target_link_libraries(main

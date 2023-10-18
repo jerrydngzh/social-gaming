@@ -17,8 +17,11 @@ Game::Game(
     perAudienceLibrary(perAudienceLibrary),
     perPlayerLibrary(perPlayerLibrary),
     rulesLibrary(rulesLibrary),
-    variablesLibrary(variablesLibrary) {}
+    variablesLibrary(variablesLibrary)
+{}
+
+Game::~Game() {}
 
 void Game::startGame() {
-    return;
+    rulesLibrary.recurse(rulesLibrary.getNode());
 }

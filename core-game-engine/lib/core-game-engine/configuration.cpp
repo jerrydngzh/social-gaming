@@ -33,18 +33,18 @@ Configuration::Configuration(const ts::Node& node, const std::string_view& gameF
             kind = line.substr(line.find(":") + 1);
         }
 
-        if(line.find("prompt") != std::string::npos) {
+        if (line.find("prompt") != std::string::npos) {
             prompt = line.substr(line.find(":") + 1);
             if (kind == "boolean") {
                 settings.push_back(BooleanSetting(prompt));
                 break;
-            } 
+            }
         }
-            
-        if(line.find("range") != std::string::npos) {
+
+        if (line.find("range") != std::string::npos) {
             line.erase(std::remove_if(line.begin(), line.end(), [](unsigned char c) {
                 return std::isspace(c);
-            }), line.end());
+                }), line.end());
             range = line.substr(line.find("(") + 1, line.find(")") - line.find("(") - 1);
             std::istringstream stream(range);
             std::string token, min, max;
@@ -53,11 +53,11 @@ Configuration::Configuration(const ts::Node& node, const std::string_view& gameF
             std::getline(stream, token, ',');
             max = std::stoi(token);
             std::cout << "min: " << min << "max: " << max << std::endl;
-        }           
+        }
     }
 }
 
-void Configuration::parsePlayers(const std::string_view& playersString){
+void Configuration::parsePlayers(const std::string_view& playersString) {
     std::string_view parsedStr = playersString.substr(1, playersString.size() - 2);
     char minString = parsedStr[0];
     char maxString = parsedStr[parsedStr.size() - 1];

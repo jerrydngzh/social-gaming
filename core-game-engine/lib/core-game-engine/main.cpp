@@ -41,7 +41,6 @@ int main(int argc, char* argv[]) {
   ts::Node perAudienceNode = root.getChildByFieldName("per_audience");
   ts::Node rulesNode = root.getChildByFieldName("rules");
 
-
   //MISHAS DEBUG INFO HERE. DELETE LATER! Maybe can help you to understand ********************************
 
   // auto treestring = root.getSExpr();
@@ -105,5 +104,5 @@ int main(int argc, char* argv[]) {
     Variables(variablesNode)
   );
 
-  //rulesLibrary.runGame()?
+  game.startGame();
 }
