@@ -55,7 +55,7 @@ help:
 
 
 # [INFO]: Removes Build Directories
-clean: 
+clean-core-game-engine: 
 	@echo "[INFO] Removing Build Directories..." ; \
 	rm -rf $(CORE_GAME_ENGINE_BUILD_DIR)
 
