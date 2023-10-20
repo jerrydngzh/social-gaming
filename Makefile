@@ -32,6 +32,30 @@ run-core-game-engine:
 test-core-game-engine:
 	@echo "TODO: core-game-engine testing..."
 
+#******************************
+#	        CLIENT
+#******************************
+
+CLIENT_DIR := client
+CLIENT_BUILD_DIR := client-build
+
+# Creates directory and runs cmake to build the project
+build-client:
+	@echo "[INFO] Building 'client'" ; \
+	rm -rf $(CLIENT_BUILD_DIR) ; \
+	mkdir $(CLIENT_BUILD_DIR) ; \
+	cd $(CLIENT_BUILD_DIR) && cmake ../$(CLIENT_DIR)
+
+# Compiles the C++ code for the project
+compile-client:
+	@echo "[INFO] Compiling 'client'" ; \
+	$(MAKE) -C $(CLIENT_BUILD_DIR) --silent
+
+# Executes the code
+run-client:
+	@echo "[INFO] Running 'client'" ; \
+	$(CLIENT_BUILD_DIR)/client
+
 
 #******************************
 # 			GENERIC
@@ -58,6 +82,11 @@ help:
 clean-core-game-engine: 
 	@echo "[INFO] Removing Build Directories..." ; \
 	rm -rf $(CORE_GAME_ENGINE_BUILD_DIR)
+
+# [INFO]: Removes Build Directories
+clean-client: 
+	@echo "[INFO] Removing Build Directories..." ; \
+	rm -rf $(CLIENT_BUILD_DIR)
 
 
 # [INFO]: Runs all the tests
