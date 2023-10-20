@@ -1,22 +1,3 @@
-Hello Team!
-
-Hello, 
-
-client_mailbox = ""
-server_mailbox = "" 
-
-DummyServer
-    get_server_mail()
-    ... 
-    send_client_mail()
-
-DummyClient
-    get_client_mail()
-        client_mail = client_mailbox
-
-    send_server_mail()
-        server_mailbox = "Rock"
-
 # Components 
 1. Client-Server Communication
 2. Client Logic
@@ -49,17 +30,11 @@ Client plays rock paper scissors
     - if game over, results are displayed
     session ends. 
 
-
-# Build 
-g++ -std=c++17 -Wall -Wextra -o main main.cpp DummyClient.cpp
-./main
-
 ## Andy's Dev Notes 
 Join 
 - user input works
 - draw works
 - when draw does not work, issue.
-
 
 Create leads to server and client processing, then an error
 libc++abi: terminating due to uncaught exception of type std::out_of_range: basic_string
