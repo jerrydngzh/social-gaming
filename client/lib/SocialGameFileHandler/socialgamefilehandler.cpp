@@ -3,37 +3,31 @@
 #include <fstream>
 #include "socialgamefilehandler.h"
 
-void sendFileToServer(const std::string file)
-{
-    std::cout << file << std::endl;
-}
 
-SocialGameFileHandler::SocialGameFileHandler()
-{
+SocialGameFileHandler::SocialGameFileHandler() {
     getGameConfigurationFile();
-    sendFile();
 }
 
 void SocialGameFileHandler::getGameConfigurationFile()
 {
     std::cout << "Enter the name of the game configuration file: ";
-    std::cin >> fileName;
+    std::cin >> filePath;
 }
 
-void SocialGameFileHandler::sendFile()
-{
-    std::ifstream configFile(fileName);
-    if (!configFile.is_open())
+std::string SocialGameFileHandler::getFile() {
+    std::ifstream fileStream(filePath);
+
+    if (!fileStream.is_open())
     {
         std::cerr << "Error: Could not open file." << std::endl;
+        return "";
     }
-    else
-    {
-        std::string line;
-        while (std::getline(configFile, line))
-        {
-            sendFileToServer(line);
-        }
-        configFile.close();
-    }
+
+    std::istreambuf_iterator<char> begin(fileStream);
+    std::istreambuf_iterator<char> end;
+
+    std::string fileContent(begin, end);
+
+    fileStream.close();
+    return fileContent;  
 }

@@ -1,4 +1,5 @@
 #include "include/client.h"
+#include "../SocialGameFileHandler/include/socialgamefilehandler.h"
 
 #include <iostream>
 #include <string>
@@ -35,6 +36,20 @@ std::string Client::createOrJoinGame() {
 
     std::string ClientChoice;
     std::cin >> ClientChoice;
+
+    if (ClientChoice == "create") {
+        SocialGameFileHandler gameFileHandler;
+        std::string fileContent = gameFileHandler.getFile();
+
+        // append create line to fileContent
+        std::string createString = "create\n";
+        fileContent = createString + fileContent;
+
+        // step three is to send to server
+        // std::cout << fileContent << "\n";    
+
+        return fileContent;
+    } 
 
     return ClientChoice;
 }

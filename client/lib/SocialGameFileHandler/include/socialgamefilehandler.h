@@ -10,10 +10,11 @@ class SocialGameFileHandler
 {
 public:
     SocialGameFileHandler();
+
+    std::string getFile();
     
 private:
-    std::string fileName;
-    
     void getGameConfigurationFile();
-    void sendFile();
+
+    std::string filePath;
 };
