@@ -1,16 +1,15 @@
 #pragma once
 
 #include <string>
-#include <cpp-tree-sitter.h>
-
+#include <vector>
+#include <mapping.h>
 
 // Handles the constants section of the Game file
 class Constants {
     private:
-        ts::Node node;
+        std::vector<Mapping> contents;
     public:
-        Constants(const ts::Node& node);
+        Constants(const std::vector<Mapping> &data);
         ~Constants();
-        ts::Node getNode() const;
-        std::string_view getContents(const std::string_view& gameFile) const;
+        void print() const;
 };

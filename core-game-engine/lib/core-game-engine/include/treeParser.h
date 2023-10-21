@@ -3,16 +3,9 @@
 #include <string>
 #include <vector>
 
-ts::Tree parseTree(const std::string& source);
+#include "mapping.h"
 
-struct Mapping {
-    int index;
-    std::string_view key;
-    std::string_view value;         // TODO: this will need to be able to handle different types eventually
-    int parent;
-    std::vector<int> children;
-    std::string_view type;
-}; 
+ts::Tree parseTree(const std::string& source);
 
 
 // Creates an object that can extract the information from a tree
