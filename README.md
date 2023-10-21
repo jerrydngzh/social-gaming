@@ -8,14 +8,14 @@
 |`make build-core-game-engine`|Creates a new build directory, then runs cmake|
 |`make compile-core-game-engine`|Compiles the `core-game-engine` .cpp files|
 |`make run-core-game-engine`|Executes the `core-game-engine` using `main` binary <br> Currently configured to use `rock-paper-scissors.game` copied into `game-files` during the build|
-|`make clean-core-game-engine`|removes all the core-game-engine build directories|
+|`make clean`|removes all the build directories|
 
 |Client Commands|Description|
 |:---|:---|
 |`make build-client`|Creates a new build directory, then runs cmake|
 |`make compile-client`|Compiles the `client` .cpp files|
 |`make run-client`|Executes the `client` using `main` binary|
-|`make clean-client`|removes all the client build directories|
+|`make clean`|removes all the build directories|
 
 
 ## Git Development 

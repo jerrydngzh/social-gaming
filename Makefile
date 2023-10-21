@@ -79,13 +79,9 @@ help:
 
 
 # [INFO]: Removes Build Directories
-clean-core-game-engine: 
+clean: 
 	@echo "[INFO] Removing Build Directories..." ; \
-	rm -rf $(CORE_GAME_ENGINE_BUILD_DIR)
-
-# [INFO]: Removes Build Directories
-clean-client: 
-	@echo "[INFO] Removing Build Directories..." ; \
+	rm -rf $(CORE_GAME_ENGINE_BUILD_DIR) ; \
 	rm -rf $(CLIENT_BUILD_DIR)
 
 
