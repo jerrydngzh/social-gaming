@@ -3,12 +3,20 @@
 ### Makefile (Automation)
 * The following commands can be executed from the root directory
 
-|            Command             |                                                                   Description                                                                  |
-|--------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| `make build-core-game-engine`  | <br>1. Creates a new build directory <br>2. Runs cmake <br><br>                                             |
-| `make compile-core-game-engine`| <br>1. Compiles the `core-game-engine` .cpp files<br><br>
-|  `make run-core-game-engine`   | <br>1. Executes the `core-game-engine` using `main` binary<br>2. Currently configured to use `rock-paper-scissors.game` copied into `game-files` during the build<br><br> |
-| `make clean`                   | <br>1. removes all the build directories<br>                                                                                                           |
+|Core Game Engine Commands|Description|
+|:---|:---|
+|`make build-core-game-engine`|Creates a new build directory, then runs cmake|
+|`make compile-core-game-engine`|Compiles the `core-game-engine` .cpp files|
+|`make run-core-game-engine`|Executes the `core-game-engine` using `main` binary <br> Currently configured to use `rock-paper-scissors.game` copied into `game-files` during the build|
+|`make clean`|removes all the build directories|
+
+|Client Commands|Description|
+|:---|:---|
+|`make build-client`|Creates a new build directory, then runs cmake|
+|`make compile-client`|Compiles the `client` .cpp files|
+|`make run-client`|Executes the `client` using `main` binary|
+|`make clean`|removes all the build directories|
+
 
 ## Git Development 
 ### Git Setup
@@ -28,6 +36,15 @@ Try to make every Commit an isolated work item. If you fix a bug in candy.cpp, a
 
 In every commit message, provide a brief overview of the changes you made, and credit any contributors to that commit. For example, a commit message might look like: 
 'Added unit tests for get_username(). Authors: Andy and Mike'
+
+
+### Merge Requests
+Before making a merge request to `master`, make sure to merge in remote master to the local feature branch you want to make a MR for.
+
+This is to ensure there are no merge conflicts when trying to merge into master! 
+
+## Running Client
+When running the client and prompted to enter the name of the game configuration file, enter `../docs/rock-paper-scissors.game`. This file can be found in the docs folder at the root of the repository. 
 
 ## Team Frobscottle Contributors 
 - Andy 
