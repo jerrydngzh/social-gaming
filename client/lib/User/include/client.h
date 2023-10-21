@@ -3,8 +3,6 @@
 #include <string_view>
 #include <string>
 
-class GameRoom;
-
 class Client {
 public:
     Client();
