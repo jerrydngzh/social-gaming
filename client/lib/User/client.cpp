@@ -21,7 +21,7 @@ bool Client::getIsAudience() {
 }
 
 bool Client::getIsOwner() {
-    return isAudience;
+    return isOwner;
 }
 
 std::string_view Client::getClientName(){
