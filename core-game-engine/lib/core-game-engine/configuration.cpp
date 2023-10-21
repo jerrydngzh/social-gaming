@@ -1,33 +1,137 @@
 #include <tuple>
 #include <string>
 #include <cpp-tree-sitter.h>
+#include <iostream>
+#include <regex>
 
 #include "configuration.h"
 
-Configuration::Configuration(const ts::Node& node):
-    node(node)
-    {}
+const std::string Configuration::GAME_NAME_FIELD = std::string("name");
+const std::string Configuration::PLAYERS_FIELD = std::string("player_range");
+const std::string Configuration::AUDIENCE_FIELD = std::string("has_audience");
+const std::string Configuration::SETUP_FIELD = std::string("setup");
+
+Configuration::Configuration(const ts::Node& node, const std::string_view& gameFile) :
+    node(node), gameFile(gameFile)
+{
+    //TODO: Intialization (populate gameName, players, hasAudience, settings with values from node)
+    gameName = node.getChildByFieldName(GAME_NAME_FIELD).getSourceRange(this->getGameFile());
+    std::string_view playersString = node.getChildByFieldName(PLAYERS_FIELD).getSourceRange(this->getGameFile());
+    parsePlayers(playersString);
+    hasAudience = node.getChildByFieldName(AUDIENCE_FIELD).getSourceRange(this->getGameFile()) == "true";
+
+    std::string settingsString(node.getNamedChild(3).getSourceRange(this->getGameFile()));
+
+    std::regex pattern("kind: [a-zA-Z0-9_]+");
+    std::smatch match;
+    std::string_view result = "";
+    if (std::regex_search(settingsString, match, pattern)) {
+          result = match.str(1);
+    } 
+
+    std::cout << result << std::endl;
+
+}
+
+void Configuration::parsePlayers(const std::string_view& playersString){
+    std::string_view parsedStr = playersString.substr(1, playersString.size() - 2);
+    char minString = parsedStr[0];
+    char maxString = parsedStr[parsedStr.size() - 1];
+    std::get<0>(players) = minString;
+    std::get<1>(players) = maxString;
+}
 
 Configuration::~Configuration() {}
 
+Configuration::Setting::Setting(Kind kind, std::string prompt, const bool hasDefaultValue) :
+    kind(kind),
+    prompt(prompt),
+    hasDefaultValue(hasDefaultValue)
+{}
+
+std::string Configuration::Setting::getPrompt() const {
+    return prompt;
+}
+
+Configuration::Setting::Kind Configuration::Setting::getKind() const {
+    return kind;
+}
+
+bool Configuration::Setting::getHasDefaultValue() const {
+    return hasDefaultValue;
+}
+
+Configuration::BooleanSetting::BooleanSetting(std::string prompt, const bool defaultValue) :
+    Setting(Kind::BOOLEAN, prompt, true),
+    defaultValue(defaultValue),
+    value(defaultValue)
+{}
+
+Configuration::BooleanSetting::BooleanSetting(std::string prompt) :
+    Setting(Kind::BOOLEAN, prompt, false)
+{}
+
+Configuration::BooleanSetting::~BooleanSetting() {}
+
+bool Configuration::BooleanSetting::getValue() const {
+    return value;
+}
+
+void Configuration::BooleanSetting::setValue(const bool value) {
+    this->value = value;
+}
+
+bool Configuration::BooleanSetting::getDefaultValue() const {
+    return defaultValue;
+}
+
+Configuration::IntegerSetting::IntegerSetting(std::string prompt, const int defaultValue, const int min, const int max) :
+    Setting(Kind::INTEGER, prompt, true),
+    defaultValue(defaultValue),
+    value(defaultValue),
+    range(std::make_tuple(min, max))
+{}
+
+Configuration::IntegerSetting::IntegerSetting(std::string prompt, const int min, const int max) :
+    Setting(Kind::INTEGER, prompt, false),
+    range(std::make_tuple(min, max))
+{}
+
+Configuration::IntegerSetting::~IntegerSetting() {}
+
+int Configuration::IntegerSetting::getValue() const {
+    return value;
+}
+
+void Configuration::IntegerSetting::setValue(const int value) {
+    this->value = value;
+}
+
+int Configuration::IntegerSetting::getDefaultValue() const {
+    return defaultValue;
+}
 
 ts::Node Configuration::getNode() const {
     return node;
+}
+
+std::string_view Configuration::getGameFile() const {
+    return gameFile;
 }
 
 std::string_view Configuration::getContents(const std::string_view& gameFile) const {
     return node.getSourceRange(gameFile);
 }
 
-std::string Configuration::getGameName() const{
+std::string Configuration::getGameName() const {
     return gameName;
 }
 
-std::tuple<int, int> Configuration::getPlayer() const{
+std::tuple<int, int> Configuration::getPlayer() const {
     return players;
 }
 
-bool Configuration::getHasAudience() const{
+bool Configuration::getHasAudience() const {
     return hasAudience;
 }
 
