@@ -15,8 +15,8 @@ public:
     std::string createOrJoinGame();
 
     void process();
-    void getMessage(std::string message);
-    std::string setMessage();
+    std::string getMessage();
+    void setMessage(std::string message);
     std::string getStringPrefix(const std::string& message);
     void runGameCode();
     void runGameInstruction();

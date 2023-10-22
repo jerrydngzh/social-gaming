@@ -8,6 +8,8 @@
 Client::Client(std::string_view Clientname1, bool isPlayer1, bool isAudience1, bool isOwner1, int code1)
     : Clientname(Clientname1), isPlayer(isPlayer1), isAudience(isAudience1), isOwner(isOwner1), gameRoomCode(code1) {}
 
+// Not a good constructor, should have a parameter to indicate createOrJoin
+// TODO: Make this better
 Client::Client() {
     messageForServer = createOrJoinGame();
 }
@@ -64,11 +66,11 @@ void Client::process() {
     }
 }
 
-void Client::getMessage(std::string message) {
+void Client::setMessage(std::string message) {
     messageFromServer = message;
 }
 
-std::string Client::setMessage() {
+std::string Client::getMessage() {
     return messageForServer;
 }
 

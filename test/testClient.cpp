@@ -5,56 +5,55 @@
 
 using namespace testing;
 
-class  ClientTests: public ::testing::Test {
-public:
-    Client clientAsh;
-    void SetUp() override {
-        clientAsh = Client("ash", true, false, true, 55);
-    }
+class  ClientTests: public ::testing::Test {};
 
-};
 // Test is broken due to the inability to getInstruction. 
 TEST_F(ClientTests, runGameInstructionTest) {
-   clientAsh.getMessage("game_instruction This is the game instruction!");
-   
+   Client clientAsh {"ash", true, false, true, 55};
+   clientAsh.setMessage("game_instruction This is the game instruction!");
+   // std::cout << "Type in: 'This is the game instruction!'" << std::endl;
    ::testing::internal::CaptureStdout();
    clientAsh.runGameInstruction();
    std::string output = ::testing::internal::GetCapturedStdout();
 
-   EXPECT_EQ(output, "This is the game instruction!");
+   ASSERT_EQ(output, "This is the game instruction!");
 }
 
 TEST_F(ClientTests, getIsPlayerTest) {
+   Client clientAsh {"ash", true, false, true, 55};
    ASSERT_EQ(true ,clientAsh.getIsPlayer());
 }
 TEST_F(ClientTests, getIsAudienceTest) {
+   Client clientAsh {"ash", true, false, true, 55};
    ASSERT_EQ(false ,clientAsh.getIsAudience());
 }
 TEST_F(ClientTests, getIsOwnerTest) {
+    Client clientAsh {"ash", true, false, true, 55};
    ASSERT_EQ(true ,clientAsh.getIsOwner());
 }
 
 TEST_F(ClientTests, getClientNameTest) {
-   ASSERT_EQ(true ,clientAsh.getClientName());
+   Client clientAsh {"ash", true, false, true, 55};
+   ASSERT_EQ("ash" ,clientAsh.getClientName());
 }
 
 TEST_F(ClientTests, getConnectionStatusTest) {
+   Client clientAsh {"ash", true, false, true, 55};
    ASSERT_EQ(true ,clientAsh.getConnectionStatus());
 }
 
 TEST_F(ClientTests, createOrJoinGameTest){
+     Client clientAsh {"ash", true, false, true, 55};
     // we should enter 10
     std::string result = clientAsh.createOrJoinGame();
     std::cout << "Please enter 'amy' in the following line" << std::endl;
     ASSERT_EQ("amy" , result);
 
 }
-// TEST_F(ClientTests, testGetMessage){
-//     // we should enter 10
-//     clientAsh.getMessage("ola");
-//     ASSERT_EQ(clientAsh.messageFromServer , "ola");
-
-// }
+TEST_F(ClientTests, testGetMessage){
+   Client clientAsh {"ash", true, false, true, 55};
+   ASSERT_EQ("",clientAsh.getMessage());
+}
 
 
 

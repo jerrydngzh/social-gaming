@@ -8,8 +8,7 @@ add_executable(runAllTests
 target_link_libraries(runAllTests
   PRIVATE
     GTest::gmock GTest::gtest GTest::gtest_main
-    user
-    
+    user   
 )
 
 add_test(NAME AllTests
