@@ -56,6 +56,31 @@ run-client:
 	@echo "[INFO] Running 'client'" ; \
 	$(CLIENT_BUILD_DIR)/client
 
+#******************************
+#	        TEST
+#******************************
+# This needs to integrate client and core-game-engine
+
+TEST_DIR := test
+TEST_BUILD_DIR := test-build
+
+# Creates directory and runs cmake to build the project
+build-test:
+	@echo "[INFO] Building 'test'" ; \
+	rm -rf $(TEST_BUILD_DIR) ; \
+	mkdir $(TEST_BUILD_DIR) ; \
+	cd $(TEST_BUILD_DIR) && cmake ../$(TEST_DIR)
+
+# Compiles the C++ code for the project
+compile-test:
+	@echo "[INFO] Compiling 'test'" ; \
+	$(MAKE) -C $(TEST_BUILD_DIR) --silent
+
+# Executes the code
+run-test:
+	@echo "[INFO] Running 'test'" ; \
+	$(TEST_BUILD_DIR)/test
+
 
 #******************************
 # 			GENERIC
