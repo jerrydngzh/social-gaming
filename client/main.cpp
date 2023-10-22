@@ -20,7 +20,7 @@ int main() {
         server.process();
         clientMailbox = server.setMessage(); // game_instruction user input rock paper or scissors.
 
-        client.getMessage(clientMailbox);
+        client.setMessage(clientMailbox);
         client.process();
 
         clientConnected = client.getConnectionStatus();
@@ -28,7 +28,7 @@ int main() {
             break;
         }
 
-        serverMailbox = client.setMessage(); // join, create
+        serverMailbox = client.getMessage(); // join, create
         server.getMessage(serverMailbox);
     }
 
