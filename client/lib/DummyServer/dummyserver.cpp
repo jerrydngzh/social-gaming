@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <ctime>
+#include <algorithm> 
 
 std::string enumToString(RPS rockPaperScissors) {
     switch (rockPaperScissors)
