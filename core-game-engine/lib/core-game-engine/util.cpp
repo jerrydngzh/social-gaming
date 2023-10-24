@@ -23,15 +23,3 @@ std::string parseGAMEFromFile(const std::string& filename){
 
     return fileContents;
 }
-
-// int main(int argc, char *argv[]) {
-//     if(argc < 2){
-//         std::cout << "Please provide a file to parse" << std::endl;
-//         return 1;
-//     }
-
-//     std::string filename = argv[1];
-//     std::string fileContents = parseGAMEFromFile(filename);
-//     std::cout << fileContents << std::endl;
-//     return 0;
-// }
