@@ -1,39 +1,45 @@
 #include <iostream>
 #include <memory>
 #include <fstream>
+#include <filesystem>
+
 #include "socialgamefilehandler.h"
 
-void sendFileToServer(const std::string file)
-{
-    std::cout << file << std::endl;
-}
 
-SocialGameFileHandler::SocialGameFileHandler()
-{
+SocialGameFileHandler::SocialGameFileHandler() {
     getGameConfigurationFile();
-    sendFile();
 }
 
 void SocialGameFileHandler::getGameConfigurationFile()
 {
     std::cout << "Enter the name of the game configuration file: ";
-    std::cin >> fileName;
+    std::cin >> filePath;
 }
 
-void SocialGameFileHandler::sendFile()
-{
-    std::ifstream configFile(fileName);
-    if (!configFile.is_open())
+std::string SocialGameFileHandler::getFile() {
+
+    // checks if the file exists at the path
+    if(!std::filesystem::exists(filePath)) {
+        std::cerr << "Error: File does not exist." << std::endl;
+        return "";
+    }
+
+    std::ifstream fileStream(filePath);
+
+    //opens the file and throws error if file cannot be opened
+    if (!fileStream.is_open())
     {
         std::cerr << "Error: Could not open file." << std::endl;
+        return "";
     }
-    else
-    {
-        std::string line;
-        while (std::getline(configFile, line))
-        {
-            sendFileToServer(line);
-        }
-        configFile.close();
-    }
+
+    //reads the file content using iterator
+    std::istreambuf_iterator<char> begin(fileStream);
+    std::istreambuf_iterator<char> end;
+
+    std::string fileContent(begin, end);
+
+    // closes the file
+    fileStream.close();
+    return fileContent;  
 }

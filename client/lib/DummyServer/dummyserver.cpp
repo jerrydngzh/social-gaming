@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <ctime>
+#include <algorithm> 
 
 std::string enumToString(RPS rockPaperScissors) {
     switch (rockPaperScissors)
@@ -31,6 +32,34 @@ void DummyServer::process()
     }
     else
     {
+        std::string copyMessageFromClient = messageFromClient;
+        std::istringstream iss(copyMessageFromClient);
+        std::string firstLine;
+        std::getline(iss, firstLine);
+
+        std::cout << "First line: " << firstLine << std::endl;
+
+        firstLine.erase(std::remove_if(firstLine.begin(), firstLine.end(), ::isspace), firstLine.end());
+        if (firstLine == "create") {
+            std::cout << "test worked \n";
+
+            // Find the position of the first newline character
+            size_t pos = copyMessageFromClient.find('\n');
+            if (pos != std::string::npos) {
+                // Remove the first line
+                copyMessageFromClient.erase(0, pos + 1); // +1 to also remove the newline character
+            } else {
+                // Handle the case where there is no newline character
+                copyMessageFromClient.clear();
+            }
+
+            std::cout << copyMessageFromClient << "\n";
+
+            int gameCode = generateGameCode();
+            std::string gameCodeString = std::to_string(gameCode);
+            messageForClient = "game_code " + gameCodeString;
+        }
+
         if (messageFromClient == "create")
         {
             int gameCode = generateGameCode();
