@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.24)
 project(server_main)
 
-add_subdirectory(lib/server)
+FetchContent_Declare(
+    web-socket-networking
+    GIT_REPOSITORY https://github.com/nsumner/web-socket-networking.git
+    GIT_TAG 0.2
+)
+FetchContent_MakeAvailable(web-socket-networking)
 
 add_executable(server_main server_main.cpp)
 

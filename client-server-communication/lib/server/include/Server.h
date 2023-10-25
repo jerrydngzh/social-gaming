@@ -4,7 +4,9 @@
 class Server {
     public:
         Server();
-    
+        Server(int port);
+        ~Server();
+
         std::string receiveRequest();
 
         /*
@@ -26,6 +28,7 @@ class Server {
             - response can be request invalid, completed, queued {io or timer}
         */
         void sendResponse();
+
     private:
         int port;
 };

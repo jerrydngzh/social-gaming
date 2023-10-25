@@ -2,7 +2,7 @@
 #include <boost/beast.hpp>
 #include "include/Server.h"
 
-Server::Server() {}
+Server::Server(int port) : port(port) {}
 
 std::string Server::receiveRequest() {
     return "stub";
