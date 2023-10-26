@@ -5,16 +5,16 @@
 
 #include "perAudience.h"
 
-PerAudience::PerAudience(const ts::Node& node):
-    node(node)
-    {}
+// PerAudience::PerAudience(const ts::Node& node):
+//     node(node)
+//     {}
 
-PerAudience::~PerAudience() {}
+// PerAudience::~PerAudience() {}
 
-ts::Node PerAudience::getNode() const {
-    return node;
-}
+// ts::Node PerAudience::getNode() const {
+//     return node;
+// }
 
-std::string_view PerAudience::getContents(const std::string_view& gameFile) const {
-    return node.getSourceRange(gameFile);
-}
+// std::string_view PerAudience::getContents(const std::string_view& gameFile) const {
+//     return node.getSourceRange(gameFile);
+// }

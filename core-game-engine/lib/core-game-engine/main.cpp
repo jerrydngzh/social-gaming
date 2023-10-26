@@ -44,20 +44,31 @@ int main(int argc, char* argv[]) {
   ts::Node rulesNode = root.getChildByFieldName("rules");
 
   // Use Extractor object to get a data structure for the contents of the node
-  std::vector<Mapping> constantsData = extractor.format(constantsNode);
-  // TODO: Configuration, perAudience, perPlayer, Variables
+  // std::vector<Mapping> configurationData = extractor.format(configurationNode);
+  // std::vector<Mapping> constantsData = extractor.format(constantsNode);
+  // std::vector<Mapping> variablesData = extractor.format(variablesNode);
+  // std::vector<Mapping> perPlayerData = extractor.format(perPlayerNode);
+  // std::vector<Mapping> perAudienceData = extractor.format(perAudienceNode);
 
   // Create and Initialize Objects for each of the game sections
-  Constants constantsLibrary(constantsData);
-  // constantsLibrary.print();    // Uncomment to print the data structure
+  // Configuration configurationLibrary(configurationData);
+  // Constants constantsLibrary(constantsData);
+  // Variables variablesLibrary(variablesData);
+  // PerPlayer perPlayerLibrary(perPlayerData);
+  // PerAudience perAudienceLibrary(perAudienceData);
 
+  // Uncomment to print the data structure contents
+  // configurationLibrary.print();  
+  // constantsLibrary.print();
+  // variablesLibrary.print();
+  // perPlayerLibrary.print();
+  // perAudienceLibrary.print();
 
   // [NOTE]: this will not work for the rules, will need a different parser
-  Configuration configurationLibrary(configurationNode, fileContents);
-  PerAudience perAudienceLibrary(perAudienceNode);
-  PerPlayer perPlayerLibrary(perPlayerNode);
+  // PerAudience perAudienceLibrary(perAudienceNode);
+  // PerPlayer perPlayerLibrary(perPlayerNode);
   Rules rulesLibrary(rulesNode, 10);
-  Variables variablesLibrary(variablesNode);
+  // Variables variablesLibrary(variablesNode);
 
   //rulesLibrary.runGame()?
 }

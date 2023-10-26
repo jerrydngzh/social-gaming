@@ -35,6 +35,7 @@ target_sources(main
   PRIVATE
     configuration.cpp
     constants.cpp
+    gameLibrary.cpp
     main.cpp
     perAudience.cpp
     perPlayer.cpp
