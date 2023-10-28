@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#include "Server.h"
+#include "../lib/networking/include/Server.h"
 
 #include <fstream>
 #include <iostream>
@@ -65,25 +65,17 @@ MessageResult
 processMessages(Server& server, const std::deque<Message>& incoming) {
   std::ostringstream result;
   for (const auto& message : incoming) {
-    // if (message.text == "quit") {
-    //   server.disconnect(message.connection);
-    // } else if (message.text == "shutdown") {
-    //   std::cout << "Shutting down.\n";
-    //   quit = true;
-    // } else {
-    //   result << message.connection.id << "> " << message.text << "\n";
-    // }
+
     auto target = message.connection.id;
     auto loc = std::find(clients.begin(), clients.end(), target);
     if(loc != clients.end()) {
-      auto connection = clients[std::distance(clients.begin(), loc)];
-      result << connection << ", " << message.text << "\n";
+      // auto connection = clients[std::distance(clients.begin(), loc)];
+      result << message.connection.id << ", " << message.text << "\n";
+    }else{
+      result << message.connection.id << ", " << "connection not found" << "\n";
     }
-
   }
-
-  // TODO: messages are processed here
-  return MessageResult{result.str(), quit};
+  return MessageResult{result.str(), false};
 }
 
 /*
@@ -127,7 +119,7 @@ main(int argc, char* argv[]) {
   const unsigned short port = std::stoi(argv[1]);
 
   // TODO: modify httpmessage
-  Server server{port, onConnect, onDisconnect};
+  Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
 
   while (true) {
     bool errorWhileUpdating = false;
