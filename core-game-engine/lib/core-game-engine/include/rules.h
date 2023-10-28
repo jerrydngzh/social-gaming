@@ -6,11 +6,6 @@
 
 
 // Handles the rules section of the Game file
-class Action {
-public:
-    virtual void execute(ts::Node node) = 0;
-    virtual ~Action() {}
-};
 
 class Rules {
 private:

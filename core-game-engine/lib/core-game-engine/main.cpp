@@ -31,15 +31,15 @@ int main(int argc, char* argv[]) {
   std::string filename = argv[1];
   std::string fileContents = parseGAMEFromFile(filename);
   ts::Tree tree = parseTree(fileContents);
-  ts::Node root = tree.getRootNode();
+  // ts::Node root = tree.getRootNode();
 
   // extract nodes from the tree
-  ts::Node configurationNode = root.getChildByFieldName("configuration");
-  ts::Node constantsNode = root.getChildByFieldName("constants");
-  ts::Node variablesNode = root.getChildByFieldName("variables");
-  ts::Node perPlayerNode = root.getChildByFieldName("per_player");
-  ts::Node perAudienceNode = root.getChildByFieldName("per_audience");
-  ts::Node rulesNode = root.getChildByFieldName("rules");
+  // ts::Node configurationNode = root.getChildByFieldName("configuration");
+  // ts::Node constantsNode = root.getChildByFieldName("constants");
+  // ts::Node variablesNode = root.getChildByFieldName("variables");
+  // ts::Node perPlayerNode = root.getChildByFieldName("per_player");
+  // ts::Node perAudienceNode = root.getChildByFieldName("per_audience");
+  // ts::Node rulesNode = root.getChildByFieldName("rules");
 
   //MISHAS DEBUG INFO HERE. DELETE LATER! Maybe can help you to understand ********************************
 
@@ -95,14 +95,7 @@ int main(int argc, char* argv[]) {
   //END OF MISHAS DEBUG INFO *****************************************************************************
 
   // Create game by initializing objects for each of the game sections
-  Game game = Game(
-    Configuration(configurationNode, fileContents),
-    Constants(constantsNode),
-    PerAudience(perAudienceNode),
-    PerPlayer(perPlayerNode),
-    Rules(rulesNode, 10),
-    Variables(variablesNode)
-  );
+  Game game = Game(tree, fileContents);
 
-  game.startGame(tree);
+  game.startGame();
 }

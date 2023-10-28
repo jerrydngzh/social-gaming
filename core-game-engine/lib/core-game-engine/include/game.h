@@ -21,14 +21,10 @@ private:
     PerPlayer perPlayerLibrary;
     Rules rulesLibrary;
     Variables variablesLibrary;
+    const ts::Tree& tree;
+    
 public:
-    Game(
-        const Configuration& configurationLibrary,
-        const Constants& constantsLibrary,
-        const PerAudience& perAudienceLibrary,
-        const PerPlayer& perPlayerLibrary,
-        const Rules& rulesLibrary,
-        const Variables& variablesLibrary);
+    Game(const ts::Tree& tree, std::string_view fileContents);
     ~Game();
     void startGame();
     void recurse(const ts::Node& node);
