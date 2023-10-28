@@ -8,26 +8,25 @@
 
 // Handles the configuration section of the Game file
 class Configuration {
-    class Setting {//for storing the setup data
-    protected:
-        std::string prompt;
-        bool hasDefaultValue;
-    public:
-        enum Kind {
-            BOOLEAN,
-            INTEGER,
-            STRING,
-            ENUM,
-            QUESTION_ANSWER,
-            MULTIPLE_CHOICE,
-            JSON
-        } kind;
-        std::string getPrompt() const;
-        Kind getKind() const;
-        bool getHasDefaultValue() const;
-
-        Setting(Kind kind, std::string prompt, const bool hasDefaultValue);
-    };
+     class Setting {//for storing the setup data
+        protected:
+            std::string prompt;
+            bool hasDefaultValue;
+        public:
+            enum Kind {
+                BOOLEAN,
+                INTEGER,
+                STRING,
+                ENUM,
+                QUESTION_ANSWER,
+                MULTIPLE_CHOICE,
+                JSON
+            } kind;
+            std::string getPrompt() const;
+            Kind getKind() const;
+            bool getHasDefaultValue() const;
+            Setting(Kind kind, std::string prompt, const bool hasDefaultValue);
+        };
 
     class BooleanSetting : public Setting {
     private:
