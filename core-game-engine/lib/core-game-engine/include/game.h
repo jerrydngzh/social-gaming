@@ -15,6 +15,7 @@
 // Holds all sections of the game and initializes game logic
 class Game {
 private:
+    Extractor extractor;
     Configuration configurationLibrary;
     Constants constantsLibrary;
     PerAudience perAudienceLibrary;

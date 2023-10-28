@@ -5,8 +5,9 @@
 #include "interpreter.h"
 
 Game::Game(const ts::Tree& tree, std::string_view fileContents):
+    extractor(std::string(fileContents)),
     configurationLibrary(tree.getRootNode().getChildByFieldName("configuration"), fileContents),
-    constantsLibrary(tree.getRootNode().getChildByFieldName("constants")),
+    constantsLibrary(extractor.format(tree.getRootNode().getChildByFieldName("constants"))),
     perAudienceLibrary(tree.getRootNode().getChildByFieldName("per_audience")),
     perPlayerLibrary(tree.getRootNode().getChildByFieldName("per_player")),
     rulesLibrary(tree.getRootNode().getChildByFieldName("rules"), 10),
