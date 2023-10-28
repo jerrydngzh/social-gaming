@@ -66,8 +66,10 @@ processMessages(Server& server, const std::deque<Message>& incoming) {
   std::ostringstream result;
   for (const auto& message : incoming) {
 
-    auto target = message.connection.id;
+    // create connection target obj, as opreator== is overloaded for Connection obj comparison only
+    Connection target = Connection{message.connection.id};
     auto loc = std::find(clients.begin(), clients.end(), target);
+
     if(loc != clients.end()) {
       // auto connection = clients[std::distance(clients.begin(), loc)];
       result << message.connection.id << ", " << message.text << "\n";
