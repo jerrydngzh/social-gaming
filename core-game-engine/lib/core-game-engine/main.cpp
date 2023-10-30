@@ -58,7 +58,7 @@ int main(int argc, char* argv[]) {
   PerAudience perAudienceLibrary(perAudienceData);
 
   // Uncomment to print the data structure contents
-  // configurationLibrary.print();  
+  configurationLibrary.print();  
   // constantsLibrary.print();
   // variablesLibrary.print();
   // perPlayerLibrary.print();

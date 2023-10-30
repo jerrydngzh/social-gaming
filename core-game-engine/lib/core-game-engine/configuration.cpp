@@ -6,6 +6,12 @@
 
 #include "configuration.h"
 
+Configuration::Configuration(const std::vector<Mapping> &data):
+    GameLibrary(data)
+    {}
+
+Configuration::~Configuration() {}
+
 // const std::string Configuration::GAME_NAME_FIELD = std::string("name");
 // const std::string Configuration::PLAYERS_FIELD = std::string("player_range");
 // const std::string Configuration::AUDIENCE_FIELD = std::string("has_audience");

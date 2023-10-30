@@ -10,7 +10,8 @@
 
 class Configuration : public GameLibrary {
     public:
-        Configuration(const std::vector<Mapping> &data) : GameLibrary(data) {}
+        Configuration(const std::vector<Mapping> &data);
+        ~Configuration();
 };
 
 // // Handles the configuration section of the Game file

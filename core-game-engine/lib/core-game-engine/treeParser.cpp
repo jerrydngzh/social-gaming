@@ -79,10 +79,8 @@ void Extractor::recurse(const ts::Node &node, std::vector<Mapping> &data) {
   std::string_view type = node.getType();
   std::string_view value = node.getSourceRange(fileContents);
 
-  std::cout << "[TYPE]: '" << type << "'" << std::endl;
-
   if(isValidType(type, rootTypes) && (data.size() == 0)){
-      append(data, type, "", 0, "root");                   // key and type (root node)
+    append(data, type, "", 0, "root");                     // key and type (root node)
   } else if (isValidType(type, keyTypes)) {
     key = value;                                           // set the global key value
   } else if (isValidType(type, valueTypes)) {
@@ -93,8 +91,8 @@ void Extractor::recurse(const ts::Node &node, std::vector<Mapping> &data) {
     parent = data.size() - 1;
   } else if (type == "list_literal" || type == "number_range") {
     append(data, key, "", parent, type);                   // key only
-    key = "";
     parent = data.size() - 1;
+    key = "";                                              // reset the global key value
   } else if (type == "setup_rule") {
     key = node.getChild(0).getSourceRange(fileContents);  // get key from first child
     append(data, key, "", parent, type);                  // add Mapping with key only
