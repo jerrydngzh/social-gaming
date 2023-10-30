@@ -18,7 +18,7 @@ public:
 
     std::string concatenateAllMessages();   
 
-    void removeClient(int clientId);
+    // void removeClient(int clientId);
     
     void broadcastResultsToAllClients(std::string results);
 

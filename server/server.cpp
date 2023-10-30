@@ -21,7 +21,7 @@ void Server::changeClientMessage(int clientId, std::string newMessage){
 }
 // This will use the mailman api
 std::string Server::sendMessageToClient(int clientID){
-   
+    return "";
 }
 
 // do processing of the message recieved
@@ -50,7 +50,7 @@ std::string Server::concatenateAllMessages(){
         std::string clientMessage = pair.second;        
         message.append(clientMessage);
     }
-
+    return "";
 }  
     
 void Server::broadcastResultsToAllClients(std::string results){
