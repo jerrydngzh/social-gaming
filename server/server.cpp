@@ -19,12 +19,15 @@ void Server::removeClient(int clientId){
 void Server::changeClientMessage(int clientId, std::string newMessage){
     clientIDToMessageMap[clientId] = std::string(newMessage);
 }
-
-std::string Server::requestMessageFromClient(int clientID){
+// This will use the mailman api
+std::string Server::sendMessageToClient(int clientID){
    
 }
 
 // do processing of the message recieved
+// Main processor of the mailman api
+// Depending on the message recieved we will call functions in the server
+// This is one of the two functions that should interact with the mailman api
 void Server::recieveMessageFromClient(int clientID, std::string message){
     // we need to add a message that is sent to the server upon client construction through the 
     // mailman api
@@ -37,16 +40,25 @@ void Server::recieveMessageFromClient(int clientID, std::string message){
     // Further business processing of messages will be here
     // TODO: We will need to know what type of messages are there and figure out
     // which ones to send back
+
 }
 
-
-std::string concatenateAllMessages(){
-
+// Don't think we need this
+std::string Server::concatenateAllMessages(){
+    std::string message = "";
+    for (const auto& pair: this->clientIDToMessageMap){
+        std::string clientMessage = pair.second;        
+        message.append(clientMessage);
+    }
 
 }  
     
-void broadcastResultsToAllClients(std::string results){
-    
+void Server::broadcastResultsToAllClients(std::string results){
+    // all the keys in the map
+    for (const auto& pair: this->clientIDToMessageMap){
+        int client = pair.first;        
+        this->sendMessageToClient(client);
+    }
 }
 
 
