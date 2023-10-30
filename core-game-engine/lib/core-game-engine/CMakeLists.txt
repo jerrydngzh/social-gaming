@@ -43,6 +43,8 @@ target_sources(main
     treeParser.cpp
     util.cpp
     variables.cpp
+    game.cpp
+    interpreter.cpp
 )
 
 target_compile_features(main PUBLIC cxx_std_20)

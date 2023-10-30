@@ -1,5 +1,5 @@
 #include "include/client.h"
-#include "../SocialGameFileHandler/include/socialgamefilehandler.h"
+#include "socialgamefilehandler.h"
 
 #include <iostream>
 #include <string>

@@ -2,18 +2,21 @@
 #include <cstdio>
 #include <memory>
 #include <string>
+#include <regex>
+#include <sstream>
 #include <iostream>
 #include <cpp-tree-sitter.h>
 
-#include "configuration.h"
-#include "constants.h"
-#include "mapping.h"
-#include "perAudience.h"
-#include "perPlayer.h"
-#include "rules.h"
+// #include "configuration.h"
+// #include "constants.h"
+// #include "mapping.h"
+// #include "perAudience.h"
+// #include "perPlayer.h"
+// #include "rules.h"
 #include "treeParser.h"
-#include "util.h"
-#include "variables.h"
+// #include "util.h"
+// #include "variables.h"
+#include "game.h"
 
 
 extern "C" {
@@ -30,10 +33,10 @@ int main(int argc, char* argv[]) {
   std::string filename = argv[1];
   std::string fileContents = parseGAMEFromFile(filename);
   ts::Tree tree = parseTree(fileContents);
-  ts::Node root = tree.getRootNode();
+  // ts::Node root = tree.getRootNode();
 
   // initialize the extractor object
-  Extractor extractor(fileContents);
+  // Extractor extractor(fileContents);
 
   // extract header nodes from the tree
   ts::Node configurationNode = root.getChildByFieldName("configuration");
@@ -65,10 +68,11 @@ int main(int argc, char* argv[]) {
   // perAudienceLibrary.print();
 
   // [NOTE]: this will not work for the rules, will need a different parser
-  // PerAudience perAudienceLibrary(perAudienceNode);
-  // PerPlayer perPlayerLibrary(perPlayerNode);
-  Rules rulesLibrary(rulesNode, 10);
-  // Variables variablesLibrary(variablesNode);
+  // Rules rulesLibrary(rulesNode, 10);
 
   //rulesLibrary.runGame()?
+  // Create game by initializing objects for each of the game sections
+  Game game = Game(tree, fileContents);
+
+  game.startGame();
 }
