@@ -4,10 +4,10 @@
 // so we do not have have to include the treesitter header
 // in our business logic
 struct Mapping {
-    int index;
+    uint32_t index;
     std::string_view key;
-    std::string_view value;         // TODO: this will need to be able to handle different types eventually
-    int parent;
-    std::vector<int> children;
+    std::string_view value;
+    uint32_t parent;
+    std::vector<uint32_t> children;
     std::string_view type;
 }; 

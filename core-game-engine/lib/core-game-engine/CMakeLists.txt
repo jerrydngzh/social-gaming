@@ -45,6 +45,12 @@ target_sources(main
     variables.cpp
 )
 
+target_compile_features(main PUBLIC cxx_std_20)
+set_target_properties(main PROPERTIES
+  LINKER_LANGUAGE CXX
+  PREFIX ""
+)
+
 target_link_libraries(main
   tree-sitter-json
   tree-sitter-sg
