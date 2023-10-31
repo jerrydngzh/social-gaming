@@ -12,7 +12,7 @@ public:
     void addNewClient(int clientId);
     void removeClient(int clientId);
 
-    std::string sendMessageToClient(int clientID);
+    std::string sendMessageToClient(int clientID, std::string results);
 
     void recieveMessageFromClient(int clientID, std::string message);
 
