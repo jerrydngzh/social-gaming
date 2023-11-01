@@ -122,8 +122,10 @@ main(int argc, char* argv[]) {
 
   // TODO: modify httpmessage
   Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
+  std::cout << "initialized server\n";
 
   while (true) {
+    std::cout << "inside while loop\n";
     bool errorWhileUpdating = false;
     try {
       server.update();
@@ -136,6 +138,7 @@ main(int argc, char* argv[]) {
     const auto incoming = server.receive();
     const auto [log, shouldQuit] = processMessages(server, incoming);
     const auto outgoing = buildOutgoing(log);
+    std::cout << log << "\n";
     server.send(outgoing);
 
     if (shouldQuit || errorWhileUpdating) {
