@@ -2,6 +2,7 @@
 #include <string>
 #include <cpp-tree-sitter.h>
 #include <iostream>
+#include <algorithm>
 #include <regex>
 
 #include "configuration.h"
@@ -22,18 +23,41 @@ Configuration::Configuration(const ts::Node& node, const std::string_view& gameF
 
     std::string settingsString(node.getNamedChild(3).getSourceRange(this->getGameFile()));
 
-    std::regex pattern("kind: [a-zA-Z0-9_]+");
-    std::smatch match;
-    std::string_view result = "";
-    if (std::regex_search(settingsString, match, pattern)) {
-          result = match.str(1);
-    } 
+    std::istringstream iss(settingsString);
+    std::string line;
+    std::string kind, prompt, range;
+    settings = std::vector<Setting>();
 
-    std::cout << result << std::endl;
+    while (std::getline(iss, line)) {
+        if (line.find("kind") != std::string::npos) {
+            kind = line.substr(line.find(":") + 1);
+        }
 
+        if (line.find("prompt") != std::string::npos) {
+            prompt = line.substr(line.find(":") + 1);
+            if (kind == "boolean") {
+                settings.push_back(BooleanSetting(prompt));
+                break;
+            }
+        }
+
+        if (line.find("range") != std::string::npos) {
+            line.erase(std::remove_if(line.begin(), line.end(), [](unsigned char c) {
+                return std::isspace(c);
+                }), line.end());
+            range = line.substr(line.find("(") + 1, line.find(")") - line.find("(") - 1);
+            std::istringstream stream(range);
+            std::string token, min, max;
+            std::getline(stream, token, ',');
+            min = std::stoi(token);
+            std::getline(stream, token, ',');
+            max = std::stoi(token);
+            std::cout << "min: " << min << "max: " << max << std::endl;
+        }
+    }
 }
 
-void Configuration::parsePlayers(const std::string_view& playersString){
+void Configuration::parsePlayers(const std::string_view& playersString) {
     std::string_view parsedStr = playersString.substr(1, playersString.size() - 2);
     char minString = parsedStr[0];
     char maxString = parsedStr[parsedStr.size() - 1];
