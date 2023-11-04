@@ -6,7 +6,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#include "../lib/networking/include/Server.h"
+// #include "../lib/networking/include/Server.h"
+#include "Server.h"
 
 #include <fstream>
 #include <iostream>

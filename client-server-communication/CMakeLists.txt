@@ -1,10 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(sg-server)
-
-# set(PACKAGE_NAME WebSocketNetworking)
-# set(PACKAGE_VERSION 0.3)
-# set(PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
-# set(PACKAGE_BUGREPORT "wsumner@sfu.ca")
+project(networking)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fno-rtti")
@@ -30,4 +25,4 @@ option(ENABLE_FTXUI_CLIENT   "Build the FTXUI client" ON)
 option(ENABLE_NCURSES_CLIENT "Build the NCurses client" ON)
 
 add_subdirectory(lib)
-add_subdirectory(server)
+add_subdirectory(tools)
