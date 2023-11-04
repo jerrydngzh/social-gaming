@@ -9,9 +9,121 @@
 
 Configuration::Configuration(const std::vector<Mapping> &data):
     GameLibrary(data)
-    {}
+{
+    setGameName();
+    setAudience();
+    setPlayerRange();
+}// Configuration()
+
 
 Configuration::~Configuration() {}
+
+
+std::string Configuration::getGameName() const {
+    return gameName;
+}// getGameName()
+
+
+bool Configuration::getHasAudience() const {
+    return hasAudience;
+}// getHasAudience()
+
+
+std::tuple<int, int> Configuration::getPlayerRange() const {
+    return playerRange;
+}// getPlayerRange()
+
+
+bool Configuration::isPlayerCountInRanger(const int &playerCount) const {
+    return (playerCount >= std::get<0>(playerRange)) && (playerCount <= std::get<1>(playerRange));
+}// isPlayerCountInRanger()
+
+
+void Configuration::setGameName() {
+    auto iter = std::find_if(contents.begin(), contents.end(), [](const Mapping &entry) {
+        if(entry.key == "configuration.name"){
+            return true;
+        }
+        return false;
+    });
+
+    try {
+      if(iter != contents.end()) {
+        gameName = std::string(iter->value);
+
+      } else {
+        throw std::invalid_argument("[ERROR] 'name' Does Not Exist...");
+      }
+    } catch(const std::invalid_argument& e) {
+        std::cout << e.what() << std::endl;
+        exit(1); 
+    }
+}// setGameName()
+
+
+void Configuration::setAudience() {
+    auto iter = std::find_if(contents.begin(), contents.end(), [](const Mapping &entry) {
+        if(entry.key == "configuration.audience") {
+            return true;
+        }
+        return false;
+    });
+
+    try {
+      if(iter != contents.end()) {
+        std::string value = std::string(iter->value);
+        if(value == "true" || value == "True" || value == "1") {
+            hasAudience = true;
+        } else {
+            hasAudience = false;
+        }
+      } else {
+        throw std::invalid_argument("[ERROR] 'audience' Does Not Exist...");
+      }
+    } catch(const std::invalid_argument& e) {
+        std::cout << e.what() << std::endl;
+        exit(1); 
+    }
+}// setAudience()
+
+
+void Configuration::setPlayerRange() {
+    auto iter = std::find_if(contents.begin(), contents.end(), [](const Mapping &entry) {
+        if(entry.key == "configuration.player_range") {
+            return true;
+        }
+        return false;
+    });
+
+    try {
+      if(iter != contents.end()) {
+        std::vector<int> childIndices = iter->children;
+
+        // get the indices in the data structure
+        int lowerIndex = childIndices.at(0);
+        int upperIndex = childIndices.at(1);
+        
+        // get the values from the Mapping entries
+        std::string lowerValue = std::string(contents.at(lowerIndex).value);
+        std::string upperValue = std::string(contents.at(upperIndex).value);
+
+        // convert values to ints
+        int lower = std::stoi(std::string(lowerValue));
+        int upper = std::stoi(std::string(upperValue));
+
+        // set the tuple
+        playerRange = std::tuple<int, int>(lower, upper);
+
+      } else {
+        throw std::invalid_argument("[ERROR] 'player range' Does Not Exist");
+      }
+    } catch(const std::invalid_argument& e) {
+        std::cout << e.what() << std::endl;
+        exit(1); 
+    }
+}// setPlayerRange()
+
+
 
 // const std::string Configuration::GAME_NAME_FIELD = std::string("name");
 // const std::string Configuration::PLAYERS_FIELD = std::string("player_range");

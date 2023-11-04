@@ -3,9 +3,10 @@
 #include <string>
 #include <vector>
 #include <mapping.h>
+#include <cassert>
 
 class GameLibrary {
-    private:
+    protected:
         std::vector<Mapping> contents;
     public:
         GameLibrary(const std::vector<Mapping> &data);

@@ -67,6 +67,7 @@ int main(int argc, char* argv[]) {
   // perPlayerLibrary.print();
   // perAudienceLibrary.print();
 
+
   // [NOTE]: this will not work for the rules, will need a different parser
   // Rules rulesLibrary(rulesNode, 10);
 
@@ -74,5 +75,5 @@ int main(int argc, char* argv[]) {
   // Create game by initializing objects for each of the game sections
   // Game game = Game(tree, fileContents, configurationData, constantsData, variablesData, perPlayerData, perAudienceData);
 
-  game.startGame();
+  // game.startGame();
 }
