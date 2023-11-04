@@ -114,9 +114,16 @@ help:
 clean: 
 	@echo "[INFO] Removing Build Directories..." ; \
 	rm -rf $(CORE_GAME_ENGINE_BUILD_DIR) ; \
-	rm -rf $(CLIENT_BUILD_DIR) ; \
+	rm -rf $(CLIENT_BUILD_DIR)
+	@echo "[INFO] Removing gtest from Test Directories..." ; \
 	rm -rf $(CORE_GAME_ENGINE_TEST_DIR)/gtest
 
+
+# [INFO]: Build all the applications
+all-build: build-core-game-engine build-client
+
+# [INFO]: Compile all the applications
+all-compile: compile-core-game-engine compile-client
 
 # [INFO]: Runs all the tests
 all-tests: test-core-game-engine
