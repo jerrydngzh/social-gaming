@@ -35,6 +35,7 @@ target_sources(main
   PRIVATE
     configuration.cpp
     constants.cpp
+    gameLibrary.cpp
     main.cpp
     perAudience.cpp
     perPlayer.cpp
@@ -44,6 +45,12 @@ target_sources(main
     variables.cpp
     game.cpp
     interpreter.cpp
+)
+
+target_compile_features(main PUBLIC cxx_std_20)
+set_target_properties(main PROPERTIES
+  LINKER_LANGUAGE CXX
+  PREFIX ""
 )
 
 target_link_libraries(main

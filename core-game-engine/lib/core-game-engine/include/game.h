@@ -15,7 +15,6 @@
 // Holds all sections of the game and initializes game logic
 class Game {
 private:
-    Extractor extractor;
     Configuration configurationLibrary;
     Constants constantsLibrary;
     PerAudience perAudienceLibrary;
@@ -25,7 +24,12 @@ private:
     const ts::Tree& tree;
     
 public:
-    Game(const ts::Tree& tree, std::string_view fileContents);
+    Game(const ts::Tree& tree, std::string_view fileContents, 
+        std::vector<Mapping> &configurationData,
+        std::vector<Mapping> &constantsData,
+        std::vector<Mapping> &variablesData,
+        std::vector<Mapping> &perPlayerData,
+        std::vector<Mapping> &perAudienceData);
     ~Game();
     void startGame();
     void recurse(const ts::Node& node);

@@ -7,15 +7,15 @@
 #include <iostream>
 #include <cpp-tree-sitter.h>
 
-// #include "configuration.h"
-// #include "constants.h"
-// #include "mapping.h"
-// #include "perAudience.h"
-// #include "perPlayer.h"
-// #include "rules.h"
+#include "configuration.h"
+#include "constants.h"
+#include "mapping.h"
+#include "perAudience.h"
+#include "perPlayer.h"
+#include "rules.h"
 #include "treeParser.h"
-// #include "util.h"
-// #include "variables.h"
+#include "util.h"
+#include "variables.h"
 #include "game.h"
 
 
@@ -33,98 +33,47 @@ int main(int argc, char* argv[]) {
   std::string filename = argv[1];
   std::string fileContents = parseGAMEFromFile(filename);
   ts::Tree tree = parseTree(fileContents);
-  // ts::Node root = tree.getRootNode();
+  ts::Node root = tree.getRootNode();
 
   // initialize the extractor object
-  // Extractor extractor(fileContents);
+  Extractor extractor(fileContents);
 
   // extract header nodes from the tree
-  // ts::Node configurationNode = root.getChildByFieldName("configuration");
-  // ts::Node constantsNode = root.getChildByFieldName("constants");
-  // ts::Node variablesNode = root.getChildByFieldName("variables");
-  // ts::Node perPlayerNode = root.getChildByFieldName("per_player");
-  // ts::Node perAudienceNode = root.getChildByFieldName("per_audience");
-  // ts::Node rulesNode = root.getChildByFieldName("rules");
+  ts::Node configurationNode = root.getChildByFieldName("configuration");
+  ts::Node constantsNode = root.getChildByFieldName("constants");
+  ts::Node variablesNode = root.getChildByFieldName("variables");
+  ts::Node perPlayerNode = root.getChildByFieldName("per_player");
+  ts::Node perAudienceNode = root.getChildByFieldName("per_audience");
+  ts::Node rulesNode = root.getChildByFieldName("rules");
 
   // Use Extractor object to get a data structure for the contents of the node
-  // std::vector<Mapping> constantsData = extractor.format(constantsNode);
-  // TODO: Configuration, perAudience, perPlayer, Variables
-  // extract nodes from the tree
-  // ts::Node configurationNode = root.getChildByFieldName("configuration");
-  // ts::Node constantsNode = root.getChildByFieldName("constants");
-  // ts::Node variablesNode = root.getChildByFieldName("variables");
-  // ts::Node perPlayerNode = root.getChildByFieldName("per_player");
-  // ts::Node perAudienceNode = root.getChildByFieldName("per_audience");
-  // ts::Node rulesNode = root.getChildByFieldName("rules");
-
-  //MISHAS DEBUG INFO HERE. DELETE LATER! Maybe can help you to understand ********************************
-
-  // auto treestring = root.getSExpr();
-  // printf("Syntax tree: %s\n", treestring.get());
-
-  // //printf("root type: %s rule type: %s\n", root.getType(), rulesNode.getType());
-
-  // std::cout << tree.getLanguage().getNumSymbols() << " <- num symb | version -> " << tree.getLanguage().getVersion() << std::endl;
-
-
-  // ts::Node n = rulesNode;
-  // std::cout << std::endl << n.getType() << std::endl;
-  // printf("Syntax tree: %s\n", n.getSExpr().get());
-
-  // std::cout << "num children: " << n.getNumChildren() << std::endl;
-  // for (int i = 0; i < n.getNumChildren(); i++) {
-  //   std::cout << "child " << i << " symbol: " << tree.getLanguage().getSymbolName((n.getChild(i)).getSymbol()) << std::endl;
-  // }
-
-  // n = n.getChild(1);
-  // std::cout << std::endl << n.getType() << std::endl;
-  // printf("Syntax tree: %s\n", n.getSExpr().get());
-
-  // std::cout << "num children: " << n.getNumChildren() << std::endl;
-  // for (int i = 0; i < n.getNumChildren(); i++) {
-  //   std::cout << "child " << i << " symbol: " << tree.getLanguage().getSymbolName((n.getChild(i)).getSymbol()) << std::endl;
-  // }
-
-  // n = n.getChild(2);
-  // std::cout << std::endl << n.getType() << std::endl;
-  // printf("Syntax tree: %s\n", n.getSExpr().get());
-
-  // std::cout << "num children: " << n.getNumChildren() << std::endl;
-  // for (int i = 0; i < n.getNumChildren(); i++) {
-  //   std::cout << "child " << i << " symbol: " << tree.getLanguage().getSymbolName((n.getChild(i)).getSymbol()) << std::endl;
-  // }
-
-  // n = n.getChild(0);
-  // std::cout << std::endl << n.getType() << std::endl;
-  // printf("Syntax tree: %s\n", n.getSExpr().get());
-
-  // std::cout << "num children: " << n.getNumChildren() << std::endl;
-  // for (int i = 0; i < n.getNumChildren(); i++) {
-  //   std::cout << "child " << i << " symbol: " << tree.getLanguage().getSymbolName((n.getChild(i)).getSymbol()) << std::endl;
-  // }
-
-  // //print all symbols
-  // for (int i = 0; i < tree.getLanguage().getNumSymbols(); i++) {
-  //   std::cout << i << " " << tree.getLanguage().getSymbolName(i) << std::endl;
-  // }
-
-  //END OF MISHAS DEBUG INFO *****************************************************************************
+  std::vector<Mapping> configurationData = extractor.format(configurationNode);
+  std::vector<Mapping> constantsData = extractor.format(constantsNode);
+  std::vector<Mapping> variablesData = extractor.format(variablesNode);
+  std::vector<Mapping> perPlayerData = extractor.format(perPlayerNode);
+  std::vector<Mapping> perAudienceData = extractor.format(perAudienceNode);
 
   // Create and Initialize Objects for each of the game sections
-  // Constants constantsLibrary(constantsData);
-  // constantsLibrary.print();    // Uncomment to print the data structure
+  Configuration configurationLibrary(configurationData);
+  Constants constantsLibrary(constantsData);
+  Variables variablesLibrary(variablesData);
+  PerPlayer perPlayerLibrary(perPlayerData);
+  PerAudience perAudienceLibrary(perAudienceData);
+
+  // Uncomment to print the data structure contents
+  configurationLibrary.print();  
+  // constantsLibrary.print();
+  // variablesLibrary.print();
+  // perPlayerLibrary.print();
+  // perAudienceLibrary.print();
 
 
   // [NOTE]: this will not work for the rules, will need a different parser
-  // Configuration configurationLibrary(configurationNode, fileContents);
-  // PerAudience perAudienceLibrary(perAudienceNode);
-  // PerPlayer perPlayerLibrary(perPlayerNode);
   // Rules rulesLibrary(rulesNode, 10);
-  // Variables variablesLibrary(variablesNode);
 
   //rulesLibrary.runGame()?
   // Create game by initializing objects for each of the game sections
-  Game game = Game(tree, fileContents);
+  // Game game = Game(tree, fileContents, configurationData, constantsData, variablesData, perPlayerData, perAudienceData);
 
-  game.startGame();
+  // game.startGame();
 }

@@ -2,15 +2,13 @@
 
 #include <string>
 #include <cpp-tree-sitter.h>
+#include <vector>
 
+#include "mapping.h"
+#include "gameLibrary.h"
 
-// Handles the variables section of the Game file
-class Variables {
-    private:
-        ts::Node node;
+class Variables : public GameLibrary {
     public:
-        Variables(const ts::Node& node);
+        Variables(const std::vector<Mapping> &data);
         ~Variables();
-        ts::Node getNode() const;
-        std::string_view getContents(const std::string_view& gameFile) const;
 };
