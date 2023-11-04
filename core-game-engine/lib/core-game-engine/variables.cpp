@@ -4,16 +4,8 @@
 
 #include "variables.h"
 
-Variables::Variables(const ts::Node& node):
-    node(node)
+Variables::Variables(const std::vector<Mapping> &data):
+    GameLibrary(data)
     {}
 
 Variables::~Variables() {}
-
-ts::Node Variables::getNode() const {
-    return node;
-}
-
-std::string_view Variables::getContents(const std::string_view& gameFile) const {
-    return node.getSourceRange(gameFile);
-}

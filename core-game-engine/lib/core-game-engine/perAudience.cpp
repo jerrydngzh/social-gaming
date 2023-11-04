@@ -5,16 +5,8 @@
 
 #include "perAudience.h"
 
-PerAudience::PerAudience(const ts::Node& node):
-    node(node)
+PerAudience::PerAudience(const std::vector<Mapping> &data):
+    GameLibrary(data)
     {}
 
 PerAudience::~PerAudience() {}
-
-ts::Node PerAudience::getNode() const {
-    return node;
-}
-
-std::string_view PerAudience::getContents(const std::string_view& gameFile) const {
-    return node.getSourceRange(gameFile);
-}
