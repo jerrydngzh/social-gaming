@@ -3,6 +3,9 @@
 #include <string>
 #include <vector>
 #include <cassert>
+#include <cstdio>
+#include <memory>
+#include <iostream>
 
 #include "mapping.h"
 

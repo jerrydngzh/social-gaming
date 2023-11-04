@@ -1,8 +1,3 @@
-#include <string>
-#include <iostream>
-#include <cpp-tree-sitter.h>
-#include <map>
-
 #include "interpreter.h"
 
 extern "C" {

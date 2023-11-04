@@ -1,9 +1,4 @@
 #include "util.h"
-#include <stdexcept>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-
 
 std::string parseGAMEFromFile(const std::string& filename){
     if(filename.find(GAME_FILE_EXTENSION) == std::string::npos){
