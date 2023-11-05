@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "mapping.h"
 #include "gameLibrary.h"

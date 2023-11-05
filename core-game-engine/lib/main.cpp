@@ -62,10 +62,10 @@ int main(int argc, char* argv[]) {
 
   // Uncomment to print the data structure contents
   configurationLibrary.print();  
-  // constantsLibrary.print();
-  // variablesLibrary.print();
-  // perPlayerLibrary.print();
-  // perAudienceLibrary.print();
+  constantsLibrary.print();
+  variablesLibrary.print();
+  perPlayerLibrary.print();
+  perAudienceLibrary.print();
 
 
   // [NOTE]: this will not work for the rules, will need a different parser

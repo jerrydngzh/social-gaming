@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <cpp-tree-sitter.h>
 #include <vector>
 
 #include "mapping.h"

@@ -3,8 +3,8 @@
 #include <string>
 #include <tuple>
 #include <vector>
-#include <cpp-tree-sitter.h>
 #include <iostream>
+#include <algorithm>
 
 #include "mapping.h"
 #include "gameLibrary.h"

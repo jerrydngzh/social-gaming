@@ -1,8 +1,3 @@
-#include <iostream>
-#include <vector>
-#include <string>
-
-#include "mapping.h"
 #include "gameLibrary.h"
 
 GameLibrary::GameLibrary(const std::vector<Mapping> &data):

@@ -3,6 +3,7 @@
 #******************************
 
 ROOT_DIR := $(pwd)
+TEST_DIR := test
 
 #******************************
 #	   CORE GAME ENGINE
@@ -10,10 +11,13 @@ ROOT_DIR := $(pwd)
 
 CORE_GAME_ENGINE_DIR := core-game-engine
 CORE_GAME_ENGINE_BUILD_DIR := core-game-engine-build
+CORE_GAME_ENGINE_TEST_DIR := $(CORE_GAME_ENGINE_DIR)/test
 
 # Creates directory and runs cmake to build the project
 build-core-game-engine:
 	@echo "[INFO] Building 'core-game-engine'" ; \
+	echo "[SETUP] Copying '$(TEST_DIR)/gtest' directory to $(CORE_GAME_ENGINE_TEST_DIR)" ; \
+	cp -r $(TEST_DIR)/gtest $(CORE_GAME_ENGINE_TEST_DIR) ; \
 	rm -rf $(CORE_GAME_ENGINE_BUILD_DIR) ; \
 	mkdir $(CORE_GAME_ENGINE_BUILD_DIR) ; \
 	cd $(CORE_GAME_ENGINE_BUILD_DIR) && cmake ../$(CORE_GAME_ENGINE_DIR)
@@ -30,7 +34,10 @@ run-core-game-engine:
 
 # Runs the test-suite
 test-core-game-engine:
-	@echo "TODO: core-game-engine testing..."
+	@echo "[INFO] core-game-engine tests commencing..." ; \
+
+
+	$(CORE_GAME_ENGINE_BUILD_DIR)/bin/tests-core-game-engine
 
 #******************************
 #	        CLIENT
@@ -103,12 +110,20 @@ help:
 	$(info *************************************)
 
 
-# [INFO]: Removes Build Directories
+# [INFO]: Removes Build & Test artifacts
 clean: 
 	@echo "[INFO] Removing Build Directories..." ; \
 	rm -rf $(CORE_GAME_ENGINE_BUILD_DIR) ; \
 	rm -rf $(CLIENT_BUILD_DIR)
+	@echo "[INFO] Removing gtest from Test Directories..." ; \
+	rm -rf $(CORE_GAME_ENGINE_TEST_DIR)/gtest
 
+
+# [INFO]: Build all the applications
+all-build: build-core-game-engine build-client
+
+# [INFO]: Compile all the applications
+all-compile: compile-core-game-engine compile-client
 
 # [INFO]: Runs all the tests
 all-tests: test-core-game-engine

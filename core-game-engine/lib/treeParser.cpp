@@ -1,8 +1,3 @@
-#include <cassert>
-#include <cstdio>
-#include <memory>
-#include <iostream>
-
 #include "treeParser.h"
 
 extern "C" {

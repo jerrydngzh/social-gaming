@@ -2,8 +2,10 @@
 
 #include <string>
 #include <vector>
-#include <mapping.h>
 #include <cassert>
+#include <iostream>
+
+#include "mapping.h"
 
 class GameLibrary {
     protected:
