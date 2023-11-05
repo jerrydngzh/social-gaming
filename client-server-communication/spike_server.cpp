@@ -1,6 +1,8 @@
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
 #include <vector>
+#include <random>
+#include <string>
 #include <iostream>
 // #include "Server.h"
 
@@ -20,6 +22,13 @@ The server should handle the following:
 4. Send responses to clients
 */
 
+int generateID() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distribution(100000, 999999);
+    return distribution(gen);
+}
+
 int main(int argc, char* argv[]){
     
     if (argc != 2){
@@ -37,16 +46,21 @@ int main(int argc, char* argv[]){
         std::cout << "Waiting for connection..." << std::endl;
         // incoming_socket recieves new client connections
         tcp::socket incoming_socket(io_context);
-
         // TODO: make this async issue #49
         // acceptor.accept blocks till the connection is accepted
-        acceptor.accept(incoming_socket);
+        acceptor.async_accept(incoming_socket);
 
         std::cout << "Connection accepted!" << std::endl;
         break;
 
         // TODO: generate a unique id for the client, append to list of active clients
+        int newId = generateID();
 
+        while(std::count(clients.begin(), clients.end(), newId)) {
+            newId = generateID();
+        }
+
+        clients.push_back(newId);
         // TODO: wait for request from a client, issue #50
 
         // TODO: process request
@@ -56,3 +70,4 @@ int main(int argc, char* argv[]){
         // TODO: handle client shutdown
     }
 }
+
