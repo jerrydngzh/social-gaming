@@ -1,10 +1,3 @@
-#include <tuple>
-#include <string>
-#include <cpp-tree-sitter.h>
-#include <iostream>
-#include <algorithm>
-#include <regex>
-
 #include "configuration.h"
 
 Configuration::Configuration(const std::vector<Mapping> &data):

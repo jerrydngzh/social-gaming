@@ -4,9 +4,9 @@
 #include <cpp-tree-sitter.h>
 #include <map>
 #include <string_view>
+#include <iostream>
+
 #include "game.h"
-
-
 
 // Handles the execution of a game
 class Interpreter {
