@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <string_view>
 #include <ctime>
+#include <algorithm>
 
 GameRoom::GameRoom(int clientIdOfOwner1) : clientIdOfOwner(clientIdOfOwner1)
 {
@@ -18,6 +19,7 @@ int randomNumber()
     return randomGameCode;
 }
 
+// TODO: improve to be enums of request commands
 int messageToCase(std::string_view clientIdMessage)
 {
     if (clientIdMessage.find("Join game room") != std::string::npos)
@@ -57,18 +59,18 @@ std::unordered_map<int, std::string> GameRoom::runGame(std::unordered_map<int, s
             // Example: "Join game room 5"
         case 0:
         {
-            handleJoinGame(clientIdMessageI)
-            break; // Add break here
+            handleJoinGame(clientIdMessage, clientId);
+            break;
         }
         case 1:
         {
-            handleLeaveGame(clientIdMessage,);
-            break; // Add break here
+            handleLeaveGame(clientIdMessage, clientId);
+            break;
         }
         case 2:
         {
             changeGameRoomOwner(clientIdMessage, clientId);
-            break; // Add break here
+            break;
         }
         case 3:
         {
@@ -86,6 +88,7 @@ std::unordered_map<int, std::string> GameRoom::runGame(std::unordered_map<int, s
     return mapOfReplies;
 }
 
+// NOTE: redo
 void GameRoom::checkProcessed()
 {
     bool allProcessed = std::all_of(isProcessedMap.begin(), isProcessedMap.end(),
@@ -121,12 +124,14 @@ void GameRoom::removeClient(int clientId)
     this->clientsInGameRoom.erase(it, this->clientsInGameRoom.end());
 }
 
+// NOTE: redo
 void GameRoom::processPlayerMoves(int clientId)
 {
     mapOfReplies[clientId] = "Processed";
     isProcessedMap[clientId] = true;
 }
 
+// NOTE: redo?
 void GameRoom::broadcastMessages(std::string_view message)
 {
     for (const auto &pair : this->mapOfReplies)
@@ -140,6 +145,7 @@ void GameRoom::sendMessageToClient(int clientId, std::string_view message)
 {
     this->mapOfReplies[clientId] = std::string(message);
 }
+
 void GameRoom::handleJoinGame(std::string_view clientIdMessage, int clientId)
 {
     int lastIndex = clientIdMessage.rfind(" ");

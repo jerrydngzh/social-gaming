@@ -17,6 +17,8 @@ class Game;
 class GameRoom : public GameRoomAbstract {
 public:
     GameRoom(int clientIdOfOwner1);
+
+    // takes in player request
     std::unordered_map<int, std::string> runGame(std::unordered_map<int, std::string_view> clientInputs);
     void setOwner(int clientId);
     void addClient(int clienId);
@@ -37,8 +39,7 @@ private:
     std::unordered_map<int, std::string> mapOfReplies;
     std::unordered_map<int, bool> isProcessedMap;
 
-     
-
+    
     // A GameRoom has-a Game-Engine
     // std::unique_ptr<Game> game;
 
