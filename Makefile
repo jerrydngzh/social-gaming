@@ -28,6 +28,8 @@ run-core-game-engine:
 	@echo "[INFO] Running 'core-game-engine'" ; \
 	$(CORE_GAME_ENGINE_BUILD_DIR)/bin/main $(CORE_GAME_ENGINE_BUILD_DIR)/game-files/rock-paper-scissors.game
 
+cr: compile-core-game-engine run-core-game-engine
+
 # Runs the test-suite
 test-core-game-engine:
 	@echo "TODO: core-game-engine testing..."

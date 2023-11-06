@@ -11,18 +11,17 @@
 // Handles the execution of a game
 class Interpreter {
 private:
-    const Game* game;
+    Game* game;
     const ts::Tree& tree;
     const static ts::Language language;
 
 public:
-    Interpreter(const Game* game, const ts::Tree& tree);
+    Interpreter(Game* game, const ts::Tree& tree);
     ~Interpreter();
     
     class Action {
     public:
-        // We need a way to return types on execute sometimes depending on action
-        // consider using std::optional
+        Game* game;
         virtual void execute(const ts::Node& node) = 0;
         virtual ~Action() {}
     };
