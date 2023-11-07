@@ -12,6 +12,7 @@ GameRoom::GameRoom(int clientIdOfOwner1) : clientIdOfOwner(clientIdOfOwner1)
     this->clientsInGameRoom.push_back(clientIdOfOwner1);
 }
 
+// game room number is random for now
 int randomNumber()
 {
     std::srand(std::time(0));
@@ -20,67 +21,64 @@ int randomNumber()
 }
 
 // TODO: improve to be enums of request commands
-int messageToCase(std::string_view clientIdMessage)
-{
-    if (clientIdMessage.find("Join game room") != std::string::npos)
-    {
-        return 0;
-    }
-    else if (clientIdMessage.find("Leave game room") != std::string::npos)
-    {
-        return 1;
-    }
-    else if (clientIdMessage.find("Change gameroom owner") != std::string::npos)
-    {
-        return 2;
-    }
-    else if (clientIdMessage.find("Process") != std::string::npos)
-    {
-        return 3;
+// int messageToCase(std::string_view clientIdMessage)
+// {
+//     if (clientIdMessage.find("Join game room") != std::string::npos)
+//     {
+//         return 0;
+//     }
+//     else if (clientIdMessage.find("Leave game room") != std::string::npos)
+//     {
+//         return 1;
+//     }
+//     else if (clientIdMessage.find("Change gameroom owner") != std::string::npos)
+//     {
+//         return 2;
+//     }
+//     else if (clientIdMessage.find("Process") != std::string::npos)
+//     {
+//         return 3;
+//     }
+// }
+
+// change clientInputs to enum?
+
+Command messageToCommand(std::string_view clientIdMessage) {
+    if (clientIdMessage.find("join game room") != std::string::npos) {
+        return JOIN;
+    } else if (clientIdMessage.find("leave game room") != std::string::npos) {
+        return LEAVE;
+    } else if (clientIdMessage.find("change gameroom owner") != std::string::npos) {
+        return CHANGE_OWNER;
+    } else if (clientIdMessage.find("process") != std::string::npos) {
+        return PROCESS;
+    } else {
+        return INVALID_COMMAND; // Add an enum value for invalid commands
     }
 }
 
-std::unordered_map<int, std::string> GameRoom::runGame(std::unordered_map<int, std::string_view> clientInputs)
+std::unordered_map<int, std::string> GameRoom::runGame(std::unordered_map<int, enum> clientCommands)
 {
-
-    // loop through map
-    for (const auto &pair : clientInputs)
+    for (const auto &pair : clientCommands)
     {
         int clientId = pair.first;
-        std::string_view clientIdMessage = pair.second;
-        if (clientIdMessage == "")
-        {
-            mapOfReplies[clientId] = "None";
-            continue;
-        }
-        int code = messageToCase(clientIdMessage);
-        switch (code)
-        {
-            // Example: "Join game room 5"
-        case 0:
-        {
-            handleJoinGame(clientIdMessage, clientId);
-            break;
-        }
-        case 1:
-        {
-            handleLeaveGame(clientIdMessage, clientId);
-            break;
-        }
-        case 2:
-        {
-            changeGameRoomOwner(clientIdMessage, clientId);
-            break;
-        }
-        case 3:
-        {
-            processPlayerMoves(clientId);
-        }
-        default:
-        {
-            mapOfReplies[clientId] = "Message not understood/not for this game room";
-            break; // Add break here
-        }
+        Command command = pair.second;
+        switch (command) {
+            case JOIN:
+                handleJoinGame(clientId);
+                break;
+            case LEAVE:
+                handleLeaveGame(clientId);
+                break;
+            case CHANGEOWNER:
+                changeGameRoomOwner(clientId); 
+                break;
+            case PROCESS:
+                processPlayerMoves(clientId);
+                break;
+            default:
+                mapOfReplies[clientId] = "Invalid command";
+                break;
         }
     }
     // check if all clients have processed their moves
@@ -111,13 +109,13 @@ void GameRoom::setOwner(int clientId)
     this->clientIdOfOwner = clientId;
 }
 
-void GameRoom::addClient(int clientId)
+void GameRoom::addPlayer(int clientId)
 {
     this->numOfClients++;
     this->clientsInGameRoom.push_back(clientId);
 }
 
-void GameRoom::removeClient(int clientId)
+void GameRoom::removePlayer(int clientId)
 {
     this->numOfClients--;
     auto it = std::remove(this->clientsInGameRoom.begin(), this->clientsInGameRoom.end(), clientsInGameRoom);
@@ -127,7 +125,6 @@ void GameRoom::removeClient(int clientId)
 // NOTE: redo
 void GameRoom::processPlayerMoves(int clientId)
 {
-    mapOfReplies[clientId] = "Processed";
     isProcessedMap[clientId] = true;
 }
 
@@ -146,33 +143,21 @@ void GameRoom::sendMessageToClient(int clientId, std::string_view message)
     this->mapOfReplies[clientId] = std::string(message);
 }
 
-void GameRoom::handleJoinGame(std::string_view clientIdMessage, int clientId)
+void GameRoom::handleJoinGame(int clientId)
 {
-    int lastIndex = clientIdMessage.rfind(" ");
-    std::string_view roomNumber = clientIdMessage.substr(lastIndex + 1);
-    std::cout << roomNumber << std::endl;
-    if (std::stoi(std::string(roomNumber)) == gameRoomNumber)
-    {
-        this->addClient(clientId);
-        std::string clientReply = "joined game room #" + std::string(roomNumber);
+        this->addPlayer(clientId);
+        std::string clientReply = "joined game room";
         mapOfReplies[clientId] = clientReply;
-    }
 }
 
-void GameRoom::handleLeaveGame(std::string_view clientIdMessage, int clientId)
+void GameRoom::handleLeaveGame(int clientId)
 {
-    int lastIndex = clientIdMessage.rfind(" ");
-    std::string_view roomNumber = clientIdMessage.substr(lastIndex + 1);
-    std::cout << roomNumber << std::endl;
-    if (std::stoi(std::string(roomNumber)) == gameRoomNumber)
-    {
-        this->removeClient(clientId);
-        std::string clientReply = "removed client from game room #" + std::string(roomNumber);
+        this->removePlayer(clientId);
+        std::string clientReply = "removed client from game room";
         mapOfReplies[clientId] = clientReply;
-    }
 }
 
-void GameRoom::changeGameRoomOwner(std::string_view clientIdMessage, int clientId) {
+void GameRoom::changeGameRoomOwner(int clientId) {
     this->setOwner(clientId);
             std::string clientReply = "Client is now the owner of game room #" + std::to_string(gameRoomNumber);
             mapOfReplies[clientId] = clientReply;

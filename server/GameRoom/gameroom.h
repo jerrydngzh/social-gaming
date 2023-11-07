@@ -14,22 +14,31 @@ class Game;
 /*
 
 */
+enum Command {
+    JOIN,
+    LEAVE,
+    CHANGE_OWNER,
+    PROCESS,
+    INVALID_COMMAND
+}
+
+
 class GameRoom : public GameRoomAbstract {
 public:
     GameRoom(int clientIdOfOwner1);
 
     // takes in player request
-    std::unordered_map<int, std::string> runGame(std::unordered_map<int, std::string_view> clientInputs);
+    std::unordered_map<int, std::string> runGame(std::unordered_map<int, std::string_view> clientCommands);
     void setOwner(int clientId);
-    void addClient(int clienId);
-    void removeClient(int clientId);
+    void addPlayer(int clienId);
+    void removePlayer(int clientId);
     void processPlayerMoves(int clientId);
     void broadcastMessages(std::string_view);
     void sendMessageToClient(int clientId, std::string_view message);
     void checkProcessed();
-    void handleJoinGame(std::string_view clientIdMessage, int clientId);
-    void handleLeaveGame(std::string_view clientIdMessage, int clientId);
-    void changeGameRoomOwner(std::string_view clientIdMessage, int clientId);
+    void handleJoinGame(int clientId);
+    void handleLeaveGame(int clientId);
+    void changeGameRoomOwner(int clientId);
     
 private:
     int gameRoomNumber;
