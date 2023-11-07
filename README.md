@@ -24,7 +24,7 @@
 |`make clean` |Removes all the build artifacts and gtest directories from test directories|
 
 ## Unit Tests
-* Application(s) must be built prior (using `make build-{application}` or `make al-build`) -- this copies the `gtest` directory into the the location of the test-suite prior to making a build directory and running CMake on the application
+* Application(s) must be built prior (using `make build-{application}` or `make all-build`) -- this copies the `gtest` directory into the the location of the test-suite prior to making a build directory and running CMake on the application
 ### Steps:
 1. `make build-{application}` or `make all-build`
 2. `make compile-{application}` or `make all-compile`
