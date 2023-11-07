@@ -7,6 +7,8 @@
 
 
 #include "Client.h"
+#include "ChatWindow.h"
+
 #include <iostream>
 #include <unistd.h>
 
@@ -18,7 +20,6 @@ int main(int argc, char* argv[]) {
   }
 
   networking::Client client{argv[1], argv[2]};
-
   bool done = false;
   auto onTextEntry = [&done, &client] (std::string text) {
     if ("exit" == text || "quit" == text) {
@@ -28,26 +29,32 @@ int main(int argc, char* argv[]) {
     }
   };
 
+  ChatWindow chatWindow(onTextEntry);
+
+  // TODO: display main page with instructions
+  /*
+    >> Welcome!
+    >> Press (C) to create a game or (J) to join a game
+    >> Press (quit or exit) to quit
+  */
+
   while (!done && !client.isDisconnected()) {
     try {
       client.update();
     } catch (std::exception& e) {
-      std::cout << "Exception from Client update: " << e.what() << std::endl;
+      chatWindow.displayText("Exception from Client update:");
+      chatWindow.displayText(e.what());
       done = true;
     }
 
+    // display incoming messages from server
     auto response = client.receive();
     if (!response.empty()) {
-        std::cout << response << std::endl;
+      chatWindow.displayText(response);
     }
 
     // send a message to the server
-    // NOTE: cin is blocking, any incoming messages from server
-    //       will not display till after a message is sent (i.e. unblock from cin)
-    // TODO: figure out how to get non-blocking input
-    std::string entry;
-    std::cin >> entry;
-    onTextEntry(entry);
+    chatWindow.update();
   }
 
   return 0;
