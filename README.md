@@ -30,6 +30,13 @@
 2. `make compile-{application}` or `make all-compile`
 3. `make test-{application}` or `make all-tests`
 
+## Special note for unit tests in the client:
+Run tests using CMake and Make.
+Since we don't have a Makefile implementation for it,
+this will eventually be changed to follow the format of having tests 
+directly in their respective folders instead of the outer folder.
+
+
 ## Git Development 
 ### Git Setup
 Make sure to 
