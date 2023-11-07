@@ -40,7 +40,7 @@ int messageToCase(std::string_view clientIdMessage)
     }
 }
 
-std::unordered_map<int, std::string> GameRoom::runGame(std::unordered_map<int, std::string_view> clientInputs)
+std::unordered_map<int, std::string> runGame(std::unordered_map<int, std::string> clientInputs) 
 {
 
     // loop through map
