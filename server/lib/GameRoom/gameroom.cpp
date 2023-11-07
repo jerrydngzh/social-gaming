@@ -1,17 +1,12 @@
 #include "gameroom.h"
+
 #include <iostream>
-#include <unordered_map>
 #include <string_view>
 #include <ctime>
 #include <algorithm>
 
-GameRoom::GameRoom(int clientIdOfOwner1) : clientIdOfOwner(clientIdOfOwner1)
-{
-    this->numOfClients = 1;
-    this->gameRoomNumber = randomNumber();
-    this->clientsInGameRoom.push_back(clientIdOfOwner1);
-}
 
+// TODO: move this outside of gameroom
 // game room number is random for now
 int randomNumber()
 {
@@ -20,29 +15,14 @@ int randomNumber()
     return randomGameCode;
 }
 
-// TODO: improve to be enums of request commands
-// int messageToCase(std::string_view clientIdMessage)
-// {
-//     if (clientIdMessage.find("Join game room") != std::string::npos)
-//     {
-//         return 0;
-//     }
-//     else if (clientIdMessage.find("Leave game room") != std::string::npos)
-//     {
-//         return 1;
-//     }
-//     else if (clientIdMessage.find("Change gameroom owner") != std::string::npos)
-//     {
-//         return 2;
-//     }
-//     else if (clientIdMessage.find("Process") != std::string::npos)
-//     {
-//         return 3;
-//     }
-// }
+GameRoom::GameRoom(int clientId) : clientIdOfOwner(clientId)
+{
+    this->numOfClients = 1;
+    this->gameRoomNumber = randomNumber();
+    this->clientsInGameRoom.push_back(clientId);
+}
 
 // change clientInputs to enum?
-
 Command messageToCommand(std::string_view clientIdMessage) {
     if (clientIdMessage.find("join game room") != std::string::npos) {
         return JOIN;
@@ -57,12 +37,12 @@ Command messageToCommand(std::string_view clientIdMessage) {
     }
 }
 
-std::unordered_map<int, std::string> GameRoom::runGame(std::unordered_map<int, enum> clientCommands)
+std::unordered_map<int, std::string> GameRoom::runGame(std::unordered_map<int, std::string_view> clientCommands)
 {
     for (const auto &pair : clientCommands)
     {
         int clientId = pair.first;
-        Command command = pair.second;
+        Command command = messageToCommand(pair.second);
         switch (command) {
             case JOIN:
                 handleJoinGame(clientId);
@@ -70,7 +50,7 @@ std::unordered_map<int, std::string> GameRoom::runGame(std::unordered_map<int, e
             case LEAVE:
                 handleLeaveGame(clientId);
                 break;
-            case CHANGEOWNER:
+            case CHANGE_OWNER:
                 changeGameRoomOwner(clientId); 
                 break;
             case PROCESS:
@@ -117,9 +97,12 @@ void GameRoom::addPlayer(int clientId)
 
 void GameRoom::removePlayer(int clientId)
 {
-    this->numOfClients--;
-    auto it = std::remove(this->clientsInGameRoom.begin(), this->clientsInGameRoom.end(), clientsInGameRoom);
-    this->clientsInGameRoom.erase(it, this->clientsInGameRoom.end());
+    auto it = std::remove(this->clientsInGameRoom.begin(), this->clientsInGameRoom.end(), clientId);
+
+    if (it != this->clientsInGameRoom.end()){
+        this->clientsInGameRoom.erase(it, this->clientsInGameRoom.end());
+        this->numOfClients--;
+    }
 }
 
 // NOTE: redo

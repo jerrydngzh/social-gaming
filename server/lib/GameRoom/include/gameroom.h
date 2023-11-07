@@ -1,34 +1,27 @@
 #pragma once
 
+#include "GameRoomAbstract.h"
 #include <string_view>
 #include <memory>
-#include <unordered_map>
 #include <vector>
-#include "GameRoomAbstract.h"
-
-
 
 class User;
 class Game;
 
-/*
-
-*/
 enum Command {
     JOIN,
     LEAVE,
     CHANGE_OWNER,
     PROCESS,
     INVALID_COMMAND
-}
-
+};
 
 class GameRoom : public GameRoomAbstract {
 public:
-    GameRoom(int clientIdOfOwner1);
+    GameRoom(int clientId);
 
     // takes in player request
-    std::unordered_map<int, std::string> runGame(std::unordered_map<int, std::string_view> clientCommands);
+    std::unordered_map<int, std::string> runGame(std::unordered_map<int, std::string_view> clientCommands) override;
     void setOwner(int clientId);
     void addPlayer(int clienId);
     void removePlayer(int clientId);
@@ -39,6 +32,8 @@ public:
     void handleJoinGame(int clientId);
     void handleLeaveGame(int clientId);
     void changeGameRoomOwner(int clientId);
+
+    // repr
     
 private:
     int gameRoomNumber;
