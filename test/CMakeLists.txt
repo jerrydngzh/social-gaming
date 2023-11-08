@@ -2,6 +2,7 @@ add_subdirectory(gtest)
 
 add_executable(runAllTests
     testClient.cpp
+    testMessageHandler.cpp
     # Add new cpp files  thatt you want to add to testing
 )
 
