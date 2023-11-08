@@ -3,7 +3,10 @@ add_subdirectory(gtest)
 add_executable(runAllTests
     testClient.cpp
     testMessageHandler.cpp
+    testGameRoom.cpp
+    testGame.cpp
     # Add new cpp files  thatt you want to add to testing
+
 )
 
 target_link_libraries(runAllTests
