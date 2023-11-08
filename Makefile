@@ -3,6 +3,7 @@
 #******************************
 
 ROOT_DIR := $(pwd)
+BUILD_DIR := *build
 TEST_DIR := test
 
 #******************************
@@ -118,6 +119,7 @@ clean:
 	@echo "[INFO] Removing Build Directories..." ; \
 	rm -rf $(CORE_GAME_ENGINE_BUILD_DIR) ; \
 	rm -rf $(CLIENT_BUILD_DIR)
+	rm -rf $(BUILD_DIR)
 	@echo "[INFO] Removing gtest from Test Directories..." ; \
 	rm -rf $(CORE_GAME_ENGINE_TEST_DIR)/gtest
 
