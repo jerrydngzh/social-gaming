@@ -6,7 +6,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#include "../lib/networking/include/Server.h"
+// #include "../lib/networking/include/Server.h"
+#include "Server.h"
 
 #include <fstream>
 #include <iostream>
@@ -33,7 +34,7 @@ onConnect(Connection c) {
 }
 
 /* 
-  handles disconnecting clientss
+  handles disconnecting clients
 */
 void
 onDisconnect(Connection c) {
@@ -47,6 +48,48 @@ struct MessageResult {
   bool shouldShutdown;
 };
 
+/*
+  Process messages to be sent to all respective clients
+  ex: c1, c2, c3 belong to gameInstance1 
+    - build a message to be sent to only c1, c2, c3 
+*/
+MessageResult
+processMessages(Server& server, const std::deque<Message>& incoming) {
+  std::ostringstream result;
+  for (const auto& message : incoming) {
+
+    Connection target = Connection{message.connection.id};
+    auto loc = std::find(clients.begin(), clients.end(), target);
+
+    if(loc != clients.end()) {
+      // auto connection = clients[std::distance(clients.begin(), loc)];
+      result << message.connection.id << ", " << message.text << "\n";
+    }else{
+      result << message.connection.id << ", " << "connection not found" << "\n";
+    }
+  }
+  return MessageResult{result.str(), false};
+}
+
+std::deque<Message>
+buildOutgoing(const std::string& log) {
+  std::deque<Message> outgoing;
+  for (auto client : clients) {
+    outgoing.push_back({client, log});
+  }
+  return outgoing;
+}
+
+std::string
+getHTTPMessage(const char* htmlLocation) {
+  if (access(htmlLocation, R_OK ) != -1) {
+    std::ifstream infile{htmlLocation};
+    return std::string{std::istreambuf_iterator<char>(infile), std::istreambuf_iterator<char>()};
+  }
+  std::cerr << "Unable to open HTML index file:\n"
+            << htmlLocation << "\n";
+  std::exit(-1);
+}
 
 // TODO: Game Server Logic
 /*
@@ -61,57 +104,7 @@ struct MessageResult {
   - queued requests should be processed in order?
   - how to handle invalid requests?
 */
-MessageResult
-processMessages(Server& server, const std::deque<Message>& incoming) {
-  std::ostringstream result;
-  for (const auto& message : incoming) {
-
-    // create connection target obj, as opreator== is overloaded for Connection obj comparison only
-    Connection target = Connection{message.connection.id};
-    auto loc = std::find(clients.begin(), clients.end(), target);
-
-    if(loc != clients.end()) {
-      // auto connection = clients[std::distance(clients.begin(), loc)];
-      result << message.connection.id << ", " << message.text << "\n";
-    }else{
-      result << message.connection.id << ", " << "connection not found" << "\n";
-    }
-  }
-  return MessageResult{result.str(), false};
-}
-
-/*
-  Constructs outgoing messages to be sent to all respective clients
-  ex: c1, c2, c3 belong to gameInstance1 
-    - build a message to be sent to only c1, c2, c3 
-*/
-std::deque<Message>
-buildOutgoing(const std::string& log) {
-  std::deque<Message> outgoing;
-  for (auto client : clients) {
-    outgoing.push_back({client, log});
-  }
-  return outgoing;
-}
-
-// TODO: modify / remove handling the HTTP file
-std::string
-getHTTPMessage(const char* htmlLocation) {
-  if (access(htmlLocation, R_OK ) != -1) {
-    std::ifstream infile{htmlLocation};
-    return std::string{std::istreambuf_iterator<char>(infile),
-                       std::istreambuf_iterator<char>()};
-
-  }
-
-  std::cerr << "Unable to open HTML index file:\n"
-            << htmlLocation << "\n";
-  std::exit(-1);
-}
-
-
-int
-main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
   if (argc < 3) {
     std::cerr << "Usage:\n  " << argv[0] << " <port> <html response>\n"
               << "  e.g. " << argv[0] << " 4002\n";
@@ -119,13 +112,9 @@ main(int argc, char* argv[]) {
   }
 
   const unsigned short port = std::stoi(argv[1]);
-
-  // TODO: modify httpmessage
   Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
-  std::cout << "initialized server\n";
 
   while (true) {
-    std::cout << "inside while loop\n";
     bool errorWhileUpdating = false;
     try {
       server.update();
@@ -138,7 +127,6 @@ main(int argc, char* argv[]) {
     const auto incoming = server.receive();
     const auto [log, shouldQuit] = processMessages(server, incoming);
     const auto outgoing = buildOutgoing(log);
-    std::cout << log << "\n";
     server.send(outgoing);
 
     if (shouldQuit || errorWhileUpdating) {
