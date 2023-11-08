@@ -3,6 +3,7 @@
 #******************************
 
 ROOT_DIR := $(pwd)
+BUILD_DIR := *build
 
 #******************************
 #	   CORE GAME ENGINE
@@ -107,7 +108,7 @@ help:
 clean: 
 	@echo "[INFO] Removing Build Directories..." ; \
 	rm -rf $(CORE_GAME_ENGINE_BUILD_DIR) ; \
-	rm -rf $(CLIENT_BUILD_DIR)
+	rm -rf $(BUILD_DIR)
 
 
 # [INFO]: Runs all the tests

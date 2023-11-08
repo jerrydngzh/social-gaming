@@ -12,6 +12,14 @@
 #include <iostream>
 #include <unistd.h>
 
+
+/*
+TODO: 
+- add the main screen display
+    - enter a name
+    - (C) to create a game
+    - (J) to join a game
+*/
 int main(int argc, char* argv[]) {
   if (argc < 3) {
     std::cerr << "Usage: \n  " << argv[0] << " <ip address> <port>\n"
@@ -30,13 +38,6 @@ int main(int argc, char* argv[]) {
   };
 
   ChatWindow chatWindow(onTextEntry);
-
-  // TODO: display main page with instructions
-  /*
-    >> Welcome!
-    >> Press (C) to create a game or (J) to join a game
-    >> Press (quit or exit) to quit
-  */
 
   while (!done && !client.isDisconnected()) {
     try {

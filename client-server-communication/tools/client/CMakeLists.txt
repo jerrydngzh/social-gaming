@@ -1,5 +1,6 @@
 add_executable(client_comm
   client_comm.cpp
+  ChatWindow.cpp
 )
 
 set_target_properties(client_comm
@@ -9,10 +10,12 @@ set_target_properties(client_comm
                       PREFIX ""
 )
 
+find_package(Curses REQUIRED)
 find_package(Threads REQUIRED)
 
 target_link_libraries(client_comm
   networking
+  ${CURSES_LIBRARIES}
   ${CMAKE_THREAD_LIBS_INIT}
 )
 
