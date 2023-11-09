@@ -8,14 +8,33 @@
 |`make build-core-game-engine`|Creates a new build directory, then runs cmake|
 |`make compile-core-game-engine`|Compiles the `core-game-engine` .cpp files|
 |`make run-core-game-engine`|Executes the `core-game-engine` using `main` binary <br> Currently configured to use `rock-paper-scissors.game` copied into `game-files` during the build|
-|`make clean`|removes all the build directories|
+|`make test-core-game-engine`|Executes the `core-game-engine` test suite (must be built and compiled)|
 
 |Client Commands|Description|
 |:---|:---|
 |`make build-client`|Creates a new build directory, then runs cmake|
 |`make compile-client`|Compiles the `client` .cpp files|
 |`make run-client`|Executes the `client` using `main` binary|
-|`make clean`|removes all the build directories|
+
+|General Commands|Description|
+|:---|:---|
+|`all-build`  |Builds all the subdirectories in the Repository|
+|`all-compile`|Compiles all the subdirectories in the Repository|
+|`all-tests`  |Runs all Unit Tests for Repository (must be built and compiled)| 
+|`make clean` |Removes all the build artifacts and gtest directories from test directories|
+
+## Unit Tests
+* Application(s) must be built prior (using `make build-{application}` or `make all-build`) -- this copies the `gtest` directory into the the location of the test-suite prior to making a build directory and running CMake on the application
+### Steps:
+1. `make build-{application}` or `make all-build`
+2. `make compile-{application}` or `make all-compile`
+3. `make test-{application}` or `make all-tests`
+
+## Special note for unit tests in the client:
+Run tests using CMake and Make.
+Since we don't have a Makefile implementation for it,
+this will eventually be changed to follow the format of having tests 
+directly in their respective folders instead of the outer folder.
 
 
 ## Git Development 
