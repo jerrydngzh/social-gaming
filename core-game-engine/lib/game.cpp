@@ -22,3 +22,13 @@ void Game::startGame() {
     Interpreter gameRunner(this, this->tree);
     gameRunner.run(rulesLibrary.getNode());
 }
+Configuration* Game::initializeGame(socialgamefile){
+    
+}
+void Game::run(){}
+
+OutputDataTransfer Game::beginGame(){}
+
+//initialize, startgame, run
+// Configuration* initialize(filepath);
+// outMessage run()
