@@ -1,12 +1,11 @@
-#include "interpreter.h"
+#include "include/interpreter.h"
 
-#include "GameContainer.h"
 
 extern "C" {
     TSLanguage* tree_sitter_socialgaming();
 }
 
-Interpreter::Interpreter(const Game* game, const ts::Tree& tree):
+Interpreter::Interpreter(Game* game, const ts::Tree& tree):
     game(game),
     tree(tree)
 {}

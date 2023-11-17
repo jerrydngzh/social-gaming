@@ -99,3 +99,5 @@ for setting s in getSettings(){
 
 
 configuration.getSettingByName(clientResponse.name).setValue(clientResponse.value);
+
+core-game-engine-build/_deps/**
