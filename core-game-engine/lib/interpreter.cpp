@@ -1,11 +1,10 @@
-#include "include/interpreter.h"
-
+#include "interpreter.h"
 
 extern "C" {
     TSLanguage* tree_sitter_socialgaming();
 }
 
-Interpreter::Interpreter(Game* game, const ts::Tree& tree):
+Interpreter::Interpreter(const Game* game, const ts::Tree& tree):
     game(game),
     tree(tree)
 {}
@@ -68,15 +67,6 @@ public:
 
     void execute(const ts::Node& node) override {
         //std::cout << node.getSExpr().get();
-        return;
-    }
-};
-
-class InputAction : public Interpreter::Action {
-public:
-
-    void execute(const ts::Node& node) override {
-        
         return;
     }
 };

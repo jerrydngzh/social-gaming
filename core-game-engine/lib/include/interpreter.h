@@ -16,7 +16,7 @@ private:
     const static ts::Language language;
 
 public:
-    Interpreter(Game* game, const ts::Tree& tree);
+    Interpreter(const Game* game, const ts::Tree& tree);
     ~Interpreter();
     
     class Action {
