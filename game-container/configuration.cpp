@@ -155,7 +155,7 @@ std::tuple<int, int> Configuration::getPlayer() const {
     return players;
 }
 
-bool Configuration::getHasAudience() const {
+bool Configuration::hasAudience() const {
     return hasAudience;
 }
 
