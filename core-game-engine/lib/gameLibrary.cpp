@@ -1,8 +1,11 @@
 #include "gameLibrary.h"
 
 GameLibrary::GameLibrary(const std::vector<Mapping> &data):
-    contents(data)
-    {}
+    contents(data),
+    lookupMap({})
+    {
+      setLookups();
+    }
 
 
 GameLibrary::~GameLibrary() {}
@@ -23,5 +26,13 @@ void GameLibrary::print() const {
         std::cout << child;
       }
       std::cout << "]" << std::endl << std::endl;
+    }
+}
+
+
+void GameLibrary::setLookups() {
+    for(Mapping& entry : contents) {
+      std::pair<std::string, Mapping*> lookup = std::make_pair(entry.key, &entry);
+      lookupMap.insert(lookup);
     }
 }
