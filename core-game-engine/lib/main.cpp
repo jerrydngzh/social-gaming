@@ -16,7 +16,7 @@
 #include "treeParser.h"
 #include "util.h"
 #include "variables.h"
-#include "game.h"
+// #include "game.h"
 
 
 extern "C" {
@@ -61,11 +61,11 @@ int main(int argc, char* argv[]) {
   PerAudience perAudienceLibrary(perAudienceData);
 
   // Uncomment to print the data structure contents
-  configurationLibrary.print();  
-  constantsLibrary.print();
-  variablesLibrary.print();
-  perPlayerLibrary.print();
-  perAudienceLibrary.print();
+  // configurationLibrary.print();  
+  // constantsLibrary.print();
+  // variablesLibrary.print();
+  // perPlayerLibrary.print();
+  // perAudienceLibrary.print();
 
 
   // [NOTE]: this will not work for the rules, will need a different parser

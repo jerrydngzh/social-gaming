@@ -71,9 +71,9 @@ Configuration* Game::getConfiguration(){
 // IO::outputMessage(vector<Player> players, String message, int timeout);
 // IO::outputScores(vector<Scores> scores);
 
-DTO Game::run(){
-    return DTO();
-}
+// DTO Game::run(){
+//     return DTO();
+// }
 
 
 //getConfiguration, run

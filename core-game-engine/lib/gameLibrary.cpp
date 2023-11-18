@@ -30,9 +30,21 @@ void GameLibrary::print() const {
 }
 
 
+std::string GameLibrary::lookup(auto keyToFind) {
+    std::string key = std::to_string(keyToFind);
+
+    // TODO: need a way to recurse data structure if not a leaf
+    std::string value = lookupMap.find(key)->second->value;
+    std::cout << "key: " << key << "; value = " << value << std::endl << std::endl;
+
+    return value;
+}
+
+
 void GameLibrary::setLookups() {
     for(Mapping& entry : contents) {
       std::pair<std::string, Mapping*> lookup = std::make_pair(entry.key, &entry);
       lookupMap.insert(lookup);
     }
 }
+
