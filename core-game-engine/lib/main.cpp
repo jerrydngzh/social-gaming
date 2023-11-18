@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cpp-tree-sitter.h>
 
+#include "game.h"
 #include "configuration.h"
 #include "constants.h"
 #include "mapping.h"
@@ -16,7 +17,6 @@
 #include "treeParser.h"
 #include "util.h"
 #include "variables.h"
-#include "game.h"
 
 
 extern "C" {
