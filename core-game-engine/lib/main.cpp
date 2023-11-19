@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cpp-tree-sitter.h>
 
+#include "game.h"
 #include "configuration.h"
 #include "constants.h"
 #include "mapping.h"
@@ -16,7 +17,6 @@
 #include "treeParser.h"
 #include "util.h"
 #include "variables.h"
-// #include "game.h"
 
 
 extern "C" {
@@ -40,38 +40,18 @@ int main(int argc, char* argv[]) {
 
   // extract header nodes from the tree
   ts::Node configurationNode = root.getChildByFieldName("configuration");
-  // ts::Node constantsNode = root.getChildByFieldName("constants");
-  // ts::Node variablesNode = root.getChildByFieldName("variables");
-  // ts::Node perPlayerNode = root.getChildByFieldName("per_player");
-  // ts::Node perAudienceNode = root.getChildByFieldName("per_audience");
-  // ts::Node rulesNode = root.getChildByFieldName("rules");
+  ts::Node constantsNode = root.getChildByFieldName("constants");
+  ts::Node variablesNode = root.getChildByFieldName("variables");
+  ts::Node perPlayerNode = root.getChildByFieldName("per_player");
+  ts::Node perAudienceNode = root.getChildByFieldName("per_audience");
+  ts::Node rulesNode = root.getChildByFieldName("rules");
 
   // Use Extractor object to get a data structure for the contents of the node
   std::vector<Mapping> configurationData = extractor.format(configurationNode);
-  // std::vector<Mapping> constantsData = extractor.format(constantsNode);
-  // std::vector<Mapping> variablesData = extractor.format(variablesNode);
-  // std::vector<Mapping> perPlayerData = extractor.format(perPlayerNode);
-  // std::vector<Mapping> perAudienceData = extractor.format(perAudienceNode);
-
-  // Create and Initialize Objects for each of the game sections
-  // Configuration configurationLibrary(configurationData);
-  // Constants constantsLibrary(constantsData);
-  // Variables variablesLibrary(variablesData);
-  // PerPlayer perPlayerLibrary(perPlayerData);
-  // PerAudience perAudienceLibrary(perAudienceData);
-
-  // configurationLibrary.lookup("configuration.player_range[0]");
-
-  // Uncomment to print the data structure contents
-  // configurationLibrary.print();  
-  // constantsLibrary.print();
-  // variablesLibrary.print();
-  // perPlayerLibrary.print();
-  // perAudienceLibrary.print();
-
-
-  // [NOTE]: this will not work for the rules, will need a different parser
-  // Rules rulesLibrary(rulesNode, 10);
+  std::vector<Mapping> constantsData = extractor.format(constantsNode);
+  std::vector<Mapping> variablesData = extractor.format(variablesNode);
+  std::vector<Mapping> perPlayerData = extractor.format(perPlayerNode);
+  std::vector<Mapping> perAudienceData = extractor.format(perAudienceNode);
 
   //rulesLibrary.runGame()?
   // Create game by initializing objects for each of the game sections

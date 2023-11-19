@@ -14,6 +14,7 @@ private:
     const Game* game;
     const ts::Tree& tree;
     const static ts::Language language;
+    
 
 public:
     Interpreter(const Game* game, const ts::Tree& tree);
