@@ -1,7 +1,7 @@
 #include "game.h"
 #include "interpreter.h"
 
-Game::Game(const ts::Tree& tree, std::string_view fileContents, 
+Game::Game(const ts::Tree& tree, std::string_view fileContents, //to remove
         std::vector<Mapping> &configurationData,
         std::vector<Mapping> &constantsData,
         std::vector<Mapping> &variablesData,
@@ -56,7 +56,7 @@ Game::Game(std::string_view filename) :
 
 Game::~Game() {}
 
-void Game::startGame() {
+void Game::startGame() {//to remove
     Interpreter gameRunner(this, this->tree);
     gameRunner.run(rulesLibrary.getNode());
 }
