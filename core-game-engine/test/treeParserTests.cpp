@@ -3,11 +3,3 @@
 
 #include "treeParser.h"
 
-
-TEST(TreeParser, POC_1) {
-    EXPECT_TRUE(0 == 0);
-}
-
-TEST(TreeParser, POC_2) {
-    EXPECT_FALSE(0 == 1);
-}

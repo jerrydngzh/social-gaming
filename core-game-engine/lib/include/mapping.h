@@ -6,10 +6,10 @@
 struct Mapping {
     int index;
     std::string key;
-    std::string_view value;
+    std::string value;
     int parent;
     std::vector<int> children;
-    std::string_view type;
+    std::string type;
 
     Mapping& operator=(const Mapping &other) {
         if(this != &other) {
