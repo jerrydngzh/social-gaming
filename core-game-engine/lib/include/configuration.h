@@ -25,5 +25,5 @@ class Configuration : public GameLibrary {
         std::string getGameName() const;
         bool getHasAudience() const;
         std::tuple<int, int> getPlayerRange() const;
-        bool isPlayerCountInRanger(const int &playerCount) const;
+        bool isPlayerCountInRange(const int &playerCount) const;
 };

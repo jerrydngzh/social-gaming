@@ -5,6 +5,7 @@
 #include <cassert>
 #include <iostream>
 #include <map>
+#include <variant>
 
 #include "mapping.h"
 
@@ -18,6 +19,6 @@ class GameLibrary {
         GameLibrary(const std::vector<Mapping> &data);
         ~GameLibrary();
         
-        std::string lookup(auto keyToFind);
+        std::variant<std::string, int, bool> lookup(const std::string keyToFind);
         void print() const;
 };

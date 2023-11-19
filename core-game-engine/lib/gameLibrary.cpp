@@ -30,14 +30,30 @@ void GameLibrary::print() const {
 }
 
 
-std::string GameLibrary::lookup(auto keyToFind) {
-    std::string key = std::to_string(keyToFind);
+std::variant<std::string, int, bool> GameLibrary::lookup(const std::string keyToFind) {
+  auto entryIter = lookupMap.find(keyToFind);
+  if(entryIter != lookupMap.end()){
+    Mapping* entry = entryIter->second;
+    std::string value = entry->value;
+    std::string_view type = entry->type;
 
-    // TODO: need a way to recurse data structure if not a leaf
-    std::string value = lookupMap.find(key)->second->value;
-    std::cout << "key: " << key << "; value = " << value << std::endl << std::endl;
+    if(type == "number") {
+      return stoi(value);
+    } else if(type == "boolean") {
+      if(value == "true" || value == "True" || value == "1"){
+        return true;
+      } else {
+        return false;
+      }
+    } else if(type == "quoted_string") {
+      return value;
+    }
 
     return value;
+  } else{
+    std::cout << "[ERROR] '" << keyToFind << "' NOT FOUND" << std::endl;
+    return "notFound";
+  }
 }
 
 
