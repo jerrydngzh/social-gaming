@@ -1,5 +1,5 @@
 #include "game.h"
-#include "include/interpreter.h"
+#include "interpreter.h"
 
 Game::Game(const ts::Tree& tree, std::string_view fileContents, //to remove
         std::vector<Mapping> &configurationData,
@@ -13,8 +13,8 @@ Game::Game(const ts::Tree& tree, std::string_view fileContents, //to remove
     perPlayerLibrary(PerPlayer(perPlayerData)),
     perAudienceLibrary(PerAudience(perAudienceData)),
     rulesLibrary(Rules(tree.getRootNode().getChildByFieldName("rules"), 10)),
-    tree(tree),
-    runner(this, tree)
+    tree(tree)
+    //runner(this, tree)
     {}
 
 Game::Game(std::string_view filename) : 
@@ -24,8 +24,8 @@ Game::Game(std::string_view filename) :
     perPlayerLibrary(PerPlayer({})),
     perAudienceLibrary(PerAudience({})),
     rulesLibrary(Rules(tree.getRootNode().getChildByFieldName("rules"), 10)),
-    tree(parseTree(parseGAMEFromFile(std::string(filename)))), 
-    runner(this, tree)
+    tree(parseTree(parseGAMEFromFile(std::string(filename))))
+    //runner(this, tree)
     {
     ts::Node root = tree.getRootNode();
 
@@ -71,9 +71,9 @@ Configuration* Game::getConfiguration(){
 // IO::outputMessage(vector<Player> players, String message, int timeout);
 // IO::outputScores(vector<Scores> scores);
 
-DTO Game::run(){
-    return DTO();
-}
+// DTO Game::run(){
+//     return DTO();
+// }
 
 
 //getConfiguration, run
