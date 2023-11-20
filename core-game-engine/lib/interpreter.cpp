@@ -1,5 +1,4 @@
-#include "include/interpreter.h"
-
+#include "interpreter.h"
 
 extern "C" {
     TSLanguage* tree_sitter_socialgaming();

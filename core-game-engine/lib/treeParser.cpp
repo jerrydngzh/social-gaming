@@ -51,7 +51,7 @@ std::string Extractor::changeStringContent(std::string toFix) {
 }// changeStringContent()
 
 
-void Extractor::checkUnrecognizedType(const std::string_view &type){
+void Extractor::checkUnrecognizedType(const std::string &type){
     bool root = isTypeInList(type, rootKeys);
     bool wrapper = isTypeInList(type, wrapperTypes);
     bool key = isTypeInList(type, keyTypes);
@@ -73,7 +73,7 @@ void Extractor::checkUnrecognizedType(const std::string_view &type){
 }// checkUnrecognizedType()
 
 
-std::string Extractor::createKey(const std::string currentKey, const std::string_view toAdd) {
+std::string Extractor::createKey(const std::string currentKey, const std::string toAdd) {
   std::string current = std::string(currentKey);
   std::string end = std::string(toAdd);
 
@@ -85,7 +85,7 @@ std::string Extractor::createKey(const std::string currentKey, const std::string
 }// createKey()
 
 
-Mapping Extractor::createMapping(std::vector<Mapping> &data, const std::string &key, const std::string_view &value, int &parent, const std::string_view &type) {
+Mapping Extractor::createMapping(std::vector<Mapping> &data, const std::string &key, const std::string &value, int &parent, const std::string &type) {
   int insertIndex = data.size(); 
   std::string path = createUniquePath(data, key, parent, type);
 
@@ -122,7 +122,7 @@ Mapping Extractor::createMapping(std::vector<Mapping> &data, const std::string &
 }// createMapping()
 
 
-std::string Extractor::createUniquePath(const std::vector<Mapping> &data, const std::string &key, const int &parent, const std::string_view &type) {
+std::string Extractor::createUniquePath(const std::vector<Mapping> &data, const std::string &key, const int &parent, const std::string &type) {
   std::string path;
   std::string copyOfKey = key;
   std::string formatedKey = changeStringContent(copyOfKey);
@@ -141,7 +141,7 @@ std::string Extractor::createUniquePath(const std::vector<Mapping> &data, const 
 
   // extract data at head of branch
   std::string branchKey = data.at(branchParser).key;
-  std::string_view branchType = data.at(branchParser).type;
+  std::string branchType = data.at(branchParser).type;
   int branchChildrenCount = data.at(branchParser).children.size();
 
   if(type == "number" && branchType == "number_range") {
@@ -167,8 +167,8 @@ std::string Extractor::createUniquePath(const std::vector<Mapping> &data, const 
 }// createUniquePath()
 
 
-bool Extractor::isTypeInList(const std::string_view &type, const std::vector<std::string_view> &validList) {
-  auto iter = std::find_if(validList.begin(), validList.end(), [type](const std::string_view &entry) {
+bool Extractor::isTypeInList(const std::string &type, const std::vector<std::string> &validList) {
+  auto iter = std::find_if(validList.begin(), validList.end(), [type](const std::string &entry) {
     return entry == type;
   });
 
@@ -182,9 +182,12 @@ bool Extractor::isTypeInList(const std::string_view &type, const std::vector<std
 
 void Extractor::recurse(const ts::Node &node, std::vector<Mapping> &data, std::string &key, int &parent) {
   int currentParent = parent;   // when function is ready to pop-off stack, reset the parent with this value
-  std::string_view type = node.getType();
-  std::string_view value = node.getSourceRange(fileContents);
   std::string currentKey = key;
+  std::string type = std::string(node.getType());
+  std::string value = std::string(node.getSourceRange(fileContents));
+
+  // remove quotes from strings
+  value.erase(remove(value.begin(), value.end(), '"'), value.end());
 
   // set a key (if applicable)
   if(isTypeInList(type, keyTypes)) {
