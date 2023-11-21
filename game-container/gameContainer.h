@@ -1,6 +1,7 @@
 #pragma once
 #include "../../core-game-engine/lib/include/game.h"
 #include "configuration.h"
+#include <vector>
 
 class GameContainer
 {
@@ -23,9 +24,10 @@ private:
 
     std::vector<Configuration::Setting> settings; 
     int ownerID;
-    std::unique_ptr<Game> game;
+    std::unique_ptr<Game> game; 
     int gameInviteCode;
     //idk about the player type
-    std::vector<player> playerList;
+    std::vector<int clientID> playerList;
+    Configuration *config;
     
 }
