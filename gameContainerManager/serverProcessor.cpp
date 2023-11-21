@@ -134,72 +134,21 @@ public:
     JoinProcessor(GameContainerManager &gameContainerManager, PlayersManager &playersManager)
         : gameContainerManager(gameContainerManager), playersManager(playersManager){};
 
+
+    // PRE: The command field of the requestDTO should be a JOIN command.
+    // The join request is validated against server logic, then is executed. 
+    // POST: Either an invalid responseDTO is generated, or a responseDTO echoing join execution status is returned
     S2CDTO processJoinCommand(const C2SDTO &requestDTO)
-    {
-        std::string response = "join pipeline called \n";
+    {        
+        S2CDTO responseDTO;
 
-        int clientGameCode = std::stoi(requestDTO.data);
-
-        std::cout << "Test \n";
-
-        // TODO Control Coupling
-        // check if clientGameCode maps to gameContainerID
-        bool gameContainerExists = gameContainerManager.doesGameContainerIDExist(clientGameCode);
-        if (gameContainerExists)
+        if (isJoinCommandValid(requestDTO))
         {
-            std::cout << "Test in\n";
-
-            response += "Game to Join Exists! \n";
-
-            // TODO Control Coupling
-            bool isClientAlreadyPlayer = playersManager.isClientPlayer(requestDTO.clientID);
-            if (isClientAlreadyPlayer)
-            {
-                response += "This client is already a player of another game! \n";
-            }
-            else
-            {
-                response += "This client can play this game \n";
-                playersManager.addPlayerToGame(requestDTO.clientID, clientGameCode);
-
-                std::string gameContainerResponse = gameContainerManager.addPlayerToGame(requestDTO.clientID, clientGameCode);
-                response += gameContainerResponse;
-            }
+            responseDTO = joinGame(requestDTO);
         }
         else
         {
-            std::cout << "Test out \n";
-            response += "Game to Join Doesn't Exists! \n";
-        }
-
-        S2CDTO responseDTO;
-        responseDTO.data = response;
-
-        return responseDTO;
-    }
-
-private:
-    GameContainerManager &gameContainerManager;
-    PlayersManager &playersManager;
-};
-
-class InputProcessor
-{
-public:
-    InputProcessor(GameContainerManager &gameContainerManager, PlayersManager &playersManager)
-        : gameContainerManager(gameContainerManager), playersManager(playersManager){};
-
-    // PRE: The command field of the requestDTO should be an INPUT command.
-    // The input request is validated against server logic, then is passed on to its gameroom. 
-    // POST: Either an invalid responseDTO is generated, or a responseDTO from a gameroom is returned  
-    S2CDTO processInputCommand(const C2SDTO & requestDTO)
-    {
-        S2CDTO responseDTO; 
-
-        if (isInputCommandValid(requestDTO)) {
-            responseDTO = stubGameRoomManagerProcessor(requestDTO);
-        } else {
-            responseDTO = invalidInputCommandResponder(requestDTO);
+            responseDTO = invalidJoinCommandResponder(requestDTO);
         }
 
         return responseDTO;
@@ -211,24 +160,115 @@ private:
 
 private: 
 
-    bool isClientPlayer(int clientID) {
+    bool gameContainerExists(int gameContainerID) {
+        return gameContainerManager.doesGameContainerIDExist(gameContainerID);
+    }
+
+    bool isClientAlreadyPlayer(int clientID) {
         return playersManager.isClientPlayer(clientID);
     }
 
-    bool isInputCommandValid(const C2SDTO & requestDTO) {
-        if (isClientPlayer(requestDTO.clientID)) {
+    bool isJoinCommandValid(const C2SDTO &requestDTO) {
+        int gameContainerID = std::stoi(requestDTO.data);
+
+        bool isJoinCommandValid = (
+            gameContainerExists(gameContainerID) 
+            && 
+            ! isClientAlreadyPlayer(requestDTO.clientID)
+        );
+        return isJoinCommandValid;
+    }
+
+    S2CDTO joinGame(const C2SDTO &requestDTO) {
+        int gameContainerID = std::stoi(requestDTO.data);
+        
+        playersManager.addPlayerToGame(requestDTO.clientID, gameContainerID);
+        std::string gameContainerResponse = gameContainerManager.addPlayerToGame(requestDTO.clientID, gameContainerID);
+
+        S2CDTO responseDTO;
+
+        responseDTO.clientIDs = {requestDTO.clientID};
+        responseDTO.command = "JOIN ROOM COMMAND SUCCESS";
+        responseDTO.data = gameContainerResponse;
+
+        return responseDTO;
+    }
+
+    S2CDTO invalidJoinCommandResponder(const C2SDTO &requestDTO)
+    {
+        std::string response_data = "";
+        int gameContainerID = std::stoi(requestDTO.data);
+
+        if (! gameContainerExists(gameContainerID)) {
+            response_data += "Game Container " + std::to_string(gameContainerID) + " doesn't exist. ";
+        }
+
+        if (isClientAlreadyPlayer(requestDTO.clientID)) {
+            response_data += "Client " + std::to_string(requestDTO.clientID) + " is already a Player. ";
+        }
+
+        S2CDTO responseDTO;
+
+        responseDTO.clientIDs = {requestDTO.clientID};
+        responseDTO.command = "INVALID JOIN COMMAND";
+        responseDTO.data = response_data;
+
+        return responseDTO;
+    }
+};
+
+class InputProcessor
+{
+public:
+    InputProcessor(GameContainerManager &gameContainerManager, PlayersManager &playersManager)
+        : gameContainerManager(gameContainerManager), playersManager(playersManager){};
+
+    // PRE: The command field of the requestDTO should be an INPUT command.
+    // The input request is validated against server logic, then is passed on to its gameroom.
+    // POST: Either an invalid responseDTO is generated, or a responseDTO from a gameroom is returned
+    S2CDTO processInputCommand(const C2SDTO &requestDTO)
+    {
+        S2CDTO responseDTO;
+
+        if (isInputCommandValid(requestDTO))
+        {
+            responseDTO = stubGameRoomManagerProcessor(requestDTO);
+        }
+        else
+        {
+            responseDTO = invalidInputCommandResponder(requestDTO);
+        }
+
+        return responseDTO;
+    }
+
+private:
+    GameContainerManager &gameContainerManager;
+    PlayersManager &playersManager;
+
+private:
+    bool isClientPlayer(int clientID)
+    {
+        return playersManager.isClientPlayer(clientID);
+    }
+
+    bool isInputCommandValid(const C2SDTO &requestDTO)
+    {
+        if (isClientPlayer(requestDTO.clientID))
+        {
             return true;
         }
 
         return false;
     }
 
-    S2CDTO stubGameRoomManagerProcessor(const C2SDTO & requestDTO) {
+    S2CDTO stubGameRoomManagerProcessor(const C2SDTO &requestDTO)
+    {
         // This should be refactored alongside GameRoomManager
         int gameContainerIDofPlayer = playersManager.getGameContainerIDofPlayer(requestDTO.clientID);
         std::string gameContainerResponse = gameContainerManager.giveGameContainerPlayerInput(gameContainerIDofPlayer, requestDTO.clientID, requestDTO.data);
 
-        S2CDTO responseDTO; 
+        S2CDTO responseDTO;
 
         responseDTO.clientIDs = {requestDTO.clientID};
         responseDTO.command = "STUB_GAMEROOM RESPONSE COMMAND";
@@ -237,13 +277,15 @@ private:
         return responseDTO;
     }
 
-    S2CDTO invalidInputCommandResponder(const C2SDTO & requestDTO) {
-        S2CDTO responseDTO; 
+    S2CDTO invalidInputCommandResponder(const C2SDTO &requestDTO)
+    {
+        S2CDTO responseDTO;
 
         responseDTO.clientIDs = {requestDTO.clientID};
         responseDTO.command = "INVALID INPUT COMMAND";
 
-        if (isClientPlayer(requestDTO.clientID) == false) {
+        if (isClientPlayer(requestDTO.clientID) == false)
+        {
             responseDTO.data = "client " + std::to_string(requestDTO.clientID) + " is not a player!";
         }
 
@@ -251,17 +293,16 @@ private:
     }
 };
 
-
-// InvalidCommandProcessor handles the case when the server platform recieves a DTO whose command 
-// does not match a valid/known command. 
+// InvalidCommandProcessor handles the case when the server platform recieves a DTO whose command
+// does not match a valid/known command.
 class InvalidCommandProcessor
 {
 public:
     InvalidCommandProcessor(){};
 
-    // PRE: The command field of the requestDTO should be an invalid command. 
-    // POST: A responseDTO indicating that the command is invalid, 
-        // along with a description of the invalid command. 
+    // PRE: The command field of the requestDTO should be an invalid command.
+    // POST: A responseDTO indicating that the command is invalid,
+    // along with a description of the invalid command.
     S2CDTO processInvalidCommand(const C2SDTO &requestDTO)
     {
         S2CDTO responseDTO;
