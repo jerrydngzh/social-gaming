@@ -189,27 +189,18 @@ public:
     InputProcessor(GameContainerManager &gameContainerManager, PlayersManager &playersManager)
         : gameContainerManager(gameContainerManager), playersManager(playersManager){};
 
-    S2CDTO processInputCommand(const C2SDTO &requestDTO)
+    // PRE: The command field of the requestDTO should be an INPUT command.
+    // The input request is validated against server logic, then is passed on to its gameroom. 
+    // POST: Either an invalid responseDTO is generated, or a responseDTO from a gameroom is returned  
+    S2CDTO processInputCommand(const C2SDTO & requestDTO)
     {
-        std::string response = "player input pipeline called \n";
+        S2CDTO responseDTO; 
 
-        // TODO Control Coupling
-        bool isClientPlayer = playersManager.isClientPlayer(requestDTO.clientID);
-        if (isClientPlayer)
-        {
-            response += "client is player \n";
-
-            int gameContainerIDofPlayer = playersManager.getGameContainerIDofPlayer(requestDTO.clientID);
-            std::string gameContainerResponse = gameContainerManager.giveGameContainerPlayerInput(gameContainerIDofPlayer, requestDTO.clientID, requestDTO.data);
-            response += gameContainerResponse;
+        if (isInputCommandValid(requestDTO)) {
+            responseDTO = stubGameRoomManagerProcessor(requestDTO);
+        } else {
+            responseDTO = invalidInputCommandResponder(requestDTO);
         }
-        else
-        {
-            response += "client is not player! Error! \n";
-        }
-
-        S2CDTO responseDTO;
-        responseDTO.data = response;
 
         return responseDTO;
     }
@@ -217,17 +208,66 @@ public:
 private:
     GameContainerManager &gameContainerManager;
     PlayersManager &playersManager;
+
+private: 
+
+    bool isClientPlayer(int clientID) {
+        return playersManager.isClientPlayer(clientID);
+    }
+
+    bool isInputCommandValid(const C2SDTO & requestDTO) {
+        if (isClientPlayer(requestDTO.clientID)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    S2CDTO stubGameRoomManagerProcessor(const C2SDTO & requestDTO) {
+        // This should be refactored alongside GameRoomManager
+        int gameContainerIDofPlayer = playersManager.getGameContainerIDofPlayer(requestDTO.clientID);
+        std::string gameContainerResponse = gameContainerManager.giveGameContainerPlayerInput(gameContainerIDofPlayer, requestDTO.clientID, requestDTO.data);
+
+        S2CDTO responseDTO; 
+
+        responseDTO.clientIDs = {requestDTO.clientID};
+        responseDTO.command = "STUB_GAMEROOM RESPONSE COMMAND";
+        responseDTO.data = gameContainerResponse;
+
+        return responseDTO;
+    }
+
+    S2CDTO invalidInputCommandResponder(const C2SDTO & requestDTO) {
+        S2CDTO responseDTO; 
+
+        responseDTO.clientIDs = {requestDTO.clientID};
+        responseDTO.command = "INVALID INPUT COMMAND";
+
+        if (isClientPlayer(requestDTO.clientID) == false) {
+            responseDTO.data = "client " + std::to_string(requestDTO.clientID) + " is not a player!";
+        }
+
+        return responseDTO;
+    }
 };
 
+
+// InvalidCommandProcessor handles the case when the server platform recieves a DTO whose command 
+// does not match a valid/known command. 
 class InvalidCommandProcessor
 {
 public:
     InvalidCommandProcessor(){};
 
+    // PRE: The command field of the requestDTO should be an invalid command. 
+    // POST: A responseDTO indicating that the command is invalid, 
+        // along with a description of the invalid command. 
     S2CDTO processInvalidCommand(const C2SDTO &requestDTO)
     {
         S2CDTO responseDTO;
 
+        responseDTO.clientIDs = {requestDTO.clientID};
+        responseDTO.command = "RECIEVED_INVALID_COMMAND";
         responseDTO.data = "command not recognized: " + requestDTO.command + "\n";
 
         return responseDTO;
