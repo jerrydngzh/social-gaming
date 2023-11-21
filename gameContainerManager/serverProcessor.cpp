@@ -2,12 +2,21 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <memory>
 #include "serverProcessorDTO.h"
-// #include "gameContainerManager.cpp"
+
+// Coupling Checklist
+// Content Coupling - Clear
+// Subclass Coupling - Clear
+// Common / External Coupling - Clear
+// Control Coupling - Not Clear
+// Temporal Coupling - ???
 
 class GameContainerManager
 {
 public:
+    GameContainerManager(){};
+
     int createGameContainer()
     {
         int gameContainerID = numberOfGameContainers;
@@ -22,7 +31,6 @@ public:
     bool doesGameContainerIDExist(int gameContainerID)
     {
         auto gameContainerVector_iter = std::find(gameContainerVector.begin(), gameContainerVector.end(), gameContainerID);
-
         if (gameContainerVector_iter != gameContainerVector.end())
         {
             return true;
@@ -54,6 +62,7 @@ class PlayersManager
 public:
     bool isClientPlayer(int clientID)
     {
+        // TODO Control Coupling
         bool foundClientInplayerIDtoGameIDMap = playerIDtoGameIDMap.find(clientID) != playerIDtoGameIDMap.end();
         if (foundClientInplayerIDtoGameIDMap)
         {
@@ -70,6 +79,7 @@ public:
         playerIDtoGameIDMap[clientID] = clientGameCode;
     }
 
+    // TODO - Doesn't handle when non-clientid is passed
     int getGameContainerIDofPlayer(int clientID)
     {
         return playerIDtoGameIDMap[clientID];
@@ -91,64 +101,58 @@ private:
     std::unordered_map<int, int> ownerIDtoGameIDMap;
 };
 
-class ServerProcessor
+// New Modules
+class CreateProcessor
 {
 public:
-    ServerProcessor(GameContainerManager &gameContainerManager, PlayersManager &playersManager, OwnersManager &ownersManager)
-        : gameContainerManager(gameContainerManager), playersManager(playersManager), ownersManager(ownersManager){};
+    CreateProcessor(GameContainerManager &gameContainerManager, OwnersManager &ownersManager)
+        : gameContainerManager(gameContainerManager), ownersManager(ownersManager){};
 
-    S2CDTO commandProcessor(const C2SDTO &c2sDTO)
-    {
-        std::string response_data = "";
-
-        if (c2sDTO.command == "CREATE")
-        {
-            response_data = createPipeline(c2sDTO);
-        }
-        else if (c2sDTO.command == "JOIN")
-        {
-            response_data = joinPipeline(c2sDTO);
-        }
-        else if (c2sDTO.command == "INPUT")
-        {
-            response_data = playerInputPipeline(c2sDTO);
-        }
-        else
-        {
-            response_data = "command not recognized: " + c2sDTO.command + "\n";
-        }
-
-        S2CDTO s2cdto;
-        s2cdto.data = response_data;
-        return s2cdto;
-    }
-
-private:
-    std::string createPipeline(const C2SDTO &c2sDTO)
+    S2CDTO processCreateCommand(const C2SDTO &requestDTO)
     {
         int gameContainerID = gameContainerManager.createGameContainer();
 
         // add clientId as owner of gamecontainerid
-        ownersManager.setOwnerOfGameContainer(c2sDTO.clientID, gameContainerID);
+        ownersManager.setOwnerOfGameContainer(requestDTO.clientID, gameContainerID);
 
-        std::string response = "create pipeline called. invite code: " + std::to_string(gameContainerID);
-        return response;
+        std::string responseData = "create pipeline called. invite code: " + std::to_string(gameContainerID);
+
+        S2CDTO responseDTO;
+        responseDTO.data = responseData;
+
+        return responseDTO;
     }
 
-    std::string joinPipeline(const C2SDTO &c2sDTO)
+private:
+    GameContainerManager &gameContainerManager;
+    OwnersManager &ownersManager;
+};
+
+class JoinProcessor
+{
+public:
+    JoinProcessor(GameContainerManager &gameContainerManager, PlayersManager &playersManager)
+        : gameContainerManager(gameContainerManager), playersManager(playersManager){};
+
+    S2CDTO processJoinCommand(const C2SDTO &requestDTO)
     {
         std::string response = "join pipeline called \n";
 
-        int clientGameCode = std::stoi(c2sDTO.data);
+        int clientGameCode = std::stoi(requestDTO.data);
 
+        std::cout << "Test \n";
+
+        // TODO Control Coupling
         // check if clientGameCode maps to gameContainerID
         bool gameContainerExists = gameContainerManager.doesGameContainerIDExist(clientGameCode);
-
         if (gameContainerExists)
         {
+            std::cout << "Test in\n";
+
             response += "Game to Join Exists! \n";
 
-            bool isClientAlreadyPlayer = playersManager.isClientPlayer(c2sDTO.clientID);
+            // TODO Control Coupling
+            bool isClientAlreadyPlayer = playersManager.isClientPlayer(requestDTO.clientID);
             if (isClientAlreadyPlayer)
             {
                 response += "This client is already a player of another game! \n";
@@ -156,31 +160,47 @@ private:
             else
             {
                 response += "This client can play this game \n";
-                playersManager.addPlayerToGame(c2sDTO.clientID, clientGameCode);
+                playersManager.addPlayerToGame(requestDTO.clientID, clientGameCode);
 
-                std::string gameContainerResponse = gameContainerManager.addPlayerToGame(c2sDTO.clientID, clientGameCode);
+                std::string gameContainerResponse = gameContainerManager.addPlayerToGame(requestDTO.clientID, clientGameCode);
                 response += gameContainerResponse;
             }
         }
         else
         {
+            std::cout << "Test out \n";
             response += "Game to Join Doesn't Exists! \n";
         }
 
-        return response;
+        S2CDTO responseDTO;
+        responseDTO.data = response;
+
+        return responseDTO;
     }
 
-    std::string playerInputPipeline(const C2SDTO &c2sDTO)
+private:
+    GameContainerManager &gameContainerManager;
+    PlayersManager &playersManager;
+};
+
+class InputProcessor
+{
+public:
+    InputProcessor(GameContainerManager &gameContainerManager, PlayersManager &playersManager)
+        : gameContainerManager(gameContainerManager), playersManager(playersManager){};
+
+    S2CDTO processInputCommand(const C2SDTO &requestDTO)
     {
         std::string response = "player input pipeline called \n";
 
-        bool isClientPlayer = playersManager.isClientPlayer(c2sDTO.clientID);
+        // TODO Control Coupling
+        bool isClientPlayer = playersManager.isClientPlayer(requestDTO.clientID);
         if (isClientPlayer)
         {
             response += "client is player \n";
 
-            int gameContainerIDofPlayer = playersManager.getGameContainerIDofPlayer(c2sDTO.clientID);
-            std::string gameContainerResponse = gameContainerManager.giveGameContainerPlayerInput(gameContainerIDofPlayer, c2sDTO.clientID, c2sDTO.data);
+            int gameContainerIDofPlayer = playersManager.getGameContainerIDofPlayer(requestDTO.clientID);
+            std::string gameContainerResponse = gameContainerManager.giveGameContainerPlayerInput(gameContainerIDofPlayer, requestDTO.clientID, requestDTO.data);
             response += gameContainerResponse;
         }
         else
@@ -188,10 +208,28 @@ private:
             response += "client is not player! Error! \n";
         }
 
-        return response;
+        S2CDTO responseDTO;
+        responseDTO.data = response;
+
+        return responseDTO;
     }
 
-    GameContainerManager gameContainerManager;
-    PlayersManager playersManager;
-    OwnersManager ownersManager;
+private:
+    GameContainerManager &gameContainerManager;
+    PlayersManager &playersManager;
+};
+
+class InvalidCommandProcessor
+{
+public:
+    InvalidCommandProcessor(){};
+
+    S2CDTO processInvalidCommand(const C2SDTO &requestDTO)
+    {
+        S2CDTO responseDTO;
+
+        responseDTO.data = "command not recognized: " + requestDTO.command + "\n";
+
+        return responseDTO;
+    }
 };
