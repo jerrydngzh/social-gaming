@@ -16,23 +16,18 @@ GameContainer::GameContainer() : ownerID(0), game(nullptr), gameInviteCode(0), p
 
 void GameContainer::getMsgFromGCManager(const GameContainerManagerDTO& serverDTO)
 {
-    if (serverDTO.command == "CREATE")
-    {
-        ownerID = serverDTO.clientID;
-    }
-    else if (serverDTO.command == "JOIN")
+    if (serverDTO.command == "JOIN")
     {
         addPlayerToList(serverDTO.clientID);
     }
-    else 
+    else if (serverDTO.command == "INPUT")
     {
-        //do something with player input        
+        //do something with player input, run game?
     }
 }
 
 GameContainerManagerDTO GameContainer::sendMsgToGCManager()
 {
-
     GameContainerManagerDTO dto;
 
     return dto;
