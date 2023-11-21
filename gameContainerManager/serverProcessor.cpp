@@ -108,17 +108,23 @@ public:
     CreateProcessor(GameContainerManager &gameContainerManager, OwnersManager &ownersManager)
         : gameContainerManager(gameContainerManager), ownersManager(ownersManager){};
 
+
+    // PRE: The command field of the requestDTO should be a CREATE command.
+    // The create request is validated against server logic, then the creation of a game is executed.
+    // POST: Either an invalid responseDTO is generated, or a responseDTO echoing create game execution status is returned
     S2CDTO processCreateCommand(const C2SDTO &requestDTO)
     {
-        int gameContainerID = gameContainerManager.createGameContainer();
-
-        // add clientId as owner of gamecontainerid
-        ownersManager.setOwnerOfGameContainer(requestDTO.clientID, gameContainerID);
-
-        std::string responseData = "create pipeline called. invite code: " + std::to_string(gameContainerID);
 
         S2CDTO responseDTO;
-        responseDTO.data = responseData;
+
+        if (isCreateCommandValid(requestDTO))
+        {
+            responseDTO = createGame(requestDTO);
+        }
+        else
+        {
+            responseDTO = invalidCreateCommandResponder(requestDTO);
+        }
 
         return responseDTO;
     }
@@ -126,6 +132,36 @@ public:
 private:
     GameContainerManager &gameContainerManager;
     OwnersManager &ownersManager;
+
+    bool isCreateCommandValid(const C2SDTO &requestDTO) {
+        // Stub Function
+        return true; 
+    }
+
+    // Needs some refactoring / will be modified soon with Kamals Code 
+    S2CDTO createGame(const C2SDTO &requestDTO) {
+        int gameContainerID = gameContainerManager.createGameContainer();
+        ownersManager.setOwnerOfGameContainer(requestDTO.clientID, gameContainerID);
+        std::string responseData = "create pipeline called. invite code: " + std::to_string(gameContainerID);
+
+        S2CDTO responseDTO;
+        responseDTO.clientIDs = {requestDTO.clientID};
+        responseDTO.command = "CREATE ROOM COMMAND SUCCESS";
+        responseDTO.data = responseData;
+        return responseDTO;
+    }
+
+    S2CDTO invalidCreateCommandResponder(const C2SDTO &requestDTO)
+    {
+        // Stub Function
+        S2CDTO responseDTO;
+
+        responseDTO.clientIDs = {requestDTO.clientID};
+        responseDTO.command = "INVALID CREATE COMMAND";
+        responseDTO.data = "Create Command is Invalid";
+
+        return responseDTO;
+    }
 };
 
 class JoinProcessor
