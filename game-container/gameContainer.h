@@ -28,5 +28,7 @@ private:
     int gameInviteCode;
     std::vector<int> playerList; // list of clientIds
     Configuration *config;
+    DtoFromGame gameDTO;
+    C2SDTO serverDTO;
     
 };

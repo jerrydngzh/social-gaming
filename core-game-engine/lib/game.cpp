@@ -72,8 +72,11 @@ Configuration* Game::getConfiguration(){
 // IO::outputMessage(vector<Player> players, String message, int timeout);
 // IO::outputScores(vector<Scores> scores);
 
-DTO Game::run(InputDTOObject){
-    return DTO();
+// Should take in an input DTO Object which has been passed down from container manager to container
+DtoFromGame Game::run(DTOtoGame dto){
+    // processing here currently stubbed
+    DtoFromGame dtoToContainer = {true, 42, "example", 123, {1, 10}, {}};
+    return dtoToContainer;
 }
 
 

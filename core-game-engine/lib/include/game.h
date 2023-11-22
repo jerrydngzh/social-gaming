@@ -39,5 +39,5 @@ public:
     void recurse(const ts::Node& node);
 
     Configuration* Game::getConfiguration();
-    DTO Game::run();
+    DtoFromGame Game::run(DTOtoGame dto);
 };
