@@ -2,5 +2,5 @@
 #pragma once
 
 class MemberState {
-    //A member has a name, id, and a map of values (or a valuesState?)
+    //A member has a name, id, and a map of values (or a valuesState?) called elements
 };
