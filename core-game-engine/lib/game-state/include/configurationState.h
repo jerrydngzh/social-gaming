@@ -1,9 +1,11 @@
-//This should be rewritten to just hold the final values of Setup (map of name to Setting or even variant)
+//Holds the final values of Setup and the name associated with them
 #pragma once
 
 #include <string>
+#include <vector>
+#include <algorithm>
 
-class Setting {//for storing the setup data
+class Setting {
     protected:
         std::string name;
     public: //Consider visitor patter instead of storing a type like this?
@@ -20,6 +22,9 @@ class Setting {//for storing the setup data
             return kind;
         };
         Setting(std::string name, Kind kind) : name(name), kind(kind) {};
+        std::string getName() const {
+            return name;
+        };
     };
 
 class BooleanSetting : public Setting {
@@ -51,3 +56,14 @@ public:
 };
 
 //TODO: implement the rest of the settings (String, Enum, QuestionAnswer, MultipleChoice, JSON)
+
+class ConfigurationState {
+private:
+    std::vector<Setting*> settings; //may need to make these unique pointers
+public:
+    ConfigurationState();
+    ~ConfigurationState();
+    void addSetting(Setting* setting);
+    Setting* getSetting(std::string name) const;
+    std::vector<Setting*> getSettings() const;
+};
