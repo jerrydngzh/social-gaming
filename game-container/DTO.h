@@ -1,6 +1,7 @@
 #include "../core-game-engine/lib/include/configuration.h"
 #include <variant>
 #include <vector>
+#include "configuration.h"
 
 enum MessageType{
     REQUEST_FOR_INPUT,
@@ -10,15 +11,15 @@ enum MessageType{
 enum InputOrJoin {
     INPUT,
     JOIN
-}
+};
 
 struct ClientData {
     std::string data;
-}
+};
 
 struct GameRequest {
     std::string request;
-}
+};
 
 struct DtoFromGame {
     bool isParallel;
@@ -53,7 +54,7 @@ struct DTOtoGame {
 // make some of these variables std::optional
 struct DTOtoGameContainerManager {
     int clientId;
-    std::vector<int clientID> playerList;
+    std::vector<int> playerList;
     Configuration::Setting setting; // on the client output(getPrompt())
     bool isParallel;
     std::variant<int, bool> value;

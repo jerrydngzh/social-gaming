@@ -10,7 +10,7 @@ public:
     GameContainer(int ownerId, std::unique_ptr<Game> game, int inviteCode)
         : ownerID(ownerId), game(std::move(game)), gameInviteCode(inviteCode), playerList() {}
 
-    ForGameContainerManagerDTO GameContainerProcessor(const FromGameContainerManagerDTO & requestDTO);
+    DTOtoGameContainerManager GameContainerProcessor(const DtoFromGame & requestDTO);
 
     // int getOwnerID() const { return ownerID; }
     // int getGameInviteCode() const { return gameInviteCode; }
@@ -19,15 +19,14 @@ public:
 private:
     void addPlayerToList(int clientID);
     // not sure about these functions anymore
-    void getMsgFromGCManager(const GameContainerManagerDTO& serverDTO);
-    GameContainerManagerDTO sendMsgToGCManager();
+    void getMsgFromGCManager(const C2SDTO& serverDTO);
+    DTOtoGameContainerManager sendMsgToGCManager();
 
     std::vector<Configuration::Setting> settings; 
     int ownerID;
     std::unique_ptr<Game> game; 
     int gameInviteCode;
-    //idk about the player type
-    std::vector<int clientID> playerList;
+    std::vector<int> playerList; // list of clientIds
     Configuration *config;
     
-}
+};

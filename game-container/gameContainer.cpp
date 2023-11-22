@@ -16,11 +16,14 @@ GameContainer::GameContainer() : ownerID(0), game(nullptr), gameInviteCode(0), p
     game = std::make_unique<Game>("../docs/rock-paper-scissors.game");
     // The configuration we are expecting is the one included in this file (Our code)
     // but currently it returns the configuration in game-container (Mike's code)
-    Configuration *config = gameInstance.getConfiguration();
+    Configuration *config = game->getConfiguration();
     settings = config->getSettings();
+    // game->runStub();
 };
 
-void GameContainer::getMsgFromGCManager(const GameContainerManagerDTO& serverDTO)
+
+
+void GameContainer::getMsgFromGCManager(const C2SDTO& serverDTO)
 {
     if (serverDTO.command == "JOIN")
     {
@@ -30,13 +33,13 @@ void GameContainer::getMsgFromGCManager(const GameContainerManagerDTO& serverDTO
     else if (serverDTO.command == "INPUT")
     {
         //do something with player input, run game?
-        game.runGame(DTOtoGame);
+        game->run();
 
     }
 }
 
-GameContainerManagerDTO GameContainer::sendMsgToGCManager()
+DTOtoGameContainerManager GameContainer::sendMsgToGCManager()
 {
-    GameContainerManagerDTO dto;
+    DtoFromGame dto = {true, 42, "example", 123, {1, 10}, {}};
     return dto;
 }
