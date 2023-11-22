@@ -13,4 +13,7 @@ private:
     std::vector<MemberState*> players; //or have a wrapper like ValuesState?
     RulesState* rulesState;
     ValuesState* values;
+
+public:
+    //TODO
 };
