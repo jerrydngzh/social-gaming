@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cpp-tree-sitter.h>
 
+#include "game.h"
 #include "configuration.h"
 #include "constants.h"
 #include "mapping.h"
@@ -16,7 +17,6 @@
 #include "treeParser.h"
 #include "util.h"
 #include "variables.h"
-#include "game.h"
 
 
 extern "C" {
@@ -52,24 +52,6 @@ int main(int argc, char* argv[]) {
   std::vector<Mapping> variablesData = extractor.format(variablesNode);
   std::vector<Mapping> perPlayerData = extractor.format(perPlayerNode);
   std::vector<Mapping> perAudienceData = extractor.format(perAudienceNode);
-
-  // Create and Initialize Objects for each of the game sections
-  Configuration configurationLibrary(configurationData);
-  Constants constantsLibrary(constantsData);
-  Variables variablesLibrary(variablesData);
-  PerPlayer perPlayerLibrary(perPlayerData);
-  PerAudience perAudienceLibrary(perAudienceData);
-
-  // Uncomment to print the data structure contents
-  configurationLibrary.print();  
-  constantsLibrary.print();
-  variablesLibrary.print();
-  perPlayerLibrary.print();
-  perAudienceLibrary.print();
-
-
-  // [NOTE]: this will not work for the rules, will need a different parser
-  // Rules rulesLibrary(rulesNode, 10);
 
   //rulesLibrary.runGame()?
   // Create game by initializing objects for each of the game sections

@@ -11,6 +11,8 @@
 #include "treeParser.h"
 #include "util.h"
 #include "variables.h"
+//#include "interpreter.h"
+//#include "../../game-container/DTO.h"
 
 // Holds all sections of the game and initializes game logic
 class Game {
@@ -22,6 +24,7 @@ private:
     Rules rulesLibrary;
     Variables variablesLibrary;
     const ts::Tree& tree;
+    //Interpreter runner;
     
 public:
     Game(const ts::Tree& tree, std::string_view fileContents, 
@@ -30,7 +33,12 @@ public:
         std::vector<Mapping> &variablesData,
         std::vector<Mapping> &perPlayerData,
         std::vector<Mapping> &perAudienceData);
+    Game(std::string_view filename);
+    Game() = default;
     ~Game();
     void startGame();
     void recurse(const ts::Node& node);
+
+    Configuration* getConfiguration();
+    //DTO run(DTO in);
 };

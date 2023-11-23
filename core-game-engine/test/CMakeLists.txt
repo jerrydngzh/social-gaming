@@ -3,7 +3,7 @@ add_subdirectory(gtest)
 add_executable(tests-core-game-engine
     # Add new cpp files  that you want to add to testing
     configurationTests.cpp
-    contantsTests.cpp
+    constantsTests.cpp
     gameTests.cpp
     gameLibraryTests.cpp
     interpreterTests.cpp
