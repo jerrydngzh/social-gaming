@@ -10,7 +10,7 @@
 //      GLOBAL VARIABLES
 //******************************
 
-static const std::string FILE_LOCATION = "core-game-engine-build/game-files/rock-paper-scissors.game";
+static const std::string FILE_LOCATION = "test-game-files/rock-paper-scissors.game";
 static const std::string LIBRARY_TYPE = "per_audience";
 static const bool TEST_PRINT = false;
 

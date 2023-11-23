@@ -26,3 +26,6 @@ target_link_libraries(tests-core-game-engine
 add_test(NAME tests-core-game-engine
   COMMAND ${CMAKE_CURRENT_BINARY_DIR}/tests-core-game-engine
 )
+
+# copy game files to build directory
+file(COPY test-game-files DESTINATION ${PROJECT_BINARY_DIR})

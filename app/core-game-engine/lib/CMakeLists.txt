@@ -40,7 +40,6 @@ target_sources(core-game-engine-lib
     configuration.cpp
     constants.cpp
     gameLibrary.cpp
-    main.cpp
     perAudience.cpp
     perPlayer.cpp
     rules.cpp
@@ -72,52 +71,4 @@ target_include_directories(core-game-engine-lib
   PRIVATE
   ${tree-sitter-json_SOURCE_DIR} # This points to the include directory of tree-sitter-json
   ${tree-sitter-sg_SOURCE_DIR} # This points to the include directory of tree-sitter-json
-)
-
-
-#********************************
-#             MAIN
-#********************************
-
-# Use the library in a main program.
-add_executable(main)
-target_sources(main
-  PRIVATE
-    configuration.cpp
-    constants.cpp
-    gameLibrary.cpp
-    main.cpp
-    perAudience.cpp
-    perPlayer.cpp
-    rules.cpp
-    treeParser.cpp
-    util.cpp
-    variables.cpp
-    game.cpp
-    interpreter.cpp
-)
-
-target_compile_features(main PUBLIC cxx_std_20)
-set_target_properties(main PROPERTIES
-  LINKER_LANGUAGE CXX
-  PREFIX ""
-)
-
-target_link_libraries(main
-  tree-sitter-json
-  tree-sitter-sg
-  cpp-tree-sitter
-)
-
-#include header
-target_include_directories(main
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  PRIVATE
-  ${tree-sitter-json_SOURCE_DIR} # This points to the include directory of tree-sitter-json
-  ${tree-sitter-sg_SOURCE_DIR} # This points to the include directory of tree-sitter-json
-)
-
-install(TARGETS main PUBLIC_HEADER
-  DESTINATION ${PROJECT_BINARY_DIR}/bin
 )

@@ -20,8 +20,7 @@ build-client:
 	@echo "[INFO] Building 'client'" ; \
 	echo "[SETUP] Copying '$(TEST_DIR)/gtest' directory to $(CLIENT_TEST_DIR)" ; \
 	cp -r $(TEST_DIR)/gtest $(CLIENT_TEST_DIR) ; \
-	rm -rf $(CLIENT_BUILD_DIR) ; \
-	mkdir $(CLIENT_BUILD_DIR) ; \
+	mkdir -p $(CLIENT_BUILD_DIR) ; \
 	cd $(CLIENT_BUILD_DIR) && cmake ../$(CLIENT_DIR)
 
 # Compiles the C++ code for the project
@@ -37,13 +36,32 @@ run-client:
 # Runs the test-suite
 test-client:
 	@echo "[INFO] client tests commencing..." ; \
-	$(CLIENT_BUILD_DIR)/bin/tests-client
+	cd $(CLIENT_BUILD_DIR) && bin/tests-client
 
 #******************************
 # CLIENT SERVER COMMUNICATION
 #******************************
+# [INFO] No test suite for this module
 
-# TODO
+CLIENT_SERVER_COMMUNICATION_DIR := $(APP_DIR)/client-server-communication
+CLIENT_SERVER_COMMUNICATION_BUILD_DIR := client-server-communication-build
+
+# Creates directory and runs cmake to build the project
+build-client-server-communication:
+	@echo "[INFO] Building 'client-server-communication'" ; \
+	mkdir -p $(CLIENT_SERVER_COMMUNICATION_BUILD_DIR) ; \
+	cd $(CLIENT_SERVER_COMMUNICATION_BUILD_DIR) && cmake ../$(CLIENT_SERVER_COMMUNICATION_DIR)
+
+# Compiles the C++ code for the project
+compile-client-server-communication:
+	@echo "[INFO] Compiling 'client-server-communication'" ; \
+	$(MAKE) -C $(CLIENT_SERVER_COMMUNICATION_BUILD_DIR) --silent
+
+# Executes the code
+run-client-server-communication:
+	@echo "[INFO] Running 'client-server-communication'" ; \
+	$(CLIENT_SERVER_COMMUNICATION_BUILD_DIR)/client
+
 
 #******************************
 #	   CORE GAME ENGINE
@@ -58,8 +76,7 @@ build-core-game-engine:
 	@echo "[INFO] Building 'core-game-engine'" ; \
 	echo "[SETUP] Copying '$(TEST_DIR)/gtest' directory to $(CORE_GAME_ENGINE_TEST_DIR)" ; \
 	cp -r $(TEST_DIR)/gtest $(CORE_GAME_ENGINE_TEST_DIR) ; \
-	rm -rf $(CORE_GAME_ENGINE_BUILD_DIR) ; \
-	mkdir $(CORE_GAME_ENGINE_BUILD_DIR) ; \
+	mkdir -p $(CORE_GAME_ENGINE_BUILD_DIR) ; \
 	cd $(CORE_GAME_ENGINE_BUILD_DIR) && cmake ../$(CORE_GAME_ENGINE_DIR)
 
 # Compiles the C++ code for the project
@@ -67,28 +84,73 @@ compile-core-game-engine:
 	@echo "[INFO] Compiling 'core-game-engine'" ; \
 	$(MAKE) -C $(CORE_GAME_ENGINE_BUILD_DIR) --silent
 
-# Executes the code
-run-core-game-engine:
-	@echo "[INFO] Running 'core-game-engine'" ; \
-	$(CORE_GAME_ENGINE_BUILD_DIR)/bin/main $(CORE_GAME_ENGINE_BUILD_DIR)/game-files/rock-paper-scissors.game
-
 # Runs the test-suite
 test-core-game-engine:
 	@echo "[INFO] core-game-engine tests commencing..." ; \
-	$(CORE_GAME_ENGINE_BUILD_DIR)/bin/tests-core-game-engine
+	cd $(CORE_GAME_ENGINE_BUILD_DIR) && bin/tests-core-game-engine
 
 
 #******************************
 # 		GAME CONTAINER
 #******************************
 
-# TODO
+GAME_CONTAINER_DIR := $(APP_DIR)/game-container
+GAME_CONTAINER_BUILD_DIR := game-container-build
+GAME_CONTAINER_TEST_DIR := $(GAME_CONTAINER_DIR)/test
+
+# Creates directory and runs cmake to build the project
+build-game-container:
+	@echo "[INFO] Building 'game-container'" ; \
+	echo "[SETUP] Copying '$(TEST_DIR)/gtest' directory to $(GAME_CONTAINER_TEST_DIR)" ; \
+	cp -r $(TEST_DIR)/gtest $(GAME_CONTAINER_TEST_DIR) ; \
+	mkdir -p $(GAME_CONTAINER_BUILD_DIR) ; \
+	cd $(GAME_CONTAINER_BUILD_DIR) && cmake ../$(GAME_CONTAINER_DIR)
+
+# Compiles the C++ code for the project
+compile-game-container:
+	@echo "[INFO] Compiling 'game-container'" ; \
+	$(MAKE) -C $(GAME_CONTAINER_BUILD_DIR) --silent
+
+# Executes the code
+run-game-container:
+	@echo "[INFO] Running 'game-container'" ; \
+	$(GAME_CONTAINER_BUILD_DIR)/game-container
+
+# Runs the test-suite
+test-game-container:
+	@echo "[INFO] game-container tests commencing..." ; \
+	$(GAME_CONTAINER_BUILD_DIR)/bin/tests-game-container
 
 #******************************
 # 	 GAME CONTAINER MANAGER
 #******************************
 
-# TODO
+GAME_CONTAINER_MANAGER_DIR := $(APP_DIR)/game-container-manager
+GAME_CONTAINER_MANAGER_BUILD_DIR := game-container-manager-build
+GAME_CONTAINER_MANAGER_TEST_DIR := $(GAME_CONTAINER_MANAGER_DIR)/test
+
+# Creates directory and runs cmake to build the project
+build-game-container-manager:
+	@echo "[INFO] Building 'game-container-manager'" ; \
+	echo "[SETUP] Copying '$(TEST_DIR)/gtest' directory to $(GAME_CONTAINER_MANAGER_TEST_DIR)" ; \
+	cp -r $(TEST_DIR)/gtest $(GAME_CONTAINER_MANAGER_TEST_DIR) ; \
+	mkdir -p $(GAME_CONTAINER_MANAGER_BUILD_DIR) ; \
+	cd $(GAME_CONTAINER_MANAGER_BUILD_DIR) && cmake ../$(GAME_CONTAINER_MANAGER_DIR)
+
+# Compiles the C++ code for the project
+compile-game-container-manager:
+	@echo "[INFO] Compiling 'game-container-manager'" ; \
+	$(MAKE) -C $(GAME_CONTAINER_MANAGER_BUILD_DIR) --silent
+
+# Executes the code
+run-game-container-manager:
+	@echo "[INFO] Running 'game-container-manager'" ; \
+	$(GAME_CONTAINER_MANAGER_BUILD_DIR)/game-container-manager
+
+# Runs the test-suite
+test-game-container-manager:
+	@echo "[INFO] game-container-manager tests commencing..." ; \
+	cd $(GAME_CONTAINER_MANAGER_BUILD_DIR) && bin/tests-game-container-manager
 
 
 #******************************
@@ -101,8 +163,7 @@ SOCIAL_GAMING_BUILD_DIR := social-gaming-build
 # Creates directory and runs cmake to build the project
 build-social-gaming:
 	@echo "[INFO] Building 'social-gaming'" ; \
-	rm -rf $(SOCIAL_GAMING_BUILD_DIR) ; \
-	mkdir $(SOCIAL_GAMING_BUILD_DIR) ; \
+	mkdir -p $(SOCIAL_GAMING_BUILD_DIR) ; \
 	cd $(SOCIAL_GAMING_BUILD_DIR) && cmake ../$(SOCIAL_GAMING_DIR)
 
 # Compiles the C++ code for the project
@@ -117,8 +178,10 @@ run-social-gaming:
 
 test-social-gaming:
 	@echo "[INFO] all tests commencing..."
-	$(SOCIAL_GAMING_BUILD_DIR)/core-game-engine/bin/tests-core-game-engine
-	$(SOCIAL_GAMING_BUILD_DIR)/client/bin/tests-client
+	cd $(SOCIAL_GAMING_BUILD_DIR)/client && bin/tests-client
+	cd $(SOCIAL_GAMING_BUILD_DIR)/core-game-engine && bin/tests-core-game-engine
+	cd $(SOCIAL_GAMING_BUILD_DIR)/game-container && bin/tests-game-container
+	cd $(SOCIAL_GAMING_BUILD_DIR)/game-container-manager && bin/tests-game-container-manager
 
 
 #******************************
@@ -147,15 +210,19 @@ clean:
 	@echo "[INFO] Removing Build Directories..." ; \
 	rm -rf *-build
 	@echo "[INFO] Removing gtest from Test Directories..." ; \
-	rm -rf $(CORE_GAME_ENGINE_TEST_DIR)/gtest
 	rm -rf $(CLIENT_TEST_DIR)/gtest
+	rm -rf $(CORE_GAME_ENGINE_TEST_DIR)/gtest
+	rm -rf $(GAME_CONTAINER_TEST_DIR)/gtest
+	rm -rf $(GAME_CONTAINER_MANAGER_TEST_DIR)/gtest
 
 
-# [INFO]: Build all the applications
-all-build: build-core-game-engine build-client
+# [INFO]: Build all the applications separately 
+all-build: build-client build-client-server-communication build-core-game-engine build-game-container build-game-container-manager build-social-gaming
 
-# [INFO]: Compile all the applications
-all-compile: compile-core-game-engine compile-client
 
-# [INFO]: Runs all the tests
-all-tests: test-core-game-engine
+# [INFO]: Compile all the applications separately 
+all-compile: compile-client compile-client-server-communication compile-core-game-engine compile-game-container compile-game-container-manager compile-social-gaming
+
+
+# [INFO]: Runs all the tests separately 
+all-tests: test-client test-core-game-engine test-game-container test-game-container-manager test-social-gaming

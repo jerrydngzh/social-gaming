@@ -10,7 +10,6 @@ configuration {
     }
   }
 }
-
 constants {
   weapons: [
     { name: "Rock",     beats: "Scissors" },
@@ -65,6 +64,5 @@ rules {
       }
     }
   }
-
   scores ["wins"];
 }
