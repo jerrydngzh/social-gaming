@@ -6,6 +6,8 @@ add_executable(tests-client
     # Add new cpp files  that you want to add to testing
     dummyServerTests.cpp
     socialGameFileHandlerTests.cpp
+    testClient.cpp
+    testSocialGameFileHandler.cpp
     userTests.cpp
 )
 

@@ -13,6 +13,7 @@ add_subdirectory(client-server-communication)
 add_subdirectory(core-game-engine)
 add_subdirectory(game-container)
 add_subdirectory(game-container-manager)
+add_subdirectory(server)
 
 add_executable(social-gaming
     main.cpp
@@ -26,6 +27,9 @@ target_link_libraries(social-gaming
     core-game-engine-lib
     game-container-lib
     game-container-manager-lib
+    game-lib
+    gameroom-lib
+    server-lib
 )
 
 # copy game files to build directory

@@ -1,21 +1,14 @@
 cmake_minimum_required(VERSION 3.24)
-project(server_main)
+project(server)
 
-add_executable(server_main main.cpp)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
-target_link_libraries(server_main
-    PRIVATE
-        game
-        gameroom
-        server
-)
-
-set_target_properties(server_main PROPERTIES
-    CXX_STANDARD 20
-    CXX_STANDARD_REQUIRED ON
-)
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
+# create output directories
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 add_subdirectory(lib)
+add_subdirectory(MessageHandler)
+
+include(CTest)
+add_subdirectory(test)
+

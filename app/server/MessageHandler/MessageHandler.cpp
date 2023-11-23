@@ -107,12 +107,14 @@ std::string ServerToClientMessageHandler::getMessage(const int clientId) {
     return clientMsg;
 }
 
-int main() {
-    ServerToClientMessageHandler serverToClientMessageHandler;
-    ClientToServerMessageHandler clientToServerMessageHandler;
-    clientToServerMessageHandler.addClient(2);
-    std::string test = "hello";
-    clientToServerMessageHandler.setClientMessage(2, test);
-    std::cout <<  clientToServerMessageHandler.getMessage(2) << std::endl;
-    return 0;
-}
+
+// TODO: to remove?
+// int main() {
+//     ServerToClientMessageHandler serverToClientMessageHandler;
+//     ClientToServerMessageHandler clientToServerMessageHandler;
+//     clientToServerMessageHandler.addClient(2);
+//     std::string test = "hello";
+//     clientToServerMessageHandler.setClientMessage(2, test);
+//     std::cout <<  clientToServerMessageHandler.getMessage(2) << std::endl;
+//     return 0;
+// }

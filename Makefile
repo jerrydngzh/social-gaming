@@ -52,7 +52,6 @@ compile-client-server-communication:
 	@echo "[INFO] Compiling 'client-server-communication'" ; \
 	$(MAKE) -C $(CLIENT_SERVER_COMMUNICATION_BUILD_DIR) --silent
 
-
 #******************************
 #	   CORE GAME ENGINE
 #******************************
@@ -78,7 +77,6 @@ compile-core-game-engine:
 test-core-game-engine:
 	@echo "[INFO] core-game-engine tests commencing..." ; \
 	cd $(CORE_GAME_ENGINE_BUILD_DIR) && bin/tests-core-game-engine
-
 
 #******************************
 # 		GAME CONTAINER
@@ -127,16 +125,37 @@ compile-game-container-manager:
 	@echo "[INFO] Compiling 'game-container-manager'" ; \
 	$(MAKE) -C $(GAME_CONTAINER_MANAGER_BUILD_DIR) --silent
 
-# Executes the code
-run-game-container-manager:
-	@echo "[INFO] Running 'game-container-manager'" ; \
-	$(GAME_CONTAINER_MANAGER_BUILD_DIR)/game-container-manager
-
 # Runs the test-suite
 test-game-container-manager:
 	@echo "[INFO] game-container-manager tests commencing..." ; \
 	cd $(GAME_CONTAINER_MANAGER_BUILD_DIR) && bin/tests-game-container-manager
 
+
+#******************************
+# 	 		SERVER
+#******************************
+
+SERVER_DIR := $(APP_DIR)/server
+SERVER_BUILD_DIR := server-build
+SERVER_TEST_DIR := $(SERVER_DIR)/test
+
+# Creates directory and runs cmake to build the project
+build-server:
+	@echo "[INFO] Building 'server'" ; \
+	echo "[SETUP] Copying '$(TEST_DIR)/gtest' directory to $(SERVER_TEST_DIR)" ; \
+	cp -r $(TEST_DIR)/gtest $(SERVER_TEST_DIR) ; \
+	mkdir -p $(SERVER_BUILD_DIR) ; \
+	cd $(SERVER_BUILD_DIR) && cmake ../$(SERVER_DIR)
+
+# Compiles the C++ code for the project
+compile-server:
+	@echo "[INFO] Compiling 'server'" ; \
+	$(MAKE) -C $(SERVER_BUILD_DIR) --silent
+
+# Runs the test-suite
+test-server:
+	@echo "[INFO] server tests commencing..." ; \
+	cd $(SERVER_BUILD_DIR) && bin/tests-server
 
 #******************************
 #		SOCIAL GAMING
@@ -168,7 +187,7 @@ test-social-gaming:
 	bin/tests-core-game-engine ; \
 	bin/tests-game-container ; \
 	bin/tests-game-container-manager ; \
-
+	bin/tests-server
 
 #******************************
 # 			GENERIC
@@ -199,12 +218,13 @@ clean:
 	@rm -rf $(CORE_GAME_ENGINE_TEST_DIR)/gtest
 	@rm -rf $(GAME_CONTAINER_TEST_DIR)/gtest
 	@rm -rf $(GAME_CONTAINER_MANAGER_TEST_DIR)/gtest
+	@rm -rf $(SERVER_TEST_DIR)/gtest
 	
 # [INFO]: Build all the applications separately 
-all-build: build-client build-client-server-communication build-core-game-engine build-game-container build-game-container-manager build-social-gaming
+all-build: build-client build-client-server-communication build-core-game-engine build-game-container build-game-container-manager build-server build-social-gaming
 
 # [INFO]: Compile all the applications separately 
-all-compile: compile-client compile-client-server-communication compile-core-game-engine compile-game-container compile-game-container-manager compile-social-gaming
+all-compile: compile-client compile-client-server-communication compile-core-game-engine compile-game-container compile-game-container-manager compile-server compile-social-gaming
 
 # [INFO]: Runs all the tests separately 
-all-tests: test-client test-core-game-engine test-game-container test-game-container-manager test-social-gaming
+all-tests: test-client test-core-game-engine test-game-container test-game-container-manager test-server test-social-gaming

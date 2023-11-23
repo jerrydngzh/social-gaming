@@ -7,13 +7,12 @@
 |:---|:---|
 |`make build-client`|Creates a new build directory, then runs cmake|
 |`make compile-client`|Compiles the `client` .cpp files|
-|`make run-client`|Executes the `client` using `main` binary|
+|`make test-client`|Executes the `client` test suite (must be built and compiled)|
 
 |Client Server Communication Commands|Description|
 |:---|:---|
 |`make build-client-server-communication`|Creates a new build directory, then runs cmake|
 |`make compile-client-server-communication`|Compiles the `client-server-communication` .cpp files|
-| `TODO` | Will need to talk to @Jerry/@Andy about integration|
 
 |Core Game Engine Commands|Description|
 |:---|:---|
@@ -32,6 +31,12 @@
 |`make build-game-container-manager`|Creates a new build directory, then runs cmake|
 |`make compile-game-container-manager`|Compiles the `game-container-manager` .cpp files|
 |`make test-game-container-manager`|Executes the `game-container-manager` test suite (must be built and compiled)|
+
+|Server Commands|Description|
+|:---|:---|
+|`make build-server`|Creates a new build directory, then runs cmake|
+|`make compile-server`|Compiles the `server` .cpp files|
+|`make test-server`|Executes the `server` test suite (must be built and compiled)|
 
 |Social Gaming (Integrated Application) Commands|Description|
 |:---|:---|
