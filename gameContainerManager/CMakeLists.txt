@@ -4,15 +4,12 @@ project(gameContainerManager)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Add the source files 
-set(SOURCES 
-    main.cpp
-    serverProcessor.cpp
-)
+# Add the lib directory - must come before main or test. 
+add_subdirectory(lib)
 
-# Add the header files 
-set(HEADERS 
-    serverProcessorDTO.h
-)
+# Building Executable 
+add_executable(main main.cpp)
+target_link_libraries(main serverProcessor_lib)
 
-add_executable(main ${SOURCES} ${HEADERS})
+# Building Test
+add_subdirectory(test)

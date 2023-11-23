@@ -8,8 +8,7 @@ In this file, we demonstrate how the Server Processor would be used in the Serve
 #include <vector>
 #include <memory>
 
-#include "serverProcessorDTO.h"
-#include "serverProcessor.cpp"
+#include "serverProcessor.h"
 
 // DUMMY FUNCTION - SERVES EXAMPLE ONLY
 // Dummy Function which replicates when the Server Platform gets a message from the client,

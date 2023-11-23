@@ -1,3 +1,34 @@
+
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"
+
+// #include "serverProcessorDTO.h"
+#include "serverProcessor.h"
+
+TEST(DummyTestSuite, DummyTest) {
+    // Arrange 
+    int x = 1;
+    int result = 0;
+
+    // Act 
+    result = x + 1;
+
+    // Assert 
+    EXPECT_EQ(result, 2);
+}
+
+TEST(ComponentTest, InitializationTest) {
+    ASSERT_NO_THROW({
+        GameContainerManager gameContainerManager;
+        ClientsManager clientsManager;
+
+        CreateProcessor createProcessor(gameContainerManager, clientsManager);
+        JoinProcessor joinProcessor(gameContainerManager, clientsManager);
+        InputProcessor inputProcessor(gameContainerManager, clientsManager);
+        InvalidCommandProcessor invalidCommandProcessor;
+    });
+}
+
 // When create game is called, a new game is created.
 
     // Arrange 
@@ -59,3 +90,5 @@
 
     // Assert 
     // error = client not player of game 
+
+
