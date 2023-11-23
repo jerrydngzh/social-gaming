@@ -4,7 +4,7 @@
 
 
 int main() {
-    // TODO: functions to initialize the application
+    // TODO: this is where the application code belongs
 
     return 0;
 }

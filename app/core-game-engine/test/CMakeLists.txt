@@ -21,6 +21,7 @@ target_link_libraries(tests-core-game-engine
   PRIVATE
     GTest::gmock GTest::gtest GTest::gtest_main
     core-game-engine-lib
+    game-state-lib
 )
 
 add_test(NAME tests-core-game-engine

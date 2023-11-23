@@ -16,7 +16,7 @@ add_subdirectory(game-container-manager)
 add_subdirectory(server)
 
 add_executable(social-gaming
-    main.cpp
+    social-gaming.cpp
 )
 
 target_link_libraries(social-gaming

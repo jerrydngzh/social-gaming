@@ -36,7 +36,6 @@ add_grammar_from_repo(tree-sitter-sg                        # Defines the librar
 add_library(core-game-engine-lib)
 target_sources(core-game-engine-lib
   PRIVATE
-    # Add cpp files for testing library
     configuration.cpp
     constants.cpp
     gameLibrary.cpp
@@ -72,3 +71,5 @@ target_include_directories(core-game-engine-lib
   ${tree-sitter-json_SOURCE_DIR} # This points to the include directory of tree-sitter-json
   ${tree-sitter-sg_SOURCE_DIR} # This points to the include directory of tree-sitter-json
 )
+
+add_subdirectory(game-state)
