@@ -1,6 +1,6 @@
 add_executable(ServerPlatform
   ServerPlatform.cpp
-  ../ServerManager/ServerManager.cpp
+  ./ServerManager/ServerManager.cpp
 )
 
 set_target_properties(ServerPlatform
