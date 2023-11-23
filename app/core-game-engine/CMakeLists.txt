@@ -11,5 +11,4 @@ add_subdirectory(lib)
 include(CTest)
 add_subdirectory(test)
 
-
 file(COPY game-files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

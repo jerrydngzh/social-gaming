@@ -29,7 +29,7 @@ add_grammar_from_repo(tree-sitter-sg                        # Defines the librar
 )
 
 #********************************
-#           TESTING
+#           LIBRARY
 #********************************
 
 # Configure the library to be tested

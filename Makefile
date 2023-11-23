@@ -3,6 +3,7 @@
 #******************************
 
 ROOT_DIR := $(pwd)
+APP_DIR := app
 BUILD_DIR := *build
 TEST_DIR := test
 
@@ -10,7 +11,7 @@ TEST_DIR := test
 #	   CORE GAME ENGINE
 #******************************
 
-CORE_GAME_ENGINE_DIR := core-game-engine
+CORE_GAME_ENGINE_DIR := $(APP_DIR)/core-game-engine
 CORE_GAME_ENGINE_BUILD_DIR := core-game-engine-build
 CORE_GAME_ENGINE_TEST_DIR := $(CORE_GAME_ENGINE_DIR)/test
 
