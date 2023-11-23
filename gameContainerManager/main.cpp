@@ -69,12 +69,11 @@ void messageProcessorSendMessage(S2CDTO message)
 int main()
 {
     GameContainerManager gameContainerManager;
-    PlayersManager playersManager;
-    OwnersManager ownersManager;
+    ClientsManager clientsManager;
 
-    CreateProcessor createProcessor(gameContainerManager, ownersManager);
-    JoinProcessor joinProcessor(gameContainerManager, playersManager);
-    InputProcessor inputProcessor(gameContainerManager, playersManager);
+    CreateProcessor createProcessor(gameContainerManager, clientsManager);
+    JoinProcessor joinProcessor(gameContainerManager, clientsManager);
+    InputProcessor inputProcessor(gameContainerManager, clientsManager);
     InvalidCommandProcessor invalidCommandProcessor;
 
     while (true)
