@@ -1,20 +1,13 @@
 cmake_minimum_required(VERSION 3.24)
 project(client)
 
-add_subdirectory(lib/User)
-add_subdirectory(lib/SocialGameFileHandler)
-add_subdirectory(lib/DummyServer)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
-add_executable(client main.cpp) # this adds the source file to the project
-
-target_link_libraries(client user)
-target_link_libraries(client socialgamefilehandler)
-target_link_libraries(client dummyserver)
-
-
-set_target_properties(client PROPERTIES
-    CXX_STANDARD 20
-    CXX_STANDARD_REQUIRED ON
-)
-
+# create output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
+
+add_subdirectory(lib)
+
+include(CTest)
+add_subdirectory(test)
+

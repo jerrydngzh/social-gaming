@@ -5,18 +5,21 @@
 ROOT_DIR := $(pwd)
 APP_DIR := app
 BUILD_DIR := *build
-TEST_DIR := test
+TEST_DIR := app
 
 #******************************
 #	        CLIENT
 #******************************
 
-CLIENT_DIR := client
+CLIENT_DIR := $(APP_DIR)/client
 CLIENT_BUILD_DIR := client-build
+CLIENT_TEST_DIR := $(CLIENT_DIR)/test
 
 # Creates directory and runs cmake to build the project
 build-client:
 	@echo "[INFO] Building 'client'" ; \
+	echo "[SETUP] Copying '$(TEST_DIR)/gtest' directory to $(CLIENT_TEST_DIR)" ; \
+	cp -r $(TEST_DIR)/gtest $(CLIENT_TEST_DIR) ; \
 	rm -rf $(CLIENT_BUILD_DIR) ; \
 	mkdir $(CLIENT_BUILD_DIR) ; \
 	cd $(CLIENT_BUILD_DIR) && cmake ../$(CLIENT_DIR)
@@ -31,8 +34,10 @@ run-client:
 	@echo "[INFO] Running 'client'" ; \
 	$(CLIENT_BUILD_DIR)/client
 
-
-# TODO: tests
+# Runs the test-suite
+test-client:
+	@echo "[INFO] client tests commencing..." ; \
+	$(CLIENT_BUILD_DIR)/bin/tests-client
 
 #******************************
 # CLIENT SERVER COMMUNICATION
@@ -110,6 +115,11 @@ run-social-gaming:
 	@echo "[INFO] Running 'social-gaming'" ; \
 	$(SOCIAL_GAMING_BUILD_DIR)/bin/social-gaming
 
+test-social-gaming:
+	@echo "[INFO] all tests commencing..."
+	$(SOCIAL_GAMING_BUILD_DIR)/core-game-engine/bin/tests-core-game-engine
+	$(SOCIAL_GAMING_BUILD_DIR)/client/bin/tests-client
+
 
 #******************************
 # 			GENERIC
@@ -135,11 +145,10 @@ help:
 # [INFO]: Removes Build & Test artifacts
 clean: 
 	@echo "[INFO] Removing Build Directories..." ; \
-	rm -rf $(CORE_GAME_ENGINE_BUILD_DIR) ; \
-	rm -rf $(CLIENT_BUILD_DIR)
-	rm -rf $(BUILD_DIR)
+	rm -rf *-build
 	@echo "[INFO] Removing gtest from Test Directories..." ; \
 	rm -rf $(CORE_GAME_ENGINE_TEST_DIR)/gtest
+	rm -rf $(CLIENT_TEST_DIR)/gtest
 
 
 # [INFO]: Build all the applications

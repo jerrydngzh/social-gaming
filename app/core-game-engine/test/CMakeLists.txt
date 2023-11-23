@@ -1,4 +1,7 @@
-add_subdirectory(gtest)
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+  add_subdirectory(gtest)
+endif()
+
 
 add_executable(tests-core-game-engine
     # Add new cpp files  that you want to add to testing
