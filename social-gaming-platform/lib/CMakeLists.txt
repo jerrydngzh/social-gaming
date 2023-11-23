@@ -1,0 +1,5 @@
+add_subdirectory(networking)
+# add_subdirectory(game-container)
+# add_subdirectory(game-engine)
+# add_subdirectory(message-processors)
+# add_subdirectory(server-processor)

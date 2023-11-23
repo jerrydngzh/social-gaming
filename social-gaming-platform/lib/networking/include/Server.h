@@ -18,6 +18,8 @@
 
 namespace networking {
 
+// TODO: clean up stuff we dont need
+
 #ifdef __EMSCRIPTEN__
 
 // The Servers are incompatible with web sockets in the browser, so disable them
