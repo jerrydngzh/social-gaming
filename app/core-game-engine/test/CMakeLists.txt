@@ -17,7 +17,7 @@ add_executable(tests-core-game-engine
 target_link_libraries(tests-core-game-engine
   PRIVATE
     GTest::gmock GTest::gtest GTest::gtest_main
-    core-game-engine-test
+    core-game-engine-lib
 )
 
 add_test(NAME tests-core-game-engine

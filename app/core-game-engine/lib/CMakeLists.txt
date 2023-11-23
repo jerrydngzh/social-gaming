@@ -33,8 +33,8 @@ add_grammar_from_repo(tree-sitter-sg                        # Defines the librar
 #********************************
 
 # Configure the library to be tested
-add_library(core-game-engine-test)
-target_sources(core-game-engine-test
+add_library(core-game-engine-lib)
+target_sources(core-game-engine-lib
   PRIVATE
     # Add cpp files for testing library
     configuration.cpp
@@ -50,23 +50,23 @@ target_sources(core-game-engine-test
     game.cpp
     interpreter.cpp
 )
-target_include_directories(core-game-engine-test
+target_include_directories(core-game-engine-lib
   PUBLIC
     include/
 )
-target_compile_features(core-game-engine-test PUBLIC cxx_std_20)
-set_target_properties(core-game-engine-test PROPERTIES
+target_compile_features(core-game-engine-lib PUBLIC cxx_std_20)
+set_target_properties(core-game-engine-lib PROPERTIES
   LINKER_LANGUAGE CXX
   CXX_STANDARD 20
 )
-target_link_libraries(core-game-engine-test
+target_link_libraries(core-game-engine-lib
   tree-sitter-json
   tree-sitter-sg
   cpp-tree-sitter
 )
 
 #include header
-target_include_directories(core-game-engine-test
+target_include_directories(core-game-engine-lib
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PRIVATE

@@ -8,6 +8,39 @@ BUILD_DIR := *build
 TEST_DIR := test
 
 #******************************
+#	        CLIENT
+#******************************
+
+CLIENT_DIR := client
+CLIENT_BUILD_DIR := client-build
+
+# Creates directory and runs cmake to build the project
+build-client:
+	@echo "[INFO] Building 'client'" ; \
+	rm -rf $(CLIENT_BUILD_DIR) ; \
+	mkdir $(CLIENT_BUILD_DIR) ; \
+	cd $(CLIENT_BUILD_DIR) && cmake ../$(CLIENT_DIR)
+
+# Compiles the C++ code for the project
+compile-client:
+	@echo "[INFO] Compiling 'client'" ; \
+	$(MAKE) -C $(CLIENT_BUILD_DIR) --silent
+
+# Executes the code
+run-client:
+	@echo "[INFO] Running 'client'" ; \
+	$(CLIENT_BUILD_DIR)/client
+
+
+# TODO: tests
+
+#******************************
+# CLIENT SERVER COMMUNICATION
+#******************************
+
+# TODO
+
+#******************************
 #	   CORE GAME ENGINE
 #******************************
 
@@ -39,57 +72,43 @@ test-core-game-engine:
 	@echo "[INFO] core-game-engine tests commencing..." ; \
 	$(CORE_GAME_ENGINE_BUILD_DIR)/bin/tests-core-game-engine
 
+
 #******************************
-#	        CLIENT
+# 		GAME CONTAINER
 #******************************
 
-CLIENT_DIR := client
-CLIENT_BUILD_DIR := client-build
+# TODO
+
+#******************************
+# 	 GAME CONTAINER MANAGER
+#******************************
+
+# TODO
+
+
+#******************************
+#		SOCIAL GAMING
+#******************************
+
+SOCIAL_GAMING_DIR := $(APP_DIR)
+SOCIAL_GAMING_BUILD_DIR := social-gaming-build
 
 # Creates directory and runs cmake to build the project
-build-client:
-	@echo "[INFO] Building 'client'" ; \
-	rm -rf $(CLIENT_BUILD_DIR) ; \
-	mkdir $(CLIENT_BUILD_DIR) ; \
-	cd $(CLIENT_BUILD_DIR) && cmake ../$(CLIENT_DIR)
+build-social-gaming:
+	@echo "[INFO] Building 'social-gaming'" ; \
+	rm -rf $(SOCIAL_GAMING_BUILD_DIR) ; \
+	mkdir $(SOCIAL_GAMING_BUILD_DIR) ; \
+	cd $(SOCIAL_GAMING_BUILD_DIR) && cmake ../$(SOCIAL_GAMING_DIR)
 
 # Compiles the C++ code for the project
-compile-client:
-	@echo "[INFO] Compiling 'client'" ; \
-	$(MAKE) -C $(CLIENT_BUILD_DIR) --silent
+compile-social-gaming:
+	@echo "[INFO] Compiling 'social-gaming'" ; \
+	$(MAKE) -C $(SOCIAL_GAMING_BUILD_DIR) --silent
 
 # Executes the code
-run-client:
-	@echo "[INFO] Running 'client'" ; \
-	$(CLIENT_BUILD_DIR)/client
-
-#******************************
-#	        TEST
-#******************************
-
-# Currently not working needs to be implemented
-# Should compile the test suite using cmake in a external directory and then make
-# like we do in our exercises for now
-
-# TEST_DIR := test
-# TEST_BUILD_DIR := test-build
-
-# # Creates directory and runs cmake to build the project
-# build-test:
-# 	@echo "[INFO] Building 'test'" ; \
-# 	rm -rf $(TEST_BUILD_DIR) ; \
-# 	mkdir $(TEST_BUILD_DIR) ; \
-# 	cd $(TEST_BUILD_DIR) && cmake ../$(TEST_DIR)
-
-# # Compiles the C++ code for the project
-# compile-test:
-# 	@echo "[INFO] Compiling 'test'" ; \
-# 	$(MAKE) -C $(TEST_BUILD_DIR) --silent
-
-# # Executes the code
-# run-test:
-# 	@echo "[INFO] Running 'test'" ; \
-# 	$(TEST_BUILD_DIR)/test
+run-social-gaming:
+	@echo "[INFO] Running 'social-gaming'" ; \
+	$(SOCIAL_GAMING_BUILD_DIR)/bin/social-gaming
 
 
 #******************************
