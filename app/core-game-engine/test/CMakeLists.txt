@@ -15,6 +15,9 @@ add_executable(tests-core-game-engine
     rulesTests.cpp
     treeParserTests.cpp
     variablesTests.cpp
+
+    # GameState tests
+    gameStateTests.cpp
 )
 
 target_link_libraries(tests-core-game-engine
