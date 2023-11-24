@@ -6,7 +6,7 @@ ConfigurationState::ConfigurationState() {
 
 ConfigurationState::~ConfigurationState() {
     for (auto setting : settings) {
-        delete setting;//Todo: make unique so this is not needed
+        delete setting;
     }
 }
 

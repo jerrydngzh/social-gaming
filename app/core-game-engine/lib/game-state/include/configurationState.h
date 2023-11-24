@@ -59,7 +59,7 @@ public:
 
 class ConfigurationState {
 private:
-    std::vector<Setting*> settings; //may need to make these unique pointers and or map to names
+    std::vector<Setting*> settings;
 public:
     ConfigurationState();
     ~ConfigurationState();
