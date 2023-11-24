@@ -5,6 +5,9 @@
 # Prevents Mac directory files 
 .DS_Store
 
+# Prevents gtest copies
+/app/client-platform/test/
+/app/server-platform/test/
 
 # C++ .gitignore template from: https://github.com/github/gitignore/blob/main/C%2B%2B.gitignore
 
