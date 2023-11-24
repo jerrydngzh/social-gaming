@@ -3,24 +3,52 @@
 ### Makefile (Automation)
 * The following commands can be executed from the root directory
 
-|Core Game Engine Commands|Description|
-|:---|:---|
-|`make build-core-game-engine`|Creates a new build directory, then runs cmake|
-|`make compile-core-game-engine`|Compiles the `core-game-engine` .cpp files|
-|`make run-core-game-engine`|Executes the `core-game-engine` using `main` binary <br> Currently configured to use `rock-paper-scissors.game` copied into `game-files` during the build|
-|`make test-core-game-engine`|Executes the `core-game-engine` test suite (must be built and compiled)|
-
 |Client Commands|Description|
 |:---|:---|
 |`make build-client`|Creates a new build directory, then runs cmake|
 |`make compile-client`|Compiles the `client` .cpp files|
-|`make run-client`|Executes the `client` using `main` binary|
+|`make test-client`|Executes the `client` test suite (must be built and compiled)|
+
+|Client Server Communication Commands|Description|
+|:---|:---|
+|`make build-client-server-communication`|Creates a new build directory, then runs cmake|
+|`make compile-client-server-communication`|Compiles the `client-server-communication` .cpp files|
+
+|Core Game Engine Commands|Description|
+|:---|:---|
+|`make build-core-game-engine`|Creates a new build directory, then runs cmake|
+|`make compile-core-game-engine`|Compiles the `core-game-engine` .cpp files|
+|`make test-core-game-engine`|Executes the `core-game-engine` test suite (must be built and compiled)|
+
+|Game Container Commands|Description|
+|:---|:---|
+|`make build-game-container`|Creates a new build directory, then runs cmake|
+|`make compile-game-container`|Compiles the `game-container` .cpp files|
+|`make test-game-container`|Executes the `game-container` test suite (must be built and compiled)|
+
+|Game Container Manager Commands|Description|
+|:---|:---|
+|`make build-game-container-manager`|Creates a new build directory, then runs cmake|
+|`make compile-game-container-manager`|Compiles the `game-container-manager` .cpp files|
+|`make test-game-container-manager`|Executes the `game-container-manager` test suite (must be built and compiled)|
+
+|Server Commands|Description|
+|:---|:---|
+|`make build-server`|Creates a new build directory, then runs cmake|
+|`make compile-server`|Compiles the `server` .cpp files|
+|`make test-server`|Executes the `server` test suite (must be built and compiled)|
+
+|Social Gaming (Integrated Application) Commands|Description|
+|:---|:---|
+|`make build-social-gaming`|Creates a new build directory, then runs cmake|
+|`make compile-social-gaming`|Compiles the `social-gaming` .cpp files|
+|`make test-social-gaming`|Executes the test suites for all the applications (must be built and compiled)|
 
 |General Commands|Description|
 |:---|:---|
-|`all-build`  |Builds all the subdirectories in the Repository|
-|`all-compile`|Compiles all the subdirectories in the Repository|
-|`all-tests`  |Runs all Unit Tests for Repository (must be built and compiled)| 
+|`all-build`  |Builds all the subdirectories in the Repository separately|
+|`all-compile`|Compiles all the subdirectories in the Repository separately|
+|`all-tests`  |Runs all Unit Tests for Repository (must be built and compiled) separately| 
 |`make clean` |Removes all the build artifacts and gtest directories from test directories|
 
 ## Unit Tests
