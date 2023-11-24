@@ -1,4 +1,4 @@
-#include "../../../networking/lib/networking/include/Server.h"
+#include "Server.h"
 
 // #include "MessageProcessor.h"
 // #include "ServerProcessor.h"
@@ -17,7 +17,7 @@ using networking::Server;
 class ServerManager
 {
 public:
-    ServerManager(const unsigned short port, Server &server);
+    ServerManager(const unsigned short port);
 
     void startServer();
 
@@ -28,7 +28,7 @@ private:
         bool shouldShutdown;
     };
 
-
+    std::vector<Connection> clients;
 
     // define all services here
     std::unique_ptr<Server> server;
@@ -43,6 +43,10 @@ private:
     std::deque<Message>
     buildOutgoing(const std::string &log);
 
-    // std::string
-    // getHTTPMessage(const char *htmlLocation);
+    void onConnect(networking::Connection c);
+    void onDisconnect(networking::Connection c);
+
+    std::string
+    getHTTPMessage(const char *htmlLocation);
+
 };
