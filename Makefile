@@ -11,8 +11,8 @@ TEST_DIR := app
 #	        CLIENT
 #******************************
 
-CLIENT_DIR := $(APP_DIR)/client
-CLIENT_BUILD_DIR := client-build
+CLIENT_DIR := $(APP_DIR)/client-platform
+CLIENT_BUILD_DIR := client-platform-build
 CLIENT_TEST_DIR := $(CLIENT_DIR)/test
 
 # Creates directory and runs cmake to build the project
@@ -33,24 +33,6 @@ test-client:
 	@echo "[INFO] client tests commencing..." ; \
 	cd $(CLIENT_BUILD_DIR) && bin/tests-client
 
-#******************************
-# CLIENT SERVER COMMUNICATION
-#******************************
-# [INFO] No test suite for this module
-
-CLIENT_SERVER_COMMUNICATION_DIR := $(APP_DIR)/client-server-communication
-CLIENT_SERVER_COMMUNICATION_BUILD_DIR := client-server-communication-build
-
-# Creates directory and runs cmake to build the project
-build-client-server-communication:
-	@echo "[INFO] Building 'client-server-communication'" ; \
-	mkdir -p $(CLIENT_SERVER_COMMUNICATION_BUILD_DIR) ; \
-	cd $(CLIENT_SERVER_COMMUNICATION_BUILD_DIR) && cmake ../$(CLIENT_SERVER_COMMUNICATION_DIR)
-
-# Compiles the C++ code for the project
-compile-client-server-communication:
-	@echo "[INFO] Compiling 'client-server-communication'" ; \
-	$(MAKE) -C $(CLIENT_SERVER_COMMUNICATION_BUILD_DIR) --silent
 
 #******************************
 #	   CORE GAME ENGINE
@@ -132,11 +114,30 @@ test-game-container-manager:
 
 
 #******************************
+# 			NETWORKING
+#******************************
+# [INFO] No test suite for this module
+
+NETWORKING_DIR := $(APP_DIR)/client-server-communication
+NETWORKING_BUILD_DIR := client-server-communication-build
+
+# Creates directory and runs cmake to build the project
+build-networking:
+	@echo "[INFO] Building 'networking'" ; \
+	mkdir -p $(NETWORKING_BUILD_DIR) ; \
+	cd $(NETWORKING_BUILD_DIR) && cmake ../$(NETWORKING_DIR)
+
+# Compiles the C++ code for the project
+compile-networking:
+	@echo "[INFO] Compiling 'networking'" ; \
+	$(MAKE) -C $(NETWORKING_BUILD_DIR) --silent
+
+#******************************
 # 	 		SERVER
 #******************************
 
-SERVER_DIR := $(APP_DIR)/server
-SERVER_BUILD_DIR := server-build
+SERVER_DIR := $(APP_DIR)/server-platform
+SERVER_BUILD_DIR := server-platform-build
 SERVER_TEST_DIR := $(SERVER_DIR)/test
 
 # Creates directory and runs cmake to build the project
@@ -156,6 +157,11 @@ compile-server:
 test-server:
 	@echo "[INFO] server tests commencing..." ; \
 	cd $(SERVER_BUILD_DIR) && bin/tests-server
+
+#******************************
+#		SERVER MANAGER
+#******************************
+# cannot build as independent component, only available through integrated build
 
 #******************************
 #		SOCIAL GAMING
