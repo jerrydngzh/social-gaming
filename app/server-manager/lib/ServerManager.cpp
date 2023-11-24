@@ -1,10 +1,11 @@
 #include "ServerManager.h"
 
-ServerManager::ServerManager(const unsigned short port)
+ServerManager::ServerManager(const unsigned short port, network::Server &server)
 {
     // Server server{port, getHTTPMessage("index.html"), onConnect, onDisconnect};
     // this->server = std::make_unique<Server>(server);
-    this->server = std::make_unique<Server>(port, getHTTPMessage("index.html"), onConnect, onDisconnect);
+    // this->server = std::make_unique<Server>(port, getHTTPMessage("index.html"), onConnect, onDisconnect);
+    this->server = std::move(server);
 }
 
 void ServerManager::startServer()
@@ -35,19 +36,6 @@ void ServerManager::startServer()
 
         sleep(1);
     }
-}
-
-void ServerManager::onConnect(Connection c)
-{
-    std::cout << "New connection found: " << c.id << "\n";
-    clients.push_back(c);
-}
-
-void ServerManager::onDisconnect(Connection c)
-{
-    std::cout << "Connection lost: " << c.id << "\n";
-    auto eraseBegin = std::remove(std::begin(clients), std::end(clients), c);
-    clients.erase(eraseBegin, std::end(clients));
 }
 
 ServerManager::MessageResult
@@ -86,15 +74,3 @@ ServerManager::buildOutgoing(const std::string &log)
     return outgoing;
 }
 
-std::string
-ServerManager::getHTTPMessage(const char *htmlLocation)
-{
-    if (access(htmlLocation, R_OK) != -1)
-    {
-        std::ifstream infile{htmlLocation};
-        return std::string{std::istreambuf_iterator<char>(infile), std::istreambuf_iterator<char>()};
-    }
-    std::cerr << "Unable to open HTML index file:\n"
-              << htmlLocation << "\n";
-    std::exit(-1);
-}

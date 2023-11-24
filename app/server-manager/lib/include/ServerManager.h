@@ -17,7 +17,7 @@ using networking::Server;
 class ServerManager
 {
 public:
-    ServerManager(const unsigned short port);
+    ServerManager(const unsigned short port, Server &server);
 
     void startServer();
 
@@ -28,18 +28,12 @@ private:
         bool shouldShutdown;
     };
 
-    std::vector<Connection> clients;
+
 
     // define all services here
     std::unique_ptr<Server> server;
     // MessageProcessor messageProcessor;
     // ServerProcessor gameContainerManager;
-
-    void
-    onConnect(Connection c);
-
-    void
-    onDisconnect(Connection c);
 
     // TODO: migrate to MessageProcessors
     MessageResult
@@ -49,6 +43,6 @@ private:
     std::deque<Message>
     buildOutgoing(const std::string &log);
 
-    std::string
-    getHTTPMessage(const char *htmlLocation);
+    // std::string
+    // getHTTPMessage(const char *htmlLocation);
 };
