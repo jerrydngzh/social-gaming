@@ -8,7 +8,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 add_library(static-game-data-lib)
 target_sources(static-game-data-lib
   PRIVATE
+    configuration.cpp
+    constants.cpp
+    gameLibrary.cpp
+    perAudience.cpp
+    perPlayer.cpp
     staticGameData.cpp
+    variables.cpp
 )
 target_include_directories(static-game-data-lib
   PUBLIC
