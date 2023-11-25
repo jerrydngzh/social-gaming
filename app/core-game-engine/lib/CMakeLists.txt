@@ -73,3 +73,4 @@ target_include_directories(core-game-engine-lib
 )
 
 add_subdirectory(game-state)
+add_subdirectory(static-game-data)
