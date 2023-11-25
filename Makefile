@@ -36,8 +36,6 @@ run-core-game-engine:
 # Runs the test-suite
 test-core-game-engine:
 	@echo "[INFO] core-game-engine tests commencing..." ; \
-
-
 	$(CORE_GAME_ENGINE_BUILD_DIR)/bin/tests-core-game-engine
 
 #******************************
@@ -63,6 +61,33 @@ compile-client:
 run-client:
 	@echo "[INFO] Running 'client'" ; \
 	$(CLIENT_BUILD_DIR)/client
+
+
+#******************************
+#	   MESSAGE PROCESSORS
+#******************************
+
+MESSAGE_PROCESSORS_DIR := message-processors
+MESSAGE_PROCESSORS_BUILD_DIR := message-processors-build
+MESSAGE_PROCESSORS_TEST_DIR := $(MESSAGE_PROCESSORS_DIR)/test
+
+# Creates directory and runs cmake to build the project
+build-message-processors:
+	@echo "[INFO] Building 'message-processors'" ; \
+	echo "[SETUP] Copying '$(TEST_DIR)/gtest' directory to $(MESSAGE_PROCESSORS_TEST_DIR)" ; \
+	cp -r $(TEST_DIR)/gtest $(MESSAGE_PROCESSORS_TEST_DIR) ; \
+	mkdir -p $(MESSAGE_PROCESSORS_BUILD_DIR) ; \
+	cd $(MESSAGE_PROCESSORS_BUILD_DIR) && cmake ../$(MESSAGE_PROCESSORS_DIR)
+
+# Compiles the C++ code for the project
+compile-message-processors:
+	@echo "[INFO] Compiling 'message-processors'" ; \
+	$(MAKE) -C $(MESSAGE_PROCESSORS_BUILD_DIR) --silent
+
+# Runs the test-suite
+test-message-processors:
+	@echo "[INFO] message-processors tests commencing..." ; \
+	cd $(MESSAGE_PROCESSORS_BUILD_DIR) && bin/tests-message-processors
 
 #******************************
 #	        TEST

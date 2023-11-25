@@ -2,10 +2,9 @@
 
 namespace MessageProcessors {
 
-
 // from the client
 struct RequestMessageDTO {
-    std::string clientId;
+    int clientId;
     std::string command;
     std::string data;
 };
@@ -18,16 +17,15 @@ struct ResponseMessageDTO {
     std::string commandData;
 };
 
-// TODO: turn MessageProcessor class into a NVI with a MessageProcessorImpl
 class MessageProcessor {
     public:
         // TODO: change parameter to Message object during integration
-        RequestMessageDTO MessageProcessor::processIncomingMessage(std::string_view message) {
+        RequestMessageDTO processIncomingMessage(std::string_view message) {
             return processRequestMessageImpl(message);
         }
         
         // TODO: change return type to MessageResult object during integration
-        std::string MessageProcessor::processOutgoingMessage(ResponseMessageDTO message) {
+        std::string processOutgoingMessage(ResponseMessageDTO message) {
             return processResponseMessageImpl(message);
         }
     private:
