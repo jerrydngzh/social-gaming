@@ -30,6 +30,7 @@ Game::Game(std::string_view filename) :
     ts::Node root = tree.getRootNode();
 
     // initialize the extractor object
+    // is there a way to not repeat the initial parsing?
     Extractor extractor(parseGAMEFromFile(std::string(filename)));
 
     // extract header nodes from the tree
@@ -57,7 +58,7 @@ Game::Game(std::string_view filename) :
 Game::~Game() {}
 
 void Game::startGame() {//to remove
-    Interpreter gameRunner(this, this->tree);
+    Interpreter gameRunner(this->tree);
     gameRunner.run(rulesLibrary.getNode());
 }
 
@@ -71,6 +72,12 @@ Configuration* Game::getConfiguration(){
 // IO::outputMessage(vector<Player> players, String message, int timeout);
 // IO::outputScores(vector<Scores> scores);
 
+// Should take in an input DTO Object which has been passed down from container manager to container
+DtoFromGame Game::run(DTOtoGame dto){
+    // processing here currently stubbed
+    DtoFromGame dtoToContainer = {true, 42, "example", 123, {1, 10}, {}};
+    return dtoToContainer;
+}
 // DTO Game::run(){
 //     return DTO();
 // }

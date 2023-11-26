@@ -4,8 +4,8 @@ extern "C" {
     TSLanguage* tree_sitter_socialgaming();
 }
 
-Interpreter::Interpreter(Game* game, const ts::Tree& tree):
-    game(game),
+Interpreter::Interpreter(const ts::Tree& tree):
+    //game(game),
     tree(tree)
 {}
 

@@ -14,6 +14,7 @@ GameLibrary::~GameLibrary() {}
 void GameLibrary::print() const {
     for(const Mapping& entry : contents){
       std::cout << "Index   : " << entry.index << std::endl;
+      std::cout << "Path    : " << entry.path << std::endl;
       std::cout << "Key     : " << entry.key << std::endl;
       std::cout << "Value   : " << entry.value << std::endl;
       std::cout << "Type    : " << entry.type << std::endl;
@@ -30,8 +31,8 @@ void GameLibrary::print() const {
 }
 
 
-std::variant<std::string, int, bool> GameLibrary::lookup(const std::string keyToFind) {
-  auto entryIter = lookupMap.find(keyToFind);
+std::variant<std::string, int, bool> GameLibrary::lookup(const std::string pathToFind) {
+  auto entryIter = lookupMap.find(pathToFind);
   if(entryIter != lookupMap.end()){
     Mapping* entry = entryIter->second;
     std::string value = entry->value;
@@ -51,7 +52,7 @@ std::variant<std::string, int, bool> GameLibrary::lookup(const std::string keyTo
 
     return value;
   } else{
-    std::cout << "[ERROR] '" << keyToFind << "' NOT FOUND" << std::endl;
+    std::cout << "[ERROR] '" << pathToFind << "' NOT FOUND" << std::endl;
     return "notFound";
   }
 }
@@ -59,7 +60,7 @@ std::variant<std::string, int, bool> GameLibrary::lookup(const std::string keyTo
 
 void GameLibrary::setLookups() {
     for(Mapping& entry : contents) {
-      std::pair<std::string, Mapping*> lookup = std::make_pair(entry.key, &entry);
+      std::pair<std::string, Mapping*> lookup = std::make_pair(entry.path, &entry);
       lookupMap.insert(lookup);
     }
 }
