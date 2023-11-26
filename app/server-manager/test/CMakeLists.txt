@@ -12,6 +12,7 @@ target_link_libraries(tests-server-manager
     GTest::gmock GTest::gtest GTest::gtest_main
     server-manager-lib
     networking
+    # TODO: add all other libraries required for server-manager
 )
 
 add_test(NAME tests-server-manager
