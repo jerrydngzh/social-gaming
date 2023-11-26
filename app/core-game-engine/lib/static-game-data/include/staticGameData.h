@@ -6,18 +6,19 @@
 #include "treeParser.h"
 #include "mapping.h"
 
-class StaticGameData {
-    private:
-        std::unique_ptr<Configuration> configurationLibrary;
-        std::unique_ptr<Constants> constantsLibrary;
-        std::unique_ptr<PerAudience> perAudienceLibrary;
-        std::unique_ptr<PerPlayer> perPlayerLibrary;
-        std::unique_ptr<Variables> variablesLibrary;
 
+// A container initializing all the static game libraries
+// (Configuration, Constants, PerAudience, PerPlayer, Variables)
+class StaticGameData {
     public:
         StaticGameData(const std::string &fileContents);
         ~StaticGameData();
 
-        std::string getGameName() const; 
-        void printStaticData(std::string libraryType) const;
+        std::unique_ptr<Configuration> configuration;
+        std::unique_ptr<Constants> constants;
+        std::unique_ptr<PerAudience> perAudience;
+        std::unique_ptr<PerPlayer> perPlayer;
+        std::unique_ptr<Variables> variables;
+
+        std::string getGameName() const;
 }; // StaticGameData

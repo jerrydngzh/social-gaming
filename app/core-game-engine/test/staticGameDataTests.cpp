@@ -35,11 +35,11 @@ TEST(staticGameData, print) {
 
     std::unique_ptr<StaticGameData> game = std::make_unique<StaticGameData>(fileContents);
     
-    if(TEST_PRINT_CONFIGURATION) game->printStaticData("configuration");
-    if(TEST_PRINT_CONSTANTS) game->printStaticData("constants");
-    if(TEST_PRINT_PER_AUDIENCE) game->printStaticData("perAudience");
-    if(TEST_PRINT_PER_PLAYER) game->printStaticData("perPlayer");
-    if(TEST_PRINT_VARIABLES) game->printStaticData("variables");
+    if(TEST_PRINT_CONFIGURATION) game->configuration->print();
+    if(TEST_PRINT_CONSTANTS) game->constants->print();
+    if(TEST_PRINT_PER_AUDIENCE) game->perAudience->print();
+    if(TEST_PRINT_PER_PLAYER) game->perPlayer->print();
+    if(TEST_PRINT_VARIABLES) game->variables->print();
 
     EXPECT_TRUE(true);
 }// print

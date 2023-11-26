@@ -22,11 +22,11 @@ StaticGameData::StaticGameData(const std::string &fileContents) {
     std::vector<Mapping> variablesData = extractor.format(variablesNode);
 
     // initialize libraries
-    this->configurationLibrary = std::make_unique<Configuration>(configurationData);
-    this->constantsLibrary = std::make_unique<Constants>(constantsData);
-    this->perAudienceLibrary = std::make_unique<PerAudience>(perAudienceData);
-    this->perPlayerLibrary = std::make_unique<PerPlayer>(perPlayerData);
-    this->variablesLibrary = std::make_unique<Variables>(variablesData);
+    this->configuration = std::make_unique<Configuration>(configurationData);
+    this->constants = std::make_unique<Constants>(constantsData);
+    this->perAudience = std::make_unique<PerAudience>(perAudienceData);
+    this->perPlayer = std::make_unique<PerPlayer>(perPlayerData);
+    this->variables = std::make_unique<Variables>(variablesData);
 }// StaticGameData()
 
 
@@ -34,22 +34,5 @@ StaticGameData::~StaticGameData() {}
 
 
 std::string StaticGameData::getGameName() const {
-    return configurationLibrary->getGameName();
-}// getName()
-
-
-void StaticGameData::printStaticData(std::string libraryType) const {
-    if(libraryType == "configuration") {
-        configurationLibrary->print();
-    } else if (libraryType == "constants") {
-        constantsLibrary->print();
-    } else if (libraryType == "perAudience") {
-        perAudienceLibrary->print();
-    } else if (libraryType == "perPlayer") {
-        perPlayerLibrary->print();
-    } else if (libraryType == "variables") {
-        variablesLibrary->print();
-    } else {
-        std::cout << "[ERROR] '" << libraryType << "' not found" << std::endl;
-    }
-}// printStaticData()
+    return configuration->getGameName();
+}// getGameName()
