@@ -18,6 +18,9 @@ add_executable(tests-core-game-engine
 
     # GameState tests
     gameStateTests.cpp
+
+    # staticGameData tests
+    staticGameDataTests.cpp
 )
 
 target_link_libraries(tests-core-game-engine
@@ -25,6 +28,7 @@ target_link_libraries(tests-core-game-engine
     GTest::gmock GTest::gtest GTest::gtest_main
     core-game-engine-lib
     game-state-lib
+    static-game-data-lib
 )
 
 add_test(NAME tests-core-game-engine
