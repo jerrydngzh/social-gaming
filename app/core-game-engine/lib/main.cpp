@@ -35,23 +35,8 @@ int main(int argc, char* argv[]) {
   ts::Tree tree = parseTree(fileContents);
   ts::Node root = tree.getRootNode();
 
-  // initialize the extractor object
-  Extractor extractor(fileContents);
-
   // extract header nodes from the tree
-  ts::Node configurationNode = root.getChildByFieldName("configuration");
-  ts::Node constantsNode = root.getChildByFieldName("constants");
-  ts::Node variablesNode = root.getChildByFieldName("variables");
-  ts::Node perPlayerNode = root.getChildByFieldName("per_player");
-  ts::Node perAudienceNode = root.getChildByFieldName("per_audience");
   ts::Node rulesNode = root.getChildByFieldName("rules");
-
-  // Use Extractor object to get a data structure for the contents of the node
-  std::vector<Mapping> configurationData = extractor.format(configurationNode);
-  std::vector<Mapping> constantsData = extractor.format(constantsNode);
-  std::vector<Mapping> variablesData = extractor.format(variablesNode);
-  std::vector<Mapping> perPlayerData = extractor.format(perPlayerNode);
-  std::vector<Mapping> perAudienceData = extractor.format(perAudienceNode);
 
   //rulesLibrary.runGame()?
   // Create game by initializing objects for each of the game sections
