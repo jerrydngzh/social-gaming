@@ -1,7 +1,6 @@
-#include "../core-game-engine/lib/include/configuration.h"
 #include <variant>
 #include <vector>
-#include "configurationState.h"
+#include "configuration.h"
 
 enum MessageType{
     REQUEST_FOR_INPUT,
@@ -27,7 +26,7 @@ struct DtoFromGame {
     std::string command;
     std::variant<int, bool> value;
     std::tuple<int, int> range; // in the case of bool its one
-    std::vector<Setting*> settings;
+    std::vector<Configuration::Setting> settings;
 };
 
 struct DTOtoGame {
@@ -55,11 +54,10 @@ struct DTOtoGame {
 struct DTOtoGameContainerManager {
     int clientId;
     std::vector<int> playerList;
-    Setting setting; // on the client output(getPrompt())
+    Configuration::Setting setting; // on the client output(getPrompt())
     bool isParallel;
     std::variant<int, bool> value;
     std::tuple<int, int> range;
-    std::vector<std::string> listOfChoice;
     GameRequest request; // general request such as players request, may not need this
 };
 

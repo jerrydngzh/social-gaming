@@ -19,7 +19,6 @@ ts::Tree parseTree(const std::string& source){
 
 Extractor::Extractor(const std::string &fileContents):
   fileContents(fileContents) 
-  // parent(0)
   {}
 
 
@@ -73,8 +72,8 @@ void Extractor::checkUnrecognizedType(const std::string &type){
 }// checkUnrecognizedType()
 
 
-std::string Extractor::createKey(const std::string currentKey, const std::string toAdd) {
-  std::string current = std::string(currentKey);
+std::string Extractor::createPath(const std::string currentPath, const std::string toAdd) {
+  std::string current = std::string(currentPath);
   std::string end = std::string(toAdd);
 
   if(!toAdd.empty()) {
@@ -82,37 +81,38 @@ std::string Extractor::createKey(const std::string currentKey, const std::string
   } 
 
   return current;
-}// createKey()
+}// createPath()
 
 
 Mapping Extractor::createMapping(std::vector<Mapping> &data, const std::string &key, const std::string &value, int &parent, const std::string &type) {
-  int insertIndex = data.size(); 
+  int insertIndex = data.size();
+  std::string copyOfKey = changeStringContent(std::string(key));
   std::string path = createUniquePath(data, key, parent, type);
 
   if(isTypeInList(type, rootKeys) && data.size() == 0) {        // roots
     std::string path = std::string(type);
-    return {insertIndex, path, "", 0, {}, "root"};
+    return {insertIndex, path, copyOfKey, "", 0, {}, "root"};
 
   } else if(isTypeInList(type, wrapperTypes)) {                // wrappers
-    return {insertIndex, "", "", parent, {}, type};  
+    return {insertIndex, "", "", "", parent, {}, type};  
 
   } else if (isTypeInList(type, valueTypesWithKey)) {          // key-value pairs  
-    return {insertIndex, path, value, parent, {}, type};
+    return {insertIndex, path, copyOfKey, value, parent, {}, type};
   
   } else if (isTypeInList(type, valueTypesNoKey)) {            // no keys, values only
-    return {insertIndex, "", value, parent, {}, type};  
+    return {insertIndex, "", "", value, parent, {}, type};  
   
   } else if (isTypeInList(type, keyOnlyTypes)) {               // keys only, no values
-    return {insertIndex, path, "", parent, {}, type};  
+    return {insertIndex, path, copyOfKey, "", parent, {}, type};  
     
   } else if (type == "setup_rule") {                           // setup_rule (unique)
-    return {insertIndex, path, "", parent, {}, type};  
+    return {insertIndex, path, copyOfKey, "", parent, {}, type};  
 
   } else if (type == "setup:" || type == "choices:") {         // setup: (unique), choices: (unique)
     std::string typeAsStr = changeStringContent(std::string(type));
-    std::string path = createKey(data.at(parent).key, typeAsStr); 
+    std::string path = createPath(data.at(parent).path, typeAsStr); 
 
-    return {insertIndex, path, "", parent, {}, type};
+    return {insertIndex, path, typeAsStr, "", parent, {}, type};
   
   } else {
     checkUnrecognizedType(type);
@@ -140,15 +140,15 @@ std::string Extractor::createUniquePath(const std::vector<Mapping> &data, const 
   }
 
   // extract data at head of branch
-  std::string branchKey = data.at(branchParser).key;
+  std::string branchPath = data.at(branchParser).path;
   std::string branchType = data.at(branchParser).type;
   int branchChildrenCount = data.at(branchParser).children.size();
 
   if(type == "number" && branchType == "number_range") {
-    path = branchKey + '[' + std::to_string(branchChildrenCount) + ']';
+    path = branchPath + '[' + std::to_string(branchChildrenCount) + ']';
 
   } else if(isTypeInList(branchType, listTypes)) {
-    std::string prepend = branchKey;
+    std::string prepend = branchPath;
 
     // direct parent previously added as a child to in the branch 
     if(!isTypeInList(data.at(parent).type, listTypes)) { 
@@ -157,10 +157,10 @@ std::string Extractor::createUniquePath(const std::vector<Mapping> &data, const 
       prepend = prepend + '[' + std::to_string(branchChildrenCount) + ']';
     }
 
-    path = createKey(prepend, key);
+    path = createPath(prepend, key);
 
   } else if(!isTypeInList(type, wrapperTypes)) {
-    path = createKey(branchKey, formatedKey);
+    path = createPath(branchPath, formatedKey);
   }
 
   return path;

@@ -1,4 +1,3 @@
-#include "../core-game-engine/lib/include/configuration.h"
 #include <variant>
 #include <vector>
 #include "configurationState.h"
@@ -59,7 +58,6 @@ struct DTOtoGameContainerManager {
     bool isParallel;
     std::variant<int, bool> value;
     std::tuple<int, int> range;
-    std::vector<std::string> listOfChoice;
     GameRequest request; // general request such as players request, may not need this
 };
 

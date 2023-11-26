@@ -56,6 +56,7 @@ target_link_libraries(core-game-engine-lib
   tree-sitter-sg
   cpp-tree-sitter
   static-game-data-lib
+  game-state-lib
 )
 
 #include header
