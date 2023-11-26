@@ -1,24 +1,55 @@
 #include "serverProcessor.h"
 
 
+  // Class GameContainer
+        // Constructor 
+        // 1 public function
+
+GameContainer::GameContainer(int gameContainerID){
+
+}
+
+int GameContainer::getGameContainerID() const {
+    return gameContainerID;
+}
+
 // GameContainerManager Implementation
 GameContainerManager::GameContainerManager()
 {
     // Constructor implementation
+    
 }
 
 int GameContainerManager::createGameContainer()
 {
     int gameContainerID = numberOfGameContainers;
-    gameContainerVector.push_back(gameContainerID);
+
+    // This does not actually create a Game Container and Store it!!!
+    // gameContainerVector.push_back(gameContainerID);
+
+    // Future Code 
+    // GameContainer newGame = gameContainer(gameContainerID);
+    // gameContainerVector.push_back(gameContainer);
+    // map gameContainerID to gameContainer
+
+    gameContainerVector.push_back(std::make_unique<GameContainer>(gameContainerID));
+    gameContainerMap[gameContainerID] = gameContainerVector.back().get();
+
     numberOfGameContainers++;
     return gameContainerID;
 }
 
 bool GameContainerManager::doesGameContainerIDExist(int gameContainerID)
 {
-    auto gameContainerVector_iter = std::find(gameContainerVector.begin(), gameContainerVector.end(), gameContainerID);
+    // auto gameContainerVector_iter = std::find(gameContainerVector.begin(), gameContainerVector.end(), gameContainerID);
+    // return (gameContainerVector_iter != gameContainerVector.end());
+
+    auto gameContainerVector_iter = std::find_if(gameContainerVector.begin(), gameContainerVector.end(),
+                                                  [gameContainerID](const std::unique_ptr<GameContainer> &gc) {
+                                                      return gc->getGameContainerID() == gameContainerID;
+                                                  });
     return (gameContainerVector_iter != gameContainerVector.end());
+
 }
 
 std::string GameContainerManager::addPlayerToGame(int clientID, int gameContainerID)

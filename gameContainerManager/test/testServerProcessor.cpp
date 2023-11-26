@@ -29,6 +29,15 @@ TEST(ComponentTest, InitializationTest) {
     });
 }
 
+
+TEST(ComponentTest, CreateGameContainer){
+
+    GameContainerManager gameContainerManager;
+    int containerID = gameContainerManager.createGameContainer();
+    ASSERT_EQ(containerID, 0);
+    ASSERT_TRUE(gameContainerManager.doesGameContainerIDExist(containerID));
+}
+
 // When create game is called, a new game is created.
 
     // Arrange 

@@ -5,6 +5,7 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
+#include <algorithm>
 
 struct C2SDTO
 {
@@ -20,6 +21,17 @@ struct S2CDTO
     std::string data;
 };
 
+class GameContainer
+{
+    public:
+    GameContainer(int gameContainerID);
+    int getGameContainerID() const;
+
+    private:
+    int gameContainerID;
+
+};
+
 class GameContainerManager
 {
 public:
@@ -33,9 +45,13 @@ public:
 
     std::string giveGameContainerPlayerInput(int gameContainerID, int clientID, std::string data);
 
+    // GameContainer getGameContainer(int gameContainerID);
+
 private:
     int numberOfGameContainers = 0;
-    std::vector<int> gameContainerVector;
+    std::vector<std::unique_ptr<GameContainer>> gameContainerVector;
+    // std::vector<int> gameContainerVector;
+    std::unordered_map<int, GameContainer*> gameContainerMap;
 };
 
 class ClientsManager
