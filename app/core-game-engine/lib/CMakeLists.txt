@@ -36,15 +36,9 @@ add_grammar_from_repo(tree-sitter-sg                        # Defines the librar
 add_library(core-game-engine-lib)
 target_sources(core-game-engine-lib
   PRIVATE
-    configuration.cpp
-    constants.cpp
-    gameLibrary.cpp
-    perAudience.cpp
-    perPlayer.cpp
     rules.cpp
     treeParser.cpp
     util.cpp
-    variables.cpp
     game.cpp
     interpreter.cpp
 )
@@ -61,6 +55,7 @@ target_link_libraries(core-game-engine-lib
   tree-sitter-json
   tree-sitter-sg
   cpp-tree-sitter
+  static-game-data-lib
 )
 
 #include header
@@ -73,3 +68,4 @@ target_include_directories(core-game-engine-lib
 )
 
 add_subdirectory(game-state)
+add_subdirectory(static-game-data)
