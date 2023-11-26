@@ -12,7 +12,7 @@
 #include "util.h"
 #include "variables.h"
 //#include "interpreter.h"
-//#include "../../game-container/DTO.h"
+#include "DTO.h"
 
 // Holds all sections of the game and initializes game logic
 class Game {
@@ -41,6 +41,5 @@ public:
 
     Configuration* getConfiguration();
     DtoFromGame run(DTOtoGame dto);
-    Configuration* getConfiguration();
     //DTO run(DTO in);
 };

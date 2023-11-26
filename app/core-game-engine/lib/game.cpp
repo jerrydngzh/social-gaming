@@ -58,7 +58,7 @@ Game::Game(std::string_view filename) :
 Game::~Game() {}
 
 void Game::startGame() {//to remove
-    Interpreter gameRunner(this, this->tree);
+    Interpreter gameRunner(this->tree);
     gameRunner.run(rulesLibrary.getNode());
 }
 

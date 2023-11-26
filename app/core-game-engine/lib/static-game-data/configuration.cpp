@@ -52,6 +52,12 @@ void Configuration::setPlayerRange() {
     playerRange = std::tuple<int, int>(lowerBound, upperBound);
 }// setPlayerRange()
 
+// Need a way to getConfiguration for static initialization of game
+// Either in GameContainer or Server?
+// Configuration* Game::getConfiguration(){
+//     return &this->configurationLibrary;
+// }
+
 
 
 // const std::string Configuration::GAME_NAME_FIELD = std::string("name");

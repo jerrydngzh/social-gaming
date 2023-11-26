@@ -38,7 +38,7 @@ class Extractor {
         void checkUnrecognizedType(const std::string &type);
 
         // returns a modified key by adding second argument to first
-        std::string createKey(const std::string currentKey, const std::string toAdd);
+        std::string createPath(const std::string currentPath, const std::string toAdd);
 
         // Create and format a specific Mapping object
         Mapping createMapping(std::vector<Mapping> &data, const std::string &key, const std::string &value, int &parent, const std::string &type);

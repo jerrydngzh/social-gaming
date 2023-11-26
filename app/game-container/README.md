@@ -103,3 +103,8 @@ configuration.getSettingByName(clientResponse.name).setValue(clientResponse.valu
 core-game-engine-build/_deps/**
 
 # MAKE A LIST OF ALL SETTINGS TO EXPECT FROM ROCK PAPER SCISSIORS
+
+Instead of sending whole setting object and letting client deal with it use the function for requesting user input
+
+for each setting
+send a DTO for a user request

@@ -5,6 +5,7 @@
 // in our business logic
 struct Mapping {
     int index;
+    std::string path;
     std::string key;
     std::string value;
     int parent;
