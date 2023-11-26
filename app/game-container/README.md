@@ -108,3 +108,5 @@ Instead of sending whole setting object and letting client deal with it use the 
 
 for each setting
 send a DTO for a user request
+
+DTO needs a way to let client know that we need to request a specific user to input either a number, a string, or a choice from multiple string (can have user input 1-5 to select an option or have them type in the right option maybe)
