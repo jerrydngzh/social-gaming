@@ -1,6 +1,7 @@
 #pragma once
-#include "../../core-game-engine/lib/include/game.h"
-#include "configuration.h"
+// #include "../../core-game-engine/lib/include/game.h"
+#include "game.h"
+// #include "configuration.h"
 #include "DTO.h"
 #include <vector>
 

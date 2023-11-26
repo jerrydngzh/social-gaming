@@ -17,7 +17,6 @@ add_library(game-container-lib)
 target_sources(game-container-lib
   PRIVATE
     gameContainer.cpp
-    configuration.cpp
 )
 target_include_directories(game-container-lib
   PUBLIC
@@ -27,6 +26,7 @@ target_compile_features(game-container-lib PUBLIC cxx_std_20)
 
 target_link_libraries(game-container-lib
   cpp-tree-sitter
+  core-game-engine-lib
 )
 
 set_target_properties(game-container-lib PROPERTIES
