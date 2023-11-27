@@ -1,0 +1,3 @@
+add_subdirectory(DummyServer)
+add_subdirectory(SocialGameFileHandler)
+add_subdirectory(User)
