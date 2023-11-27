@@ -6,7 +6,7 @@
 
 using namespace MessageProcessors;
 
-TEST(MessageProcessor, processIncomingMessage_test) {
+TEST(MessageProcessor, processIncomingMessage_ValidJsonFormat_test) {
     MessageProcessor messageProcessor;
     std::string_view message = "{\"clientId\":1,\"command\":\"echo\",\"data\":\"hello world\"}";
     RequestMessageDTO requestMessageDTO = messageProcessor.processIncomingMessage(message);
@@ -16,7 +16,74 @@ TEST(MessageProcessor, processIncomingMessage_test) {
     EXPECT_EQ(requestMessageDTO.data, "hello world");
 }
 
-TEST(MessageProcessor, processOutgoingMessage_test) {
+TEST(MessageProcessor, processIncoming_EmptyMessage_test) {
+    MessageProcessor messageProcessor; 
+    std::string_view message = "";
+    EXPECT_THROW(messageProcessor.processIncomingMessage(message), std::exception);
+}
+
+// ============= VALID =============
+TEST(MessageProcessor, processIncoming_ValidClientId_test) {
+    MessageProcessor messageProcessor;
+    std::string_view message = "{\"clientId\":333,\"command\":\"echo\",\"data\":\"hello world\"}";
+    RequestMessageDTO requestMessageDTO = messageProcessor.processIncomingMessage(message);
+    EXPECT_EQ(requestMessageDTO.clientId, 333);
+}
+
+TEST(MessageProcessor, processIncoming_ValidCommand_test) {
+    MessageProcessor messageProcessor;
+    std::string_view message = "{\"clientId\":333,\"command\":\"JOIN\",\"data\":\"hello world\"}";
+    RequestMessageDTO requestMessageDTO = messageProcessor.processIncomingMessage(message);
+    EXPECT_EQ(requestMessageDTO.command, "JOIN");
+}
+
+TEST(MessageProcessor, processIncoming_ValidData_test) {
+    MessageProcessor messageProcessor;
+    std::string_view message = "{\"clientId\":333,\"command\":\"echo\",\"data\":\"hello world\"}";
+    RequestMessageDTO requestMessageDTO = messageProcessor.processIncomingMessage(message);
+    EXPECT_EQ(requestMessageDTO.data, "hello world");
+}
+
+// ============= INVALID =============
+TEST(MessageProcessor, processIncoming_InvalidClientId_test) {
+    MessageProcessor messageProcessor;
+    std::string_view message = "{\"clientId\":\"333\",\"command\":\"echo\",\"data\":\"hello world\"}";
+    EXPECT_THROW(messageProcessor.processIncomingMessage(message), std::exception);
+}
+
+TEST(MessageProcessor, processIncoming_InvalidCommand_test) {
+    MessageProcessor messageProcessor;
+    std::string_view message = "{\"clientId\":\"333\",\"command\":echo,\"data\":\"hello world\"}";
+    EXPECT_THROW(messageProcessor.processIncomingMessage(message), std::exception);
+}
+
+TEST(MessageProcessor, processIncoming_InvalidData_test) {
+    MessageProcessor messageProcessor;
+    std::string_view message = "{\"clientId\":333,\"command\":\"echo\",\"data\":true}";
+    EXPECT_THROW(messageProcessor.processIncomingMessage(message), std::exception);
+}
+
+
+// ============= MISSING =============
+TEST(MessageProcessor, processIncoming_MissingClientId_test) {
+    MessageProcessor messageProcessor;
+    std::string_view message = "{\"clientId\":null,\"command\": \"echo\",\"data\":true}";
+    EXPECT_THROW(messageProcessor.processIncomingMessage(message), std::exception);
+}
+
+TEST(MessageProcessor, processIncoming_MissingCommand_test) {
+    MessageProcessor messageProcessor;
+    std::string_view message = "{\"clientId\":333,\"command\": null,\"data\":true}";
+    EXPECT_THROW(messageProcessor.processIncomingMessage(message), std::exception);
+}
+
+TEST(MessageProcessor, processIncoming_MissingData_test) {
+    MessageProcessor messageProcessor;
+    std::string_view message = "{\"clientId\":333,\"command\":\"echo\",\"data\":null}";
+    EXPECT_THROW(messageProcessor.processIncomingMessage(message), std::exception);
+}
+
+TEST(MessageProcessor, processOutgoingMessage_ValidJsonFormat_test) {
     MessageProcessor messageProcessor;
     ResponseMessageDTO responseMessageDTO{1, true, "hello world", "echo", "hello world"};
     std::string responseMessage = messageProcessor.processOutgoingMessage(responseMessageDTO);
@@ -25,49 +92,10 @@ TEST(MessageProcessor, processOutgoingMessage_test) {
     EXPECT_EQ(responseMessage, expectedResponseMessage);
 }
 
-
-// TODO: add tests for the following test cases
-/*
-TESTS cases:
-- processIncomingMessage
-    - empty message
-    - invalid json
-    - valid json
-        - clientId
-            - missing
-            - invalid type
-            - valid
-        - command
-            - missing
-            - invalid type
-            - valid
-        - data
-            - missing
-            - invalid type
-            - valid
-
-- processOutgoingMessage
-    - empty message
-    - invalid json
-    - valid json
-        - clientId
-            - missing
-            - invalid type
-            - valid
-        - messageStatus
-            - missing
-            - invalid type
-            - valid
-        - messageResult
-            - missing
-            - invalid type
-            - valid
-        - command
-            - missing
-            - invalid type
-            - valid
-        - commandData
-            - missing
-            - invalid type
-            - valid
-*/
+TEST(MessageProcessor, processOutgoingMessage_EmptyMessage_test) {
+    MessageProcessor messageProcessor;
+    ResponseMessageDTO responseMessageDTO{0, NULL, "", "", ""};
+    std::string expectedResponseMessage = "{\"clientId\":0,\"messageStatus\":false,\"messageResult\":\"\",\"command\":\"\",\"commandData\":\"\"}";
+    std::string responseMessage = messageProcessor.processOutgoingMessage(responseMessageDTO);
+    EXPECT_EQ(responseMessage, expectedResponseMessage);
+}
