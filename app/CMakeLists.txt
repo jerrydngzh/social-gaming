@@ -15,6 +15,7 @@ add_subdirectory(game-container-manager)
 add_subdirectory(networking)
 add_subdirectory(server-platform)
 add_subdirectory(server-manager)
+add_subdirectory(message-processors)
 
 
 # copy game files to build directory
