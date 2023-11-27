@@ -112,6 +112,31 @@ test-game-container-manager:
 	@echo "[INFO] game-container-manager tests commencing..." ; \
 	cd $(GAME_CONTAINER_MANAGER_BUILD_DIR) && bin/tests-game-container-manager
 
+#******************************
+#	   MESSAGE PROCESSORS
+#******************************
+
+MESSAGE_PROCESSORS_DIR := $(APP_DIR)/message-processors
+MESSAGE_PROCESSORS_BUILD_DIR := message-processors-build
+MESSAGE_PROCESSORS_TEST_DIR := $(MESSAGE_PROCESSORS_DIR)/test
+
+# Creates directory and runs cmake to build the project
+build-message-processors:
+	@echo "[INFO] Building 'message-processors'" ; \
+	echo "[SETUP] Copying '$(TEST_DIR)/gtest' directory to $(MESSAGE_PROCESSORS_TEST_DIR)" ; \
+	cp -r $(TEST_DIR)/gtest $(MESSAGE_PROCESSORS_TEST_DIR) ; \
+	mkdir -p $(MESSAGE_PROCESSORS_BUILD_DIR) ; \
+	cd $(MESSAGE_PROCESSORS_BUILD_DIR) && cmake ../$(MESSAGE_PROCESSORS_DIR)
+
+# Compiles the C++ code for the project
+compile-message-processors:
+	@echo "[INFO] Compiling 'message-processors'" ; \
+	$(MAKE) -C $(MESSAGE_PROCESSORS_BUILD_DIR) --silent
+
+# Runs the test-suite
+test-message-processors:
+	@echo "[INFO] message-processors tests commencing..." ; \
+	cd $(MESSAGE_PROCESSORS_BUILD_DIR) && bin/tests-message-processors
 
 #******************************
 # 			NETWORKING
@@ -181,7 +206,6 @@ compile-social-gaming:
 	@echo "[INFO] Compiling 'social-gaming'" ; \
 	$(MAKE) -C $(SOCIAL_GAMING_BUILD_DIR) --silent
 
-# Executes the code
 run-social-gaming:
 	@echo "[INFO] Running 'social-gaming'" ; \
 	$(SOCIAL_GAMING_BUILD_DIR)/bin/social-gaming
@@ -193,7 +217,8 @@ test-social-gaming:
 	bin/tests-core-game-engine ; \
 	bin/tests-game-container ; \
 	bin/tests-game-container-manager ; \
-	bin/tests-server
+	bin/tests-server ; \
+	bin/tests-message-processors
 
 #******************************
 # 			GENERIC
@@ -224,13 +249,14 @@ clean:
 	@rm -rf $(CORE_GAME_ENGINE_TEST_DIR)/gtest
 	@rm -rf $(GAME_CONTAINER_TEST_DIR)/gtest
 	@rm -rf $(GAME_CONTAINER_MANAGER_TEST_DIR)/gtest
+	@rm -rf $(MESSAGE_PROCESSORS_TEST_DIR)/gtest
 	@rm -rf $(SERVER_TEST_DIR)/gtest
 	
 # [INFO]: Build all the applications separately 
-all-build: build-client build-client-server-communication build-core-game-engine build-game-container build-game-container-manager build-server build-social-gaming
+all-build: build-client build-client-server-communication build-core-game-engine build-game-container build-game-container-manager build-message-processors build-server build-social-gaming
 
 # [INFO]: Compile all the applications separately 
-all-compile: compile-client compile-client-server-communication compile-core-game-engine compile-game-container compile-game-container-manager compile-server compile-social-gaming
+all-compile: compile-client compile-client-server-communication compile-core-game-engine compile-game-container compile-game-container-manager compile-message-processors compile-server compile-social-gaming
 
 # [INFO]: Runs all the tests separately 
-all-tests: test-client test-core-game-engine test-game-container test-game-container-manager test-server test-social-gaming
+all-tests: test-client test-core-game-engine test-game-container test-game-container-manager test-message-processors test-server test-social-gaming
