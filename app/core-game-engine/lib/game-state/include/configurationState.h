@@ -56,14 +56,3 @@ public:
 };
 
 //TODO: implement the rest of the settings (String, Enum, QuestionAnswer, MultipleChoice, JSON)
-
-class ConfigurationState {
-private:
-    std::vector<Setting*> settings;
-public:
-    ConfigurationState();
-    ~ConfigurationState();
-    void addSetting(Setting* setting);
-    Setting* getSetting(std::string name) const;
-    std::vector<Setting*> getSettings() const;
-};

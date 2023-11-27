@@ -1,6 +1,7 @@
 //GameState is a wrapper class holding all the classes associated with the game state
 #pragma once
 
+#include <map>
 #include "configurationState.h"
 #include "memberState.h"
 #include "rulesState.h"
@@ -8,12 +9,20 @@
 
 class GameState {
 private:
-    ConfigurationState* configurationState;
-    std::vector<MemberState*> audience; //Maybe should be a map of id to member?
-    std::vector<MemberState*> players; //or have a wrapper like ValuesState?
-    RulesState* rulesState;
+    std::map<std::string, Setting*> settings;
+    std::map<int, MemberState*> audience;
+    std::map<int, MemberState*> players;
     ValuesState* values;
+    RulesState* rulesState;
 
 public:
-    //TODO
+    //ConfigurationState
+    void addSetting(Setting* setting);
+    Setting* getSetting(std::string name) const;
+    std::map<std::string, Setting*> getSettings() const;
+    //players
+
+    //values
+
+    //rules
 };
