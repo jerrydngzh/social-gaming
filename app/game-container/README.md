@@ -101,3 +101,12 @@ for setting s in getSettings(){
 configuration.getSettingByName(clientResponse.name).setValue(clientResponse.value);
 
 core-game-engine-build/_deps/**
+
+# MAKE A LIST OF ALL SETTINGS TO EXPECT FROM ROCK PAPER SCISSIORS
+
+Instead of sending whole setting object and letting client deal with it use the function for requesting user input
+
+for each setting
+send a DTO for a user request
+
+DTO needs a way to let client know that we need to request a specific user to input either a number, a string, or a choice from multiple string (can have user input 1-5 to select an option or have them type in the right option maybe)

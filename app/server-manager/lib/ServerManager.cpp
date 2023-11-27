@@ -1,9 +1,12 @@
 #include "ServerManager.h"
 
+const char* htmlLoc = "./app/server-platform/index.html";
+
 ServerManager::ServerManager(const unsigned short port)
 {
-    // TODO: this is probably broken, someone plz help fix, idk what to do - jerry
-    // this->server = std::make_unique<Server>(port, getHTTPMessage("index.html"), this->onConnect, this->onDisconnect);
+    this->server = std::make_unique<Server>(port, getHTTPMessage(htmlLoc),
+                    [this](networking::Connection c) { this->onConnect(c); },
+                    [this](networking::Connection c) { this->onDisconnect(c); });
 }
 
 void ServerManager::startServer()
@@ -21,7 +24,6 @@ void ServerManager::startServer()
                       << " " << e.what() << "\n\n";
             errorWhileUpdating = true;
         }
-
         const auto incoming = this->server->receive();
         const auto [log, shouldQuit] = processMessages(*(this->server), incoming);
         const auto outgoing = buildOutgoing(log);
@@ -36,22 +38,22 @@ void ServerManager::startServer()
     }
 }
 
-void onConnect(networking::Connection c)
+void ServerManager::onConnect(networking::Connection c)
 {
     std::cout << "New connection found: " << c.id << "\n";
     // TODO: decide how we want to manage clients
-    // clients.push_back(c);
+    clients.push_back(c);
 }
 
-void onDisconnect(networking::Connection c)
+void ServerManager::onDisconnect(networking::Connection c)
 {
     std::cout << "Connection lost: " << c.id << "\n";
-    // auto eraseBegin = std::remove(std::begin(clients), std::end(clients), c);
-    // clients.erase(eraseBegin, std::end(clients));
+    auto eraseBegin = std::remove(std::begin(clients), std::end(clients), c);
+    clients.erase(eraseBegin, std::end(clients));
 }
 
 std::string
-getHTTPMessage(const char *htmlLocation)
+ServerManager::getHTTPMessage(const char *htmlLocation)
 {
     if (access(htmlLocation, R_OK) != -1)
     {
@@ -63,7 +65,7 @@ getHTTPMessage(const char *htmlLocation)
     std::exit(-1);
 }
 
-
+// TODO: modify to use MessageProcessors
 ServerManager::MessageResult
 ServerManager::processMessages(Server &server, const std::deque<Message> &incoming)
 {
@@ -76,7 +78,7 @@ ServerManager::processMessages(Server &server, const std::deque<Message> &incomi
 
         if (loc != clients.end())
         {
-            // auto connection = clients[std::distance(clients.begin(), loc)];
+            auto connection = clients[std::distance(clients.begin(), loc)];
             result << message.connection.id << ", " << message.text << "\n";
         }
         else
@@ -89,6 +91,7 @@ ServerManager::processMessages(Server &server, const std::deque<Message> &incomi
     return MessageResult{result.str(), false};
 }
 
+// TODO: modify to use MessageProcessors
 std::deque<Message>
 ServerManager::buildOutgoing(const std::string &log)
 {

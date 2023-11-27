@@ -6,18 +6,18 @@
 #include <string_view>
 #include <iostream>
 
-#include "game.h"
+#include "gameState.h"
 
 // Handles the execution of a game
 class Interpreter {
 private:
-    const Game* game;
+    //const Game* game;
     const ts::Tree& tree;
     const static ts::Language language;
     
 
 public:
-    Interpreter(Game* game, const ts::Tree& tree);
+    Interpreter(const ts::Tree& tree);
     ~Interpreter();
     
     class Action {
