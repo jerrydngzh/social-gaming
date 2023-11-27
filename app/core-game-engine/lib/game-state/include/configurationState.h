@@ -6,10 +6,9 @@
 #include <algorithm>
 
 class Setting {
-    protected:
-        std::string name;
     public: //Consider visitor patter instead of storing a type like this?
-        enum Kind {
+        const std::string name;
+        const enum Kind {
             BOOLEAN,
             INTEGER,
             STRING,
@@ -18,41 +17,21 @@ class Setting {
             MULTIPLE_CHOICE,
             JSON
         } kind;
-        Kind getKind() const {
-            return kind;
-        };
         Setting(std::string name, Kind kind) : name(name), kind(kind) {};
-        std::string getName() const {
-            return name;
-        };
     };
 
 class BooleanSetting : public Setting {
-private:
-    bool value;
 public:
+    bool value;
     BooleanSetting(std::string name, const bool value) : Setting(name, Kind::BOOLEAN), value(value) {};
     ~BooleanSetting();
-    bool getValue() const {
-        return value;
-    };
-    void setValue(const bool value){
-        this->value = value;
-    };
 };
 
 class IntegerSetting : public Setting {
-private:
-    int value;
 public:
+    int value;
     IntegerSetting(std::string name, const int value) : Setting(name, Kind::INTEGER), value(value) {};
     ~IntegerSetting();
-    int getValue() const {
-        return value;
-    };
-    void setValue(const int value) {
-        this->value = value;
-    }
 };
 
 //TODO: implement the rest of the settings (String, Enum, QuestionAnswer, MultipleChoice, JSON)

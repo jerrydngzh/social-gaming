@@ -2,5 +2,14 @@
 #pragma once
 
 class MemberState {
-    //A member has a name, id, and a map of values (or a valuesState?) called elements
+    public:
+        const std::string name;
+        const int id;
+        std::map<std::string, Value*> elements;
+        MemberState(std::string name, int id) : name(name), id(id) {};
+        ~MemberState() {
+            for (auto element : elements) {
+                delete element.second;
+            }
+        };
 };

@@ -8,21 +8,19 @@
 #include "valuesState.h"
 
 class GameState {
-private:
+public:
     std::map<std::string, Setting*> settings;
     std::map<int, MemberState*> audience;
     std::map<int, MemberState*> players;
-    ValuesState* values;
+    std::map<std::string, Value*> values;
     RulesState* rulesState;
 
-public:
-    //ConfigurationState
+    //Methods for interacting with Game Container
+
+    //   Configuration
     void addSetting(Setting* setting);
-    Setting* getSetting(std::string name) const;
-    std::map<std::string, Setting*> getSettings() const;
-    //players
-
-    //values
-
-    //rules
+    std::vector<Setting*> getSettings() const;
+    //   Players
+    void addPlayer(MemberState* player);
+    void addAudience(MemberState* audience);
 };

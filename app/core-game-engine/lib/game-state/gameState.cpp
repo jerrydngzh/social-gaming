@@ -1,29 +1,41 @@
 #include "gameState.h"
 
-//Constructors
+//Constructor / Destructor
 GameState::GameState() = default;
 
 GameState::~GameState() {
     for (auto setting : settings) {
         delete setting.second;
     }
+    for (auto player : players) {
+        delete player.second;
+    }
+    for (auto audienceMember : audience) {
+        delete audienceMember.second;
+    }
+    for (auto value : values) {
+        delete value.second;
+    }
+    delete rulesState;
 }
 
 //Configuration
-Setting* GameState::getSetting(std::string name) const  {
-    return settings.at(name);
-}
-
-std::map<std::string, Setting*> GameState::getSettings() const {
-    return settings;
+std::vector<Setting*> GameState::getSettings() const {
+    std::vector<Setting*> settingsVector;
+    for (auto setting : settings) {
+        settingsVector.push_back(setting.second);
+    }
+    return settingsVector;
 }
 
 void GameState::addSetting(Setting* setting) {
-    settings[setting->getName()] = setting;
+    settings[setting->name] = setting;
 }
 
 //Players
-
-//Values
-
-//Rules
+void GameState::addPlayer(MemberState* player) {
+    players[player->id] = player;
+}
+void GameState::addAudience(MemberState* audienceMember) {
+    audience[audienceMember->id] = audienceMember;
+}
