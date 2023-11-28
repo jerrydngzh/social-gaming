@@ -1,7 +1,6 @@
 #include "gameState.h"
 
-//Constructor / Destructor
-GameState::GameState() = default;
+// Constructor / Destructor
 
 GameState::~GameState() {
     for (auto setting : settings) {
@@ -19,7 +18,7 @@ GameState::~GameState() {
     delete rulesState;
 }
 
-//Configuration
+// Configuration
 std::vector<Setting*> GameState::getSettings() const {
     std::vector<Setting*> settingsVector;
     for (auto setting : settings) {
@@ -32,7 +31,7 @@ void GameState::addSetting(Setting* setting) {
     settings[setting->name] = setting;
 }
 
-//Players
+// Players
 void GameState::addPlayer(MemberState* player) {
     players[player->id] = player;
 }

@@ -1,8 +1,6 @@
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
-
 #include "gameState.h"
-#include "configurationState.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 //******************************
 //      GLOBAL VARIABLES
@@ -15,26 +13,25 @@ static const bool TEST_PRINT = false;
 //******************************
 
 TEST(ConfigurationStateTest, setting) {
-    
-    //setup
-    ConfigurationState cS;
+    // setup
+    GameState cS;
 
     cS.addSetting(new BooleanSetting("boolTest", true));
     cS.addSetting(new IntegerSetting("intTest", 1));
 
-    if(TEST_PRINT) {
+    if (TEST_PRINT) {
         printf("ConfigurationState, setting\n");
     }
 
-    EXPECT_EQ(cS.getSetting("boolTest")->getKind(), Setting::Kind::BOOLEAN);
-    EXPECT_EQ(cS.getSetting("intTest")->getKind(), Setting::Kind::INTEGER);
+    EXPECT_EQ(cS.settings.at("boolTest")->kind, Setting::Kind::BOOLEAN);
+    EXPECT_EQ(cS.settings.at("intTest")->kind, Setting::Kind::INTEGER);
 
-    BooleanSetting* bS = static_cast<BooleanSetting*>(cS.getSetting("boolTest"));
-    EXPECT_EQ(bS->getValue(), true);
-    bS->setValue(false);
-    EXPECT_EQ(bS->getValue(), false);
-    IntegerSetting* iS = static_cast<IntegerSetting*>(cS.getSetting("intTest"));
-    EXPECT_EQ(iS->getValue(), 1);
-    iS->setValue(2);
-    EXPECT_EQ(iS->getValue(), 2);
+    BooleanSetting* bS = static_cast<BooleanSetting*>(cS.settings.at("boolTest"));
+    EXPECT_EQ(bS->value, true);
+    bS->value = false;
+    EXPECT_EQ(bS->value, false);
+    IntegerSetting* iS = static_cast<IntegerSetting*>(cS.settings.at("intTest"));
+    EXPECT_EQ(iS->value, 1);
+    iS->value = 2;
+    EXPECT_EQ(iS->value, 2);
 }
