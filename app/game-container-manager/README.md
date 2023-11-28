@@ -1,11 +1,9 @@
 # GameContainer Manager 
 
-## Building and Running the Project 
-1. Create and cd into a build directory (buildGameContainerManager). 
+## MakeFile Instructions 
+Please follow the toplevel makefile instructions to run the test suite on 
+the game container manager. 
 
-Execute the following commands in the build directory. 
-2. `cmake ../gameContainerManager`
-3. `make`
-4. `./main`
-
-
+## Running Main 
+Inside the build folder created by the top level makefile commands, 
+inside bin, is a `main`. This can be run by doing `./bin/main` inside the build directory. 
