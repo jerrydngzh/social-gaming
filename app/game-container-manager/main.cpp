@@ -8,7 +8,7 @@ In this file, we demonstrate how the Server Processor would be used in the Serve
 #include <vector>
 #include <memory>
 
-#include "serverProcessor.h"
+#include "gameContainerManager.h"
 
 // DUMMY FUNCTION - SERVES EXAMPLE ONLY
 // Dummy Function which replicates when the Server Platform gets a message from the client,
