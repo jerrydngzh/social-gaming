@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 add_library(game-state-lib)
 target_sources(game-state-lib
   PRIVATE
-    configurationState.cpp
+    gameState.cpp
 )
 target_include_directories(game-state-lib
   PUBLIC
