@@ -16,7 +16,17 @@ class GameState {
     std::map<int, MemberState*> audience;
     std::map<int, MemberState*> players;
     std::map<std::string, Value*> values;
-    RulesState* rulesState;
+    RulesState rulesState;
+
+    // Methods for initialization
+
+    std::map<std::string, Value*> perPlayerValues;
+    std::map<std::string, Value*> perAudienceValues;
+
+    void addConstant(Value* value);
+    void addVariable(Value* value);
+    void addPerPlayer(Value* value);
+    void addPerAudience(Value* value);
 
     // Methods for interacting with Game Container
 
