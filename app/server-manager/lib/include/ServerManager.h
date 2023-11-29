@@ -37,11 +37,11 @@ private:
     // ServerProcessor gameContainerManager;
 
     std::deque<MessageProcessors::RequestMessageDTO>
-    processMessages(Server &server, const std::deque<Message> &incoming);
+    processMessages(const std::deque<Message> &incoming);
 
     // TODO: migrate to MessageProcessors
     std::deque<Message>
-    buildOutgoing(const std::string &log);
+    buildOutgoing(const std::deque<MessageProcessors::ResponseMessageDTO> &messageResults);
 
     void onConnect(networking::Connection c);
     void onDisconnect(networking::Connection c);

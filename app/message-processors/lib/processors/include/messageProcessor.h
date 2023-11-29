@@ -10,7 +10,7 @@ struct RequestMessageDTO {
 };
 
 struct ResponseMessageDTO {
-    int clientId;
+    uintptr_t clientId;
     bool messageStatus; //could change to enums [SUCCESS, FAILED]
     std::string messageResult;
     std::string command;

@@ -1,6 +1,7 @@
 #include "ServerManager.h"
 
 const char* htmlLoc = "./app/server-platform/index.html";
+const std::string DISCONNECT = "DISCONNECT";
 
 ServerManager::ServerManager(const unsigned short port)
 {
@@ -27,24 +28,32 @@ void ServerManager::startServer()
             errorWhileUpdating = true;
         }
         const auto incoming = this->server->receive();
-        // TODO: 
-        const auto [log, shouldQuit] = processMessages(*(this->server), incoming);
-        const auto outgoing = buildOutgoing(log);
-        this->server->send(outgoing);
+        
+        const auto incomingMessages = processMessages(incoming);
 
-        if (shouldQuit || errorWhileUpdating)
+        // NOTE: single execution of requests
+        for (const auto &request : incomingMessages)
+        {
+            // const auto messageResult = this->serverProcessor->execute(incomingMessages);
+            // const auto outgoing = buildOutgoing(messageResult); 
+            // this->server->send(outgoing);
+        }
+
+        // NOTE: or batch execution of requests
+        // const auto messageResult = this->serverProcessor->execute(incomingMessages);
+        // const auto outgoing = buildOutgoing(incomingMessages);
+        // this->server->send(outgoing);
+
+        if (errorWhileUpdating)
         {
             break;
         }
-
-        sleep(1);
     }
 }
 
 void ServerManager::onConnect(networking::Connection c)
 {
     std::cout << "New connection found: " << c.id << "\n";
-    // TODO: decide how we want to manage clients
     clients.push_back(c);
 }
 
@@ -69,7 +78,7 @@ ServerManager::getHTTPMessage(const char *htmlLocation)
 }
 
 std::deque<MessageProcessors::RequestMessageDTO>
-ServerManager::processMessages(Server &server, const std::deque<Message> &incoming)
+ServerManager::processMessages(const std::deque<Message> &incoming)
 {
     std::deque<MessageProcessors::RequestMessageDTO> requests;
     for (const auto &message : incoming)
@@ -81,10 +90,18 @@ ServerManager::processMessages(Server &server, const std::deque<Message> &incomi
         {
             Connection connection = clients[std::distance(clients.begin(), loc)];
             std::cout << "Message from " << connection.id << ": " << message.text << "\n";
-            
+
             MessageProcessors::RequestMessageDTO request = messageProcessors->processIncomingMessage(message.text);
-            request.clientId = connection.id;
-            requests.push_back(request);
+
+            if (request.command == DISCONNECT)
+            {
+                this->server->disconnect(connection);
+            }
+            else
+            {
+                request.clientId = connection.id;
+                requests.push_back(request);
+            }
         }
         else
         {
@@ -99,13 +116,26 @@ ServerManager::processMessages(Server &server, const std::deque<Message> &incomi
 
 // TODO: modify to use MessageProcessors
 std::deque<Message>
-ServerManager::buildOutgoing(const std::string &log)
+ServerManager::buildOutgoing(const std::deque<MessageProcessors::ResponseMessageDTO>& responses)
 {
     std::deque<Message> outgoing;
-    for (auto client : clients)
+    for (const auto &response : responses)
     {
-        outgoing.push_back({client, log});
+        Connection target{response.clientId};
+        auto loc = std::find(clients.begin(), clients.end(), target);
+
+        if (loc != clients.end())
+        {
+            Connection connection = clients[std::distance(clients.begin(), loc)];
+            auto message = messageProcessors->processOutgoingMessage(response);
+            outgoing.push_back({connection, message});
+        }
+        else
+        {
+            std::cout << "Connection: " 
+                    << response.clientId 
+                    << " not found!\n";
+        }
     }
     return outgoing;
 }
-
