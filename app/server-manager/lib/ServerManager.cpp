@@ -7,6 +7,8 @@ ServerManager::ServerManager(const unsigned short port)
     this->server = std::make_unique<Server>(port, getHTTPMessage(htmlLoc),
                     [this](networking::Connection c) { this->onConnect(c); },
                     [this](networking::Connection c) { this->onDisconnect(c); });
+
+    this->messageProcessors = std::make_unique<MessageProcessors::MessageProcessor>();
 }
 
 void ServerManager::startServer()
@@ -25,6 +27,7 @@ void ServerManager::startServer()
             errorWhileUpdating = true;
         }
         const auto incoming = this->server->receive();
+        // TODO: 
         const auto [log, shouldQuit] = processMessages(*(this->server), incoming);
         const auto outgoing = buildOutgoing(log);
         this->server->send(outgoing);
@@ -65,30 +68,33 @@ ServerManager::getHTTPMessage(const char *htmlLocation)
     std::exit(-1);
 }
 
-// TODO: modify to use MessageProcessors
-ServerManager::MessageResult
+std::deque<MessageProcessors::RequestMessageDTO>
 ServerManager::processMessages(Server &server, const std::deque<Message> &incoming)
 {
-    std::ostringstream result;
+    std::deque<MessageProcessors::RequestMessageDTO> requests;
     for (const auto &message : incoming)
     {
-
-        Connection target = Connection{message.connection.id};
+        Connection target{message.connection.id};
         auto loc = std::find(clients.begin(), clients.end(), target);
 
         if (loc != clients.end())
         {
-            auto connection = clients[std::distance(clients.begin(), loc)];
-            result << message.connection.id << ", " << message.text << "\n";
+            Connection connection = clients[std::distance(clients.begin(), loc)];
+            std::cout << "Message from " << connection.id << ": " << message.text << "\n";
+            
+            MessageProcessors::RequestMessageDTO request = messageProcessors->processIncomingMessage(message.text);
+            request.clientId = connection.id;
+            requests.push_back(request);
         }
         else
         {
-            result << message.connection.id << ", "
-                   << "connection not found"
-                   << "\n";
+            std::cout << "Connection: " 
+                    << message.connection.id 
+                    << " not found!\n";
+            requests.push_back(MessageProcessors::RequestMessageDTO{message.connection.id, "Connection not found!"});
         }
     }
-    return MessageResult{result.str(), false};
+    return requests;
 }
 
 // TODO: modify to use MessageProcessors

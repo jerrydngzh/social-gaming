@@ -4,7 +4,7 @@ namespace MessageProcessors {
 
 // from the client
 struct RequestMessageDTO {
-    int clientId;
+    uintptr_t clientId;
     std::string command;
     std::string data;
 };
