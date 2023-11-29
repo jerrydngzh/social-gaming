@@ -19,12 +19,10 @@ struct ResponseMessageDTO {
 
 class MessageProcessor {
     public:
-        // TODO: change parameter to Message object during integration
         RequestMessageDTO processIncomingMessage(std::string_view message) {
             return processRequestMessageImpl(message);
         }
         
-        // TODO: change return type to MessageResult object during integration
         std::string processOutgoingMessage(ResponseMessageDTO message) {
             return processResponseMessageImpl(message);
         }
