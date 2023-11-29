@@ -2,6 +2,7 @@
 
 const char* htmlLoc = "./app/server-platform/index.html";
 const std::string DISCONNECT = "DISCONNECT";
+const std::string NEW_CONNECTION = "NEW_CONNECTION";
 
 ServerManager::ServerManager(const unsigned short port)
 {
@@ -31,7 +32,7 @@ void ServerManager::startServer()
         
         const auto incomingMessages = processMessages(incoming);
 
-        // NOTE: single execution of requests
+        // single execution of requests based on batch of incoming messages
         for (const auto &request : incomingMessages)
         {
             // const auto messageResult = this->serverProcessor->execute(incomingMessages);
@@ -39,22 +40,35 @@ void ServerManager::startServer()
             // this->server->send(outgoing);
         }
 
-        // NOTE: or batch execution of requests
-        // const auto messageResult = this->serverProcessor->execute(incomingMessages);
-        // const auto outgoing = buildOutgoing(incomingMessages);
-        // this->server->send(outgoing);
-
         if (errorWhileUpdating)
         {
             break;
         }
     }
 }
-
+  
 void ServerManager::onConnect(networking::Connection c)
 {
     std::cout << "New connection found: " << c.id << "\n";
     clients.push_back(c);
+
+    std::deque<Message> outgoing;
+
+    MessageProcessors::ResponseMessageDTO response;
+    std::stringstream message;
+    message << "Welcome to the server!" << std::endl
+            << "Please enter one following commands to interact with the server:" << std::endl
+            << "1. CREATE -- To create a new game room" << std::endl
+            << "2. JOIN <room-code> -- To join an existing game room" << std::endl;
+
+    response.clientId = c.id;
+    response.messageStatus = true;
+    response.messageResult = message.str();
+    response.command = NEW_CONNECTION;
+    response.commandData = NEW_CONNECTION;
+    
+    outgoing.push_back({c, message.str()});
+    server->send(outgoing);
 }
 
 void ServerManager::onDisconnect(networking::Connection c)
@@ -114,7 +128,6 @@ ServerManager::processMessages(const std::deque<Message> &incoming)
     return requests;
 }
 
-// TODO: modify to use MessageProcessors
 std::deque<Message>
 ServerManager::buildOutgoing(const std::deque<MessageProcessors::ResponseMessageDTO>& responses)
 {
