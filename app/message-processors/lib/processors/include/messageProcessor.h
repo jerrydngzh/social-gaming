@@ -4,13 +4,13 @@ namespace MessageProcessors {
 
 // from the client
 struct RequestMessageDTO {
-    int clientId;
+    uintptr_t clientId;
     std::string command;
     std::string data;
 };
 
 struct ResponseMessageDTO {
-    int clientId;
+    uintptr_t clientId;
     bool messageStatus; //could change to enums [SUCCESS, FAILED]
     std::string messageResult;
     std::string command;
@@ -19,12 +19,10 @@ struct ResponseMessageDTO {
 
 class MessageProcessor {
     public:
-        // TODO: change parameter to Message object during integration
         RequestMessageDTO processIncomingMessage(std::string_view message) {
             return processRequestMessageImpl(message);
         }
         
-        // TODO: change return type to MessageResult object during integration
         std::string processOutgoingMessage(ResponseMessageDTO message) {
             return processResponseMessageImpl(message);
         }

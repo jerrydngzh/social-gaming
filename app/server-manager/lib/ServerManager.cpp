@@ -1,12 +1,16 @@
 #include "ServerManager.h"
 
 const char* htmlLoc = "./app/server-platform/index.html";
+const std::string DISCONNECT = "DISCONNECT";
+const std::string NEW_CONNECTION = "NEW_CONNECTION";
 
 ServerManager::ServerManager(const unsigned short port)
 {
     this->server = std::make_unique<Server>(port, getHTTPMessage(htmlLoc),
                     [this](networking::Connection c) { this->onConnect(c); },
                     [this](networking::Connection c) { this->onDisconnect(c); });
+
+    this->messageProcessors = std::make_unique<MessageProcessors::MessageProcessor>();
 }
 
 void ServerManager::startServer()
@@ -25,24 +29,46 @@ void ServerManager::startServer()
             errorWhileUpdating = true;
         }
         const auto incoming = this->server->receive();
-        const auto [log, shouldQuit] = processMessages(*(this->server), incoming);
-        const auto outgoing = buildOutgoing(log);
-        this->server->send(outgoing);
+        
+        const auto incomingMessages = processMessages(incoming);
 
-        if (shouldQuit || errorWhileUpdating)
+        // single execution of requests based on batch of incoming messages
+        for (const auto &request : incomingMessages)
+        {
+            // const auto messageResult = this->serverProcessor->execute(incomingMessages);
+            // const auto outgoing = buildOutgoing(messageResult); 
+            // this->server->send(outgoing);
+        }
+
+        if (errorWhileUpdating)
         {
             break;
         }
-
-        sleep(1);
     }
 }
-
+  
 void ServerManager::onConnect(networking::Connection c)
 {
     std::cout << "New connection found: " << c.id << "\n";
-    // TODO: decide how we want to manage clients
     clients.push_back(c);
+
+    std::deque<Message> outgoing;
+
+    MessageProcessors::ResponseMessageDTO response;
+    std::stringstream message;
+    message << "Welcome to the server!" << std::endl
+            << "Please enter one following commands to interact with the server:" << std::endl
+            << "1. CREATE -- To create a new game room" << std::endl
+            << "2. JOIN <room-code> -- To join an existing game room" << std::endl;
+
+    response.clientId = c.id;
+    response.messageStatus = true;
+    response.messageResult = message.str();
+    response.command = NEW_CONNECTION;
+    response.commandData = NEW_CONNECTION;
+    
+    outgoing.push_back({c, message.str()});
+    server->send(outgoing);
 }
 
 void ServerManager::onDisconnect(networking::Connection c)
@@ -65,41 +91,64 @@ ServerManager::getHTTPMessage(const char *htmlLocation)
     std::exit(-1);
 }
 
-// TODO: modify to use MessageProcessors
-ServerManager::MessageResult
-ServerManager::processMessages(Server &server, const std::deque<Message> &incoming)
+std::deque<MessageProcessors::RequestMessageDTO>
+ServerManager::processMessages(const std::deque<Message> &incoming)
 {
-    std::ostringstream result;
+    std::deque<MessageProcessors::RequestMessageDTO> requests;
     for (const auto &message : incoming)
     {
-
-        Connection target = Connection{message.connection.id};
+        Connection target{message.connection.id};
         auto loc = std::find(clients.begin(), clients.end(), target);
 
         if (loc != clients.end())
         {
-            auto connection = clients[std::distance(clients.begin(), loc)];
-            result << message.connection.id << ", " << message.text << "\n";
+            Connection connection = clients[std::distance(clients.begin(), loc)];
+            std::cout << "Message from " << connection.id << ": " << message.text << "\n";
+
+            MessageProcessors::RequestMessageDTO request = messageProcessors->processIncomingMessage(message.text);
+
+            if (request.command == DISCONNECT)
+            {
+                this->server->disconnect(connection);
+            }
+            else
+            {
+                request.clientId = connection.id;
+                requests.push_back(request);
+            }
         }
         else
         {
-            result << message.connection.id << ", "
-                   << "connection not found"
-                   << "\n";
+            std::cout << "Connection: " 
+                    << message.connection.id 
+                    << " not found!\n";
+            requests.push_back(MessageProcessors::RequestMessageDTO{message.connection.id, "Connection not found!"});
         }
     }
-    return MessageResult{result.str(), false};
+    return requests;
 }
 
-// TODO: modify to use MessageProcessors
 std::deque<Message>
-ServerManager::buildOutgoing(const std::string &log)
+ServerManager::buildOutgoing(const std::deque<MessageProcessors::ResponseMessageDTO>& responses)
 {
     std::deque<Message> outgoing;
-    for (auto client : clients)
+    for (const auto &response : responses)
     {
-        outgoing.push_back({client, log});
+        Connection target{response.clientId};
+        auto loc = std::find(clients.begin(), clients.end(), target);
+
+        if (loc != clients.end())
+        {
+            Connection connection = clients[std::distance(clients.begin(), loc)];
+            auto message = messageProcessors->processOutgoingMessage(response);
+            outgoing.push_back({connection, message});
+        }
+        else
+        {
+            std::cout << "Connection: " 
+                    << response.clientId 
+                    << " not found!\n";
+        }
     }
     return outgoing;
 }
-
