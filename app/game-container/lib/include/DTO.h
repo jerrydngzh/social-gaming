@@ -1,6 +1,6 @@
 #include <variant>
 #include <vector>
-#include "configuration.h"
+#include "configurationState.h"
 
 enum MessageType{
     REQUEST_FOR_INPUT,

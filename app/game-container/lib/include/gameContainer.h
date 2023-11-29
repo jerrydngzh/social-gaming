@@ -1,7 +1,7 @@
 #pragma once
 // #include "../../core-game-engine/lib/include/game.h"
-#include "game.h"
-// #include "configuration.h"
+#include "gameState.h"
+#include "configurationState.h"
 #include "DTO.h"
 #include <vector>
 
@@ -24,7 +24,7 @@ private:
     void getMsgFromGCManager(const C2SDTO& serverDTO);
     DTOtoGameContainerManager sendMsgToGCManager();
 
-    std::vector<Configuration::Setting> settings; 
+    std::vector<Setting> settings; 
     int ownerID;
     std::unique_ptr<Game> game; 
     int gameInviteCode;

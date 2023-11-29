@@ -1,8 +1,5 @@
-#include "gameContainer.h"
 // should replace game_state 
-#include "game.h"
-#include "DTO.h"
-#include "configuration.h"
+#include gameContainer.h
 
 // Game Container Manager should pass in the server DTO right back in
 GameContainer::GameContainer() : ownerID(0), game(nullptr), gameInviteCode(0), playerList(), serverDTO(serverDTO){
