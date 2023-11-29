@@ -26,7 +26,7 @@ struct DtoFromGame {
     std::string command;
     std::variant<int, bool> value;
     std::tuple<int, int> range; // in the case of bool its one
-    std::vector<Configuration::Setting> settings;
+    std::vector<Setting> settings;
 };
 
 struct DTOtoGame {
@@ -54,7 +54,7 @@ struct DTOtoGame {
 struct DTOtoGameContainerManager {
     int clientId;
     std::vector<int> playerList;
-    Configuration::Setting setting; // on the client output(getPrompt())
+    Setting setting; // on the client output(getPrompt())
     bool isParallel;
     std::variant<int, bool> value;
     std::tuple<int, int> range;

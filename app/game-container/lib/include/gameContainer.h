@@ -4,12 +4,13 @@
 #include "configurationState.h"
 #include "DTO.h"
 #include <vector>
+#include <memory>
 
 class GameContainer
 {
 public:
     GameContainer();
-    GameContainer(int ownerId, std::unique_ptr<Game> game, int inviteCode)
+    GameContainer(int ownerId, std::unique_ptr<GameState> game, int inviteCode)
         : ownerID(ownerId), game(std::move(game)), gameInviteCode(inviteCode), playerList() {}
 
     DTOtoGameContainerManager GameContainerProcessor(const DtoFromGame & requestDTO);
@@ -26,10 +27,10 @@ private:
 
     std::vector<Setting> settings; 
     int ownerID;
-    std::unique_ptr<Game> game; 
+    std::unique_ptr<GameState> game; 
     int gameInviteCode;
     std::vector<int> playerList; // list of clientIds
-    Configuration *config;
+    Setting *config;
     DtoFromGame gameDTO;
     C2SDTO serverDTO;
 };
