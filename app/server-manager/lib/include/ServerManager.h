@@ -13,6 +13,7 @@
 using networking::Connection;
 using networking::Message;
 using networking::Server;
+
 using namespace ServerProcessor;
 
 class ServerManager
@@ -35,15 +36,13 @@ private:
     std::unique_ptr<Server> server;
     std::unique_ptr<MessageProcessors::MessageProcessor> messageProcessors;
 
-    // Server Processor Services 
-    std::unique_ptr<GameContainer> stubGameContainer;
-    std::unique_ptr<GameContainerManager> gameContainerManager;
-    std::unique_ptr<ClientsManager> clientsManager;
-    std::unique_ptr<CreateProcessor> createProcessor;
-    std::unique_ptr<JoinProcessor> joinProcessor;
-    std::unique_ptr<InputProcessor> inputProcessor;
-    std::unique_ptr<InvalidCommandProcessor> invalidCommandProcessor;
-
+    // Server Processor Services
+    GameContainerManager gameContainerManager;
+    ClientsManager clientsManager;
+    CreateProcessor createProcessor;
+    JoinProcessor joinProcessor;
+    InputProcessor inputProcessor;
+    InvalidCommandProcessor invalidCommandProcessor;
 
     // ===================== METHODS =====================
     std::deque<MessageProcessors::RequestMessageDTO>
@@ -59,6 +58,6 @@ private:
     getHTTPMessage(const char *htmlLocation);
 
     // DTO Adaptors
-    ServerProcessor::C2SDTO messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message);
-    std::deque<MessageProcessors::ResponseMessageDTO> serverProcessorDTOToMessageDTO(const ServerProcessor::S2CDTO &message); 
+    C2SDTO messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message);
+    std::deque<MessageProcessors::ResponseMessageDTO> serverProcessorDTOToMessageDTO(const ServerProcessor::S2CDTO &message);
 };

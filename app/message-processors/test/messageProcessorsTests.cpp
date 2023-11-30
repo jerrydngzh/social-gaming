@@ -9,7 +9,7 @@ using namespace MessageProcessors;
 TEST(MessageProcessor, processIncomingMessage_ValidJsonFormat_test) {
     MessageProcessor messageProcessor;
     std::string_view message = "{\"clientId\":1,\"command\":\"echo\",\"data\":\"hello world\"}";
-    ResponseMessageDTO requestMessageDTO = messageProcessor.processIncomingMessage(message);
+    RequestMessageDTO requestMessageDTO = messageProcessor.processIncomingMessage(message);
 
     EXPECT_EQ(requestMessageDTO.clientId, 1);
     EXPECT_EQ(requestMessageDTO.command, "echo");
@@ -26,21 +26,21 @@ TEST(MessageProcessor, processIncoming_EmptyMessage_test) {
 TEST(MessageProcessor, processIncoming_ValidClientId_test) {
     MessageProcessor messageProcessor;
     std::string_view message = "{\"clientId\":333,\"command\":\"echo\",\"data\":\"hello world\"}";
-    ResponseMessageDTO requestMessageDTO = messageProcessor.processIncomingMessage(message);
+    RequestMessageDTO requestMessageDTO = messageProcessor.processIncomingMessage(message);
     EXPECT_EQ(requestMessageDTO.clientId, 333);
 }
 
 TEST(MessageProcessor, processIncoming_ValidCommand_test) {
     MessageProcessor messageProcessor;
     std::string_view message = "{\"clientId\":333,\"command\":\"JOIN\",\"data\":\"hello world\"}";
-    ResponseMessageDTO requestMessageDTO = messageProcessor.processIncomingMessage(message);
+    RequestMessageDTO requestMessageDTO = messageProcessor.processIncomingMessage(message);
     EXPECT_EQ(requestMessageDTO.command, "JOIN");
 }
 
 TEST(MessageProcessor, processIncoming_ValidData_test) {
     MessageProcessor messageProcessor;
     std::string_view message = "{\"clientId\":333,\"command\":\"echo\",\"data\":\"hello world\"}";
-    ResponseMessageDTO requestMessageDTO = messageProcessor.processIncomingMessage(message);
+    RequestMessageDTO requestMessageDTO = messageProcessor.processIncomingMessage(message);
     EXPECT_EQ(requestMessageDTO.data, "hello world");
 }
 

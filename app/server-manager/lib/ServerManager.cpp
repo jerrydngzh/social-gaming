@@ -5,6 +5,9 @@ const std::string DISCONNECT = "DISCONNECT";
 const std::string NEW_CONNECTION = "NEW_CONNECTION";
 
 ServerManager::ServerManager(const unsigned short port)
+    : gameContainerManager(), clientsManager(), createProcessor(this->gameContainerManager, this->clientsManager),
+      joinProcessor(this->gameContainerManager, this->clientsManager), invalidCommandProcessor(),
+      inputProcessor(this->gameContainerManager, this->clientsManager)
 {
     this->server = std::make_unique<Server>(
         port, getHTTPMessage(htmlLoc),
@@ -14,15 +17,6 @@ ServerManager::ServerManager(const unsigned short port)
         { this->onDisconnect(c); });
 
     this->messageProcessors = std::make_unique<MessageProcessors::MessageProcessor>();
-
-    // Server Processor Instantiation
-    this->stubGameContainer = std::make_unique<GameContainer>();
-    this->gameContainerManager = std::make_unique<GameContainerManager>();
-    this->clientsManager = std::make_unique<ClientsManager>();
-    this->createProcessor = std::make_unique<CreateProcessor>();
-    this->joinProcessor = std::make_unique<JoinProcessor>();
-    this->inputProcessor = std::make_unique<InputProcessor>();
-    this->invalidCommandProcessor = std::make_unique<InvalidCommandProcessor>();
 }
 
 void ServerManager::startServer()
@@ -46,32 +40,34 @@ void ServerManager::startServer()
 
         // single execution of requests based on batch of incoming messages
         for (const auto &request : incomingMessages)
-        {
+        {   
             // const auto messageResult = this->serverProcessor->execute(incomingMessages);
             // const auto outgoing = buildOutgoing(messageResult);
             // this->server->send(outgoing);
 
+            // NOTE: ServerProcessor execution control flow is inlined 
+            // into ServerManager, as opposed to a separate class.
             C2SDTO requestDTO = messageDTOToServerProcessorDTO(request);
             S2CDTO responseDTO;
 
-            // Figures out what process to run depending on the Command.
+            // Figures out what process to run depending on the `command`
             if (requestDTO.command == "CREATE")
             {
-                responseDTO = createProcessor->processCreateCommand(requestDTO);
+                responseDTO = createProcessor.processCreateCommand(requestDTO);
             }
             else if (requestDTO.command == "JOIN")
             {
-                responseDTO = joinProcessor->processJoinCommand(requestDTO);
+                responseDTO = joinProcessor.processJoinCommand(requestDTO);
             }
             else if (requestDTO.command == "INPUT")
             {
-                responseDTO = inputProcessor->processInputCommand(requestDTO);
+                responseDTO = inputProcessor.processInputCommand(requestDTO);
             }
             else
             {
-                responseDTO = invalidCommandProcessor->processInvalidCommand(requestDTO);
+                responseDTO = invalidCommandProcessor.processInvalidCommand(requestDTO);
             }
-            
+
             std::deque<MessageProcessors::ResponseMessageDTO> responses = serverProcessorDTOToMessageDTO(responseDTO);
 
             const auto outgoing = buildOutgoing(responses);
@@ -191,7 +187,8 @@ ServerManager::buildOutgoing(const std::deque<MessageProcessors::ResponseMessage
     return outgoing;
 }
 
-ServerProcessor::C2SDTO messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message){
+ServerProcessor::C2SDTO ServerManager::messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message)
+{
     ServerProcessor::C2SDTO requestDTO;
     requestDTO.clientID = message.clientId;
     requestDTO.command = message.command;
@@ -199,13 +196,14 @@ ServerProcessor::C2SDTO messageDTOToServerProcessorDTO(const MessageProcessors::
     return requestDTO;
 }
 
-std::deque<MessageProcessors::ResponseMessageDTO> serverProcessorDTOToMessageDTO(const ServerProcessor::S2CDTO &message){
-
+std::deque<MessageProcessors::ResponseMessageDTO> ServerManager::serverProcessorDTOToMessageDTO(const ServerProcessor::S2CDTO &message)
+{
     std::deque<MessageProcessors::ResponseMessageDTO> responses;
 
     // a response may require sending of the same message to multiple clients of a game room
     // so we need to iterate through the list of client IDs and create a response for each
-    for (const auto clientId : message.clientIDs) {
+    for (const auto clientId : message.clientIDs)
+    {
         std::cout << "Client ID: " << clientId << std::endl; // TESTING ONLY
         MessageProcessors::ResponseMessageDTO responseDTO;
         responseDTO.clientId = clientId;
@@ -213,6 +211,5 @@ std::deque<MessageProcessors::ResponseMessageDTO> serverProcessorDTOToMessageDTO
         responseDTO.commandData = message.data;
         responses.push_back(responseDTO);
     }
-
     return responses;
 }

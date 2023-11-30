@@ -3,6 +3,7 @@
 
 #include "gameContainerManager.h"
 
+using namespace ServerProcessor;
 
 TEST(gameContainerManager, POC) {
     EXPECT_TRUE(true);
