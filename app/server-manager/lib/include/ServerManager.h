@@ -1,6 +1,6 @@
 #include "Server.h"
 
-// #include "MessageProcessor.h"
+#include "messageProcessor.h"
 // #include "ServerProcessor.h"
 
 #include <fstream>
@@ -32,16 +32,16 @@ private:
 
     // define all services here
     std::unique_ptr<Server> server;
+    std::unique_ptr<MessageProcessors::MessageProcessor> messageProcessors;
     // MessageProcessor messageProcessor;
     // ServerProcessor gameContainerManager;
 
-    // TODO: migrate to MessageProcessors
-    MessageResult
-    processMessages(Server &server, const std::deque<Message> &incoming);
+    std::deque<MessageProcessors::RequestMessageDTO>
+    processMessages(const std::deque<Message> &incoming);
 
     // TODO: migrate to MessageProcessors
     std::deque<Message>
-    buildOutgoing(const std::string &log);
+    buildOutgoing(const std::deque<MessageProcessors::ResponseMessageDTO> &messageResults);
 
     void onConnect(networking::Connection c);
     void onDisconnect(networking::Connection c);
