@@ -10,7 +10,7 @@ const std::string JSON_CLIENT_ID_ACCESSOR = "clientId";
 const std::string JSON_COMMAND_ACCESSOR = "command";
 const std::string JSON_DATA_ACCESSOR = "data";
 
-RequestMessageDTO MessageProcessor::processRequestMessageImpl(std::string_view message) {
+ResponseMessageDTO MessageProcessor::processRequestMessageImpl(std::string_view message) {
     json jsonObj = json::parse(message);
     // uintptr_t clientId = jsonObj[JSON_CLIENT_ID_ACCESSOR];
     std::string command = jsonObj[JSON_COMMAND_ACCESSOR];
@@ -20,7 +20,7 @@ RequestMessageDTO MessageProcessor::processRequestMessageImpl(std::string_view m
     std::string data = jsonObj[JSON_DATA_ACCESSOR];
 
     // NOTE: we leave knowledge of clientId to the layer above
-    RequestMessageDTO requestMessageDTO{0, command, data};
+    ResponseMessageDTO requestMessageDTO{0, command, data};
 
     return requestMessageDTO;
 }

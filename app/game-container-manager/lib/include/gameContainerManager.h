@@ -7,6 +7,8 @@
 #include <memory>
 #include <algorithm>
 
+namespace ServerProcessor{
+
 struct C2SDTO
 {
     int clientID;
@@ -135,3 +137,5 @@ class InvalidCommandProcessor
 public:
     S2CDTO processInvalidCommand(const C2SDTO &requestDTO);
 };
+
+}
