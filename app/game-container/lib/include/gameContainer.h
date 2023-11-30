@@ -5,13 +5,16 @@
 #include "DTO.h"
 #include <vector>
 #include <memory>
+#include "deserializer.h"
+
+
 
 class GameContainer
 {
 public:
     GameContainer();
-    GameContainer(int ownerId, std::unique_ptr<GameState> game, int inviteCode)
-        : ownerID(ownerId), game(std::move(game)), gameInviteCode(inviteCode), playerList() {}
+    GameContainer(int ownerId, GameState game, int inviteCode)
+        : ownerID(ownerId), gameInviteCode(inviteCode), playerList() {}
 
     DTOtoGameContainerManager GameContainerProcessor(const DtoFromGame & requestDTO);
 
@@ -27,10 +30,21 @@ private:
 
     std::vector<Setting> settings; 
     int ownerID;
-    std::unique_ptr<GameState> game; 
+    GameState game;
     int gameInviteCode;
     std::vector<int> playerList; // list of clientIds
     Setting *config;
     DtoFromGame gameDTO;
     C2SDTO serverDTO;
+};
+
+// Stub class for interpreter as 
+// we still need to integrate with real interpreter from core game engine
+// and resolve dependencuy issues
+class Interpeter {
+    void run(GameState gs){
+        // will either return the apropriate value
+        // or take in a repsonse dto which it will then proporgate by reference
+        // so that we can read in stuff
+    }
 };
