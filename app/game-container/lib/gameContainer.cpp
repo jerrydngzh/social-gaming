@@ -41,13 +41,12 @@ void GameContainer::getMsgFromGCManager(const C2SDTO& serverDTO)
 {
     if (serverDTO.command == "JOIN")
     {
+        MemberState newUser{"temp", serverDTO.clientID};
         if(serverDTO.isPlayer){
-            MemberState newPlayer{"temp", serverDTO.clientID};
             addPlayerToList(serverDTO.clientID);
-            game.addPlayer(&newPlayer);
+            game.addPlayer(&newUser);
         } else{
-            MemberState newAudience{"temp", serverDTO.clientID};
-            game.addAudience(&newAudience);
+            game.addAudience(&newUser);
         }
     }
     else if (serverDTO.command == "INPUT")
