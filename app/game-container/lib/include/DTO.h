@@ -27,6 +27,7 @@ struct DtoFromGame {
     std::variant<int, bool> value;
     std::tuple<int, int> range; // in the case of bool its one
     std::vector<Setting> settings;
+    std::vector<std::string> validInputs;
 };
 
 struct DTOtoGame {
@@ -66,4 +67,5 @@ struct C2SDTO
     int clientID;
     std::string command;
     std::string data;
+    bool isPlayer;
 };
