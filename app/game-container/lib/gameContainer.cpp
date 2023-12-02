@@ -8,8 +8,8 @@ Interpeter stubInterpeter{};
 // Game Container Manager should pass in the server DTO right back in
 // we need a static pointer to game container manager as well
 
-void interpeterCommunication(GameState gs){
-    stubInterpeter.run(gs);
+void GameContainer::interpeterCommunication(GameState gs){
+    this->lastResponse = stubInterpeter.run(gs);
 }
 
 GameContainer::GameContainer() : ownerID(0), gameInviteCode(0), playerList(), serverDTO(serverDTO){
@@ -30,10 +30,16 @@ GameContainer::GameContainer() : ownerID(0), gameInviteCode(0), playerList(), se
 };
 
 
-bool validateInput(std::string input){
+bool GameContainer::validateInput(std::string input){
     // in the response we are getting from the game we have a vector of valid strings
     // simply check from that
 
+    std::vector<std::string> vecOfValidInputs = this->lastResponse.validInputs;
+    auto searchIndex = std::find(vecOfValidInputs.begin(), vecOfValidInputs.end(), input);
+    if (searchIndex != vecOfValidInputs.end()){
+        return true;
+    }
+    return false;
 
 }
 
@@ -59,14 +65,24 @@ void GameContainer::getMsgFromGCManager(const C2SDTO& serverDTO)
         if(validateInput(serverDTO.command)){
             Setting newSetting{serverDTO.data, kind};
             game.addSetting(&newSetting);
-        }        
+        } 
+        // If the input is not valid we need to send the response back to game container manager
+        else {
+            sendMsgToGCManager();
+        }
     }
 }
 
-GameContainer::askForSetting() {
+DTOtoGameContainerManager proccessCommandAndGetNextRequest(C2SDTO inputDTO){
+    // here we need to ensure that the proper processing is done
+    // we can ensure that this happens by creating the struct
+    
+}
+
+// GameContainer::askForSetting() {
     
 
-}
+// }
 
 DTOtoGameContainerManager GameContainer::sendMsgToGCManager()
 {
