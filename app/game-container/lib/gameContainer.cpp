@@ -23,11 +23,11 @@ GameContainer::GameContainer(int ownerId,int inviteCode,std::vector<int> playerL
     game = GameStateFactory::createInitialGameState(/* passing in static data recieved in constructor*/);
 
     // we must initialize lastResponse with something, currently have initialized it with this
-    std::variant<int, bool> myVariant = static_cast<int>(42);
-    std::tuple<int, int> myTuple = std::make_tuple(1, 2);
-    Setting::Kind kind = Setting::STRING;
-    Setting mySetting("weapon", kind);
-    lastResponse = {false,1,"command",myVariant,myTuple,mySetting,{}};
+    // std::variant<int, bool> myVariant = static_cast<int>(42);
+    // std::tuple<int, int> myTuple = std::make_tuple(1, 2);
+    // Setting::Kind kind = Setting::STRING;
+    // Setting mySetting("weapon", kind);
+    // lastResponse = {false,1,"command",myVariant,myTuple,mySetting,{}};
 
 
     // processing of the dto object

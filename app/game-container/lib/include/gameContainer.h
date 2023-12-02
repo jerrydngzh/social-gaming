@@ -19,7 +19,7 @@ public:
     bool validateInput(std::string input);
 
     // this is the function gamecontainer manager should call from out side
-    DTOtoGameContainerManager GameContainer::proccessCommandAndGetNextRequest(const C2SDTO& serverDTO);
+    DTOtoGameContainerManager proccessCommandAndGetNextRequest(const C2SDTO& serverDTO);
 
     // helper functions that can be used for calling
     int getOwnerID() const { return ownerID; }
@@ -36,7 +36,11 @@ private:
     std::vector<int> playerList; // list of clientIds
     Setting *config;
     C2SDTO serverDTO;
-    DtoFromGame lastResponse;
+    std::variant<int, bool> myVariant = static_cast<int>(42);
+    std::tuple<int, int> myTuple = std::make_tuple(1, 2);
+    Setting::Kind kind = Setting::STRING;
+    Setting mySetting{"weapon", kind};
+    DtoFromGame lastResponse = {false,1,"command",myVariant,myTuple,mySetting,{}};
     
 };
 

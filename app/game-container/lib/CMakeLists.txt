@@ -18,6 +18,7 @@ add_library(game-container-lib)
 target_sources(game-container-lib
   PRIVATE
     gameContainer.cpp
+    gameState.cpp
 )
 target_include_directories(game-container-lib
   PUBLIC
