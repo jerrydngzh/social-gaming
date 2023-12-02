@@ -1,7 +1,7 @@
 #include "Server.h"
 
 #include "messageProcessor.h"
-// #include "ServerProcessor.h"
+#include "gameContainerManager.h"
 
 #include <fstream>
 #include <iostream>
@@ -13,6 +13,8 @@
 using networking::Connection;
 using networking::Message;
 using networking::Server;
+
+using namespace ServerProcessor;
 
 class ServerManager
 {
@@ -30,16 +32,22 @@ private:
 
     std::vector<Connection> clients;
 
-    // define all services here
+    // ===================== SERVICES =====================
     std::unique_ptr<Server> server;
     std::unique_ptr<MessageProcessors::MessageProcessor> messageProcessors;
-    // MessageProcessor messageProcessor;
-    // ServerProcessor gameContainerManager;
 
+    // Server Processor Services
+    GameContainerManager gameContainerManager;
+    ClientsManager clientsManager;
+    CreateProcessor createProcessor;
+    JoinProcessor joinProcessor;
+    InputProcessor inputProcessor;
+    InvalidCommandProcessor invalidCommandProcessor;
+
+    // ===================== METHODS =====================
     std::deque<MessageProcessors::RequestMessageDTO>
     processMessages(const std::deque<Message> &incoming);
 
-    // TODO: migrate to MessageProcessors
     std::deque<Message>
     buildOutgoing(const std::deque<MessageProcessors::ResponseMessageDTO> &messageResults);
 
@@ -49,4 +57,7 @@ private:
     std::string
     getHTTPMessage(const char *htmlLocation);
 
+    // DTO Adaptors
+    C2SDTO messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message);
+    std::deque<MessageProcessors::ResponseMessageDTO> serverProcessorDTOToMessageDTO(const ServerProcessor::S2CDTO &message);
 };

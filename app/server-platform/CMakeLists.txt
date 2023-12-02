@@ -21,6 +21,7 @@ target_link_libraries(ServerPlatform
   game-container-lib
   game-container-manager-lib
   server-manager-lib
+  message-processors-lib
 )
 
 install(TARGETS ServerPlatform

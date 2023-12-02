@@ -1,5 +1,6 @@
 #include "gameContainerManager.h"
 
+using namespace ServerProcessor;
 
 GameContainer::GameContainer(int gameContainerID){
 
