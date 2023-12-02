@@ -1,6 +1,6 @@
 #include <variant>
 #include <vector>
-#include "configuration.h"
+#include "configurationState.h"
 
 enum MessageType{
     REQUEST_FOR_INPUT,
@@ -26,7 +26,21 @@ struct DtoFromGame {
     std::string command;
     std::variant<int, bool> value;
     std::tuple<int, int> range; // in the case of bool its one
-    std::vector<Configuration::Setting> settings;
+    Setting setting;
+    std::vector<std::string> validInputs;
+
+    DtoFromGame& operator=(const DtoFromGame& other) {
+        if (this != &other) {
+            isParallel = other.isParallel;
+            clientID = other.clientID;
+            command = other.command;
+            value = other.value;
+            range = other.range;
+            setting = other.setting;
+            validInputs = other.validInputs;
+        }
+        return *this;
+    }
 };
 
 struct DTOtoGame {
@@ -54,7 +68,7 @@ struct DTOtoGame {
 struct DTOtoGameContainerManager {
     int clientId;
     std::vector<int> playerList;
-    Configuration::Setting setting; // on the client output(getPrompt())
+    Setting setting; // on the client output(getPrompt())
     bool isParallel;
     std::variant<int, bool> value;
     std::tuple<int, int> range;
@@ -66,4 +80,5 @@ struct C2SDTO
     int clientID;
     std::string command;
     std::string data;
+    bool isPlayer;
 };
