@@ -12,6 +12,8 @@ target_link_libraries(tests-server-manager
     GTest::gmock GTest::gtest GTest::gtest_main
     server-manager-lib
     networking
+    message-processors-lib
+    game-container-manager-lib
     # TODO: add all other libraries required for server-manager
 )
 
