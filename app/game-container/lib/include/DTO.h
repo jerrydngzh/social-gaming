@@ -28,6 +28,19 @@ struct DtoFromGame {
     std::tuple<int, int> range; // in the case of bool its one
     Setting setting;
     std::vector<std::string> validInputs;
+
+    DtoFromGame& operator=(const DtoFromGame& other) {
+        if (this != &other) {
+            isParallel = other.isParallel;
+            clientID = other.clientID;
+            command = other.command;
+            value = other.value;
+            range = other.range;
+            setting = other.setting;
+            validInputs = other.validInputs;
+        }
+        return *this;
+    }
 };
 
 struct DTOtoGame {

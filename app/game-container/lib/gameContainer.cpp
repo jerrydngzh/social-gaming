@@ -3,7 +3,7 @@
 
 // to stub out Interpreter for now
 // we need a way to build the right 
-Interpeter stubInterpeter{};
+Interpreter stubInterpeter{};
 
 // Game Container Manager should pass in the server DTO right back in
 // we need a static pointer to game container manager as well
@@ -15,12 +15,20 @@ void GameContainer::addPlayerToList(int clientID){
     playerList.push_back(clientID);
 }
 
-GameContainer::GameContainer() : ownerID(0), gameInviteCode(0), playerList(), serverDTO(serverDTO){
+GameContainer::GameContainer(int ownerId,int inviteCode,std::vector<int> playerList2) : ownerID(0), gameInviteCode(0), playerList(playerList2) {
     // The configuration we are expecting is the one included in this file (Our code)
     // but currently it returns the configuration in game-container (Mike's code)
     // Configuration *config = game->getConfiguration();
     // settings = config->getSettings();
-    GameState game = GameStateFactory::createInitialGameState(/* passing in static data recieved in constructor*/);
+    game = GameStateFactory::createInitialGameState(/* passing in static data recieved in constructor*/);
+
+    // we must initialize lastResponse with something, currently have initialized it with this
+    std::variant<int, bool> myVariant = static_cast<int>(42);
+    std::tuple<int, int> myTuple = std::make_tuple(1, 2);
+    Setting::Kind kind = Setting::STRING;
+    Setting mySetting("weapon", kind);
+    lastResponse = {false,1,"command",myVariant,myTuple,mySetting,{}};
+
 
     // processing of the dto object
     ClientData clData = {serverDTO.data};

@@ -1,5 +1,4 @@
 #pragma once
-// #include "../../core-game-engine/lib/include/game.h"
 #include "gameState.h"
 #include "configurationState.h"
 #include "DTO.h"
@@ -12,14 +11,12 @@
 class GameContainer
 {
 public:
-    GameContainer();
-    GameContainer(int ownerId, GameState game, int inviteCode)
-        : ownerID(ownerId), gameInviteCode(inviteCode), playerList() {}
+    GameContainer(int ownerId,int inviteCode,std::vector<int> playerList2);
 
     DTOtoGameContainerManager GameContainerProcessor(const DtoFromGame& requestDTO);
-    void GameContainer::interpeterCommunication(GameState gs);
+    void interpeterCommunication(GameState gs);
     // DTOtoGameContainerManager sendMsgToGCManager();
-    bool GameContainer::validateInput(std::string input);
+    bool validateInput(std::string input);
 
     // this is the function gamecontainer manager should call from out side
     DTOtoGameContainerManager GameContainer::proccessCommandAndGetNextRequest(const C2SDTO& serverDTO);
@@ -38,7 +35,6 @@ private:
     int gameInviteCode;
     std::vector<int> playerList; // list of clientIds
     Setting *config;
-    DtoFromGame gameDTO;
     C2SDTO serverDTO;
     DtoFromGame lastResponse;
     
@@ -47,7 +43,7 @@ private:
 // Stub class for interpreter as 
 // we still need to integrate with real interpreter from core game engine
 // and resolve dependency issues
-class Interpeter {
+class Interpreter {
 public:
     DtoFromGame run(GameState gs){
         // will either return the apropriate value

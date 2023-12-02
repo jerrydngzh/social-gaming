@@ -7,8 +7,8 @@
 
 class Setting {
    public:
-    const std::string name;
-    const enum Kind {
+    std::string name;
+    enum Kind {
         BOOLEAN,
         INTEGER,
         STRING,
@@ -18,6 +18,13 @@ class Setting {
         JSON
     } kind;
     Setting(std::string name, Kind kind) : name(name), kind(kind){};
+    Setting& operator=(const Setting& other) {
+        if (this != &other) {
+            name = other.name;
+            kind = other.kind;
+        }
+        return *this;
+    }
 };
 
 class BooleanSetting : public Setting {
