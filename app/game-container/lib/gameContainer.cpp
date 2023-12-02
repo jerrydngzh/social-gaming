@@ -15,19 +15,19 @@ void GameContainer::addPlayerToList(int clientID){
     playerList.push_back(clientID);
 }
 
-GameContainer::GameContainer(int ownerId,int inviteCode,std::vector<int> playerList2) : ownerID(0), gameInviteCode(0), playerList(playerList2) {
+// may also want to get serverDTO in the constructor as well for processing purposes
+GameContainer::GameContainer(int ownerId,int inviteCode,std::vector<int> playerList2 /*static game file*/, C2SDTO serverDTO2) : ownerID(0), gameInviteCode(0), playerList(playerList2), serverDTO(serverDTO2) {
     // The configuration we are expecting is the one included in this file (Our code)
     // but currently it returns the configuration in game-container (Mike's code)
+    // we want to move the two lines of ocde below to serverplatform
+    // as thats where it should belong according to new design
     // Configuration *config = game->getConfiguration();
     // settings = config->getSettings();
-    game = GameStateFactory::createInitialGameState(/* passing in static data recieved in constructor*/);
+    GameStateFactory gsFactory;
+    game = gsFactory.createInitialGameState(/* passing in static data recieved in constructor*/);
 
     // we must initialize lastResponse with something, currently have initialized it with this
-    // std::variant<int, bool> myVariant = static_cast<int>(42);
-    // std::tuple<int, int> myTuple = std::make_tuple(1, 2);
-    // Setting::Kind kind = Setting::STRING;
-    // Setting mySetting("weapon", kind);
-    // lastResponse = {false,1,"command",myVariant,myTuple,mySetting,{}};
+    lastResponse = {false,1,"command",myVariant,myTuple,mySetting,{}};
 
 
     // processing of the dto object

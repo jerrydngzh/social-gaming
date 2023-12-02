@@ -11,7 +11,7 @@
 class GameContainer
 {
 public:
-    GameContainer(int ownerId,int inviteCode,std::vector<int> playerList2);
+    GameContainer(int ownerId,int inviteCode,std::vector<int> playerList2,  C2SDTO serverDTO2);
 
     DTOtoGameContainerManager GameContainerProcessor(const DtoFromGame& requestDTO);
     void interpeterCommunication(GameState gs);
