@@ -11,6 +11,9 @@ Interpeter stubInterpeter{};
 void GameContainer::interpeterCommunication(GameState gs){
     this->lastResponse = stubInterpeter.run(gs);
 }
+void GameContainer::addPlayerToList(int clientID){
+    playerList.push_back(clientID);
+}
 
 GameContainer::GameContainer() : ownerID(0), gameInviteCode(0), playerList(), serverDTO(serverDTO){
     // The configuration we are expecting is the one included in this file (Our code)
@@ -25,8 +28,6 @@ GameContainer::GameContainer() : ownerID(0), gameInviteCode(0), playerList(), se
     DTOtoGame dtoGame = {serverDTO.clientID,binaryEnum,clData};
     
     interpeterCommunication(game);
-
-    
 };
 
 
@@ -43,7 +44,15 @@ bool GameContainer::validateInput(std::string input){
 
 }
 
-void GameContainer::getMsgFromGCManager(const C2SDTO& serverDTO)
+// helper function to convert DtoFromGame to DtoToContainerManager
+DTOtoGameContainerManager GameContainer::GameContainerProcessor(const DtoFromGame& requestDTO){
+    GameRequest request{requestDTO.command};
+    DTOtoGameContainerManager newDto{requestDTO.clientID,playerList,requestDTO.setting,
+                                     requestDTO.isParallel,requestDTO.value,requestDTO.range, request};
+    return newDto;
+}
+
+DTOtoGameContainerManager GameContainer::proccessCommandAndGetNextRequest(const C2SDTO& serverDTO)
 {
     if (serverDTO.command == "JOIN")
     {
@@ -54,10 +63,10 @@ void GameContainer::getMsgFromGCManager(const C2SDTO& serverDTO)
         } else{
             game.addAudience(&newUser);
         }
+        
     }
     else if (serverDTO.command == "INPUT")
     {
-        // in the case of input
         // we need to send it over to core game enginer after validation that the input is correct
         // Setting(std::string name, Kind kind) : name(name), kind(kind){};
 
@@ -67,31 +76,15 @@ void GameContainer::getMsgFromGCManager(const C2SDTO& serverDTO)
             game.addSetting(&newSetting);
         } 
         // If the input is not valid we need to send the response back to game container manager
+        // Without running interpreter
         else {
-            sendMsgToGCManager();
+            DTOtoGameContainerManager dto = GameContainerProcessor(lastResponse);
+            return dto;
         }
     }
+    interpeterCommunication(game);
+    DTOtoGameContainerManager dto = GameContainerProcessor(lastResponse);
+    return dto;
 }
 
-DTOtoGameContainerManager proccessCommandAndGetNextRequest(C2SDTO inputDTO){
-    // here we need to ensure that the proper processing is done
-    // we can ensure that this happens by creating the struct
-    
-}
 
-// GameContainer::askForSetting() {
-    
-
-// }
-
-DTOtoGameContainerManager GameContainer::sendMsgToGCManager()
-{
-    DTOtoGameContainerManager dto {};
-    // dto = {};
-    // loop through each setting and send it one at a time, pause and rewait
-    // to be discussed on Wed
-    for (const auto& setting : settings) {
-
-    }
-    
-}
