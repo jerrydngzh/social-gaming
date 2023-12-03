@@ -8,14 +8,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 add_subdirectory(gtest)
-add_subdirectory(client-platform)
 add_subdirectory(core-game-engine)
 add_subdirectory(game-container)
 add_subdirectory(game-container-manager)
 add_subdirectory(networking)
-add_subdirectory(server-platform)
-add_subdirectory(server-manager)
 add_subdirectory(message-processors)
+add_subdirectory(server-manager)
+add_subdirectory(server-platform)
+add_subdirectory(client-platform)
 
 
 # copy game files to build directory
