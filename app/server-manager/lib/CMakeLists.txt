@@ -23,7 +23,7 @@ set_target_properties(server-manager-lib PROPERTIES
 target_link_libraries(server-manager-lib
   PRIVATE
     core-game-engine-lib
-    # game-container-lib
+    game-container-lib
     game-container-manager-lib
     networking
     message-processors-lib
