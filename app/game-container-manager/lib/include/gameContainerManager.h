@@ -7,8 +7,6 @@
 #include <memory>
 #include <algorithm>
 
-namespace ServerProcessor{
-
 struct C2SDTO
 {
     int clientID;
@@ -25,13 +23,12 @@ struct S2CDTO
 
 class GameContainer
 {
-    public:
+public:
     GameContainer(int gameContainerID);
     int getGameContainerID() const;
 
-    private:
+private:
     int gameContainerID;
-
 };
 
 class GameContainerManager
@@ -53,7 +50,7 @@ private:
     int numberOfGameContainers = 0;
     std::vector<std::unique_ptr<GameContainer>> gameContainerVector;
     // std::vector<int> gameContainerVector;
-    std::unordered_map<int, GameContainer*> gameContainerMap;
+    std::unordered_map<int, GameContainer *> gameContainerMap;
 };
 
 class ClientsManager
@@ -137,5 +134,3 @@ class InvalidCommandProcessor
 public:
     S2CDTO processInvalidCommand(const C2SDTO &requestDTO);
 };
-
-}
