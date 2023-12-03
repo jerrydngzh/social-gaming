@@ -53,7 +53,7 @@ private:
 
 class ClientsManager {
 public:
-    bool isClientPlayer(int clientID);
+    bool isClientAlreadyPlayer(int clientID);
 
     void addPlayerToGame(int clientID, int clientGameCode);
 

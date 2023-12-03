@@ -30,14 +30,22 @@ bool CreateProcessor::isCreateCommandValid(const ClientToServerDataObject &reque
 ServerToClientsDataObject CreateProcessor::createGame(const ClientToServerDataObject &requestDTO)
 {
     int gameContainerID = gameContainerManager.createGameContainer();
-    clientsManager.setOwnerOfGameContainer(requestDTO.clientID, gameContainerID);
-    std::string responseData = "create pipeline called. invite code: " + std::to_string(gameContainerID);
+    // TODO - No Discard
+    bool validCreateGame = clientsManager.setOwnerOfGameContainer(requestDTO.clientID, gameContainerID);
 
-    std::vector<uintptr_t> clientIDs = {requestDTO.clientID};
-    std::string command = "CREATE ROOM COMMAND SUCCESS";
-    std::string data = responseData;
-    ServerToClientsDataObject responseDTO = {clientIDs, command, data};
-    return responseDTO;
+    if (validCreateGame) {
+        std::vector<uintptr_t> clientIDs = {requestDTO.clientID};
+        std::string command = "CREATE ROOM COMMAND SUCCESS";
+        std::string data = "create pipeline called. invite code: " + std::to_string(gameContainerID);
+        ServerToClientsDataObject responseDTO = {clientIDs, command, data};
+        return responseDTO;
+    } else {
+        std::vector<uintptr_t> clientIDs = {requestDTO.clientID};
+        std::string command = "CREATE ROOM COMMAND FAILED";
+        std::string data = "TODO Error Message";
+        ServerToClientsDataObject responseDTO = {clientIDs, command, data};
+        return responseDTO;
+    }
 }
 
 ServerToClientsDataObject CreateProcessor::invalidCreateCommandResponder(const ClientToServerDataObject &requestDTO)
@@ -77,7 +85,7 @@ bool JoinProcessor::gameContainerExists(int gameContainerID)
 
 bool JoinProcessor::isClientAlreadyPlayer(int clientID)
 {
-    return clientsManager.isClientPlayer(clientID);
+    return clientsManager.isClientAlreadyPlayer(clientID);
 }
 
 /* TODO: Using stoi and such in logic heavy code is inadvisable, since it can crash. Consider parsing the
@@ -95,14 +103,21 @@ ServerToClientsDataObject JoinProcessor::joinGame(const ClientToServerDataObject
 {
     int gameContainerID = std::stoi(requestDTO.data);
 
-    clientsManager.addPlayerToGame(requestDTO.clientID, gameContainerID);
-    std::string gameContainerResponse = gameContainerManager.addPlayerToGame(requestDTO.clientID, gameContainerID);
+    bool validAddPlayerToGame = clientsManager.addPlayerToGame(requestDTO.clientID, gameContainerID);
 
-    std::vector<uintptr_t> clientIDs = {requestDTO.clientID};
-    std::string command = "JOIN ROOM COMMAND SUCCESS";
-    std::string data = gameContainerResponse;
-    ServerToClientsDataObject responseDTO = {clientIDs, command, data};
-    return responseDTO;
+    if (validAddPlayerToGame) {
+        std::vector<uintptr_t> clientIDs = {requestDTO.clientID};
+        std::string command = "JOIN ROOM COMMAND SUCCESS";
+        std::string data = gameContainerManager.addPlayerToGame(requestDTO.clientID, gameContainerID);
+        ServerToClientsDataObject responseDTO = {clientIDs, command, data};
+        return responseDTO;
+    } else {
+        std::vector<uintptr_t> clientIDs = {requestDTO.clientID};
+        std::string command = "JOIN ROOM COMMAND FAILURE";
+        std::string data = "TODO ERROR MESSAGE";
+        ServerToClientsDataObject responseDTO = {clientIDs, command, data};
+        return responseDTO;
+    }
 }
 
 ServerToClientsDataObject JoinProcessor::invalidJoinCommandResponder(const ClientToServerDataObject &requestDTO)
@@ -150,7 +165,7 @@ ServerToClientsDataObject InputProcessor::process(const ClientToServerDataObject
 
 bool InputProcessor::isClientPlayer(int clientID)
 {
-    return clientsManager.isClientPlayer(clientID);
+    return clientsManager.isClientAlreadyPlayer(clientID);
 }
 
 bool InputProcessor::isInputCommandValid(const ClientToServerDataObject &requestDTO)
@@ -196,9 +211,9 @@ ServerToClientsDataObject InputProcessor::invalidInputCommandResponder(const Cli
 // TODO - Need to make making error messages easier to use / construct. 
 ServerToClientsDataObject InvalidCommandProcessor::process(const ClientToServerDataObject &requestDTO)
 {
-    ServerToClientsDataObject responseDTO = {{requestDTO.clientID}, "RECEIVED_INVALID_COMMAND", "command not recognized: " + requestDTO.command + "\n"};
-    // responseDTO.clientIDs = {requestDTO.clientID};
-    // responseDTO.command = "RECEIVED_INVALID_COMMAND";
-    // responseDTO.data = "command not recognized: " + requestDTO.command + "\n";
+    std::vector<uintptr_t> clientIDs = {requestDTO.clientID};
+    std::string command = "RECEIVED_INVALID_COMMAND";
+    std::string data = "command not recognized: " + requestDTO.command + "\n";
+    ServerToClientsDataObject responseDTO = {clientIDs, command, data};
     return responseDTO;
 }

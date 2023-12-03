@@ -75,26 +75,45 @@ std::string GameContainerManager::giveGameContainerPlayerInput(int gameContainer
     return response;
 }
 
-// ClientsManager Implementation
-// TODO: Function name is unclear - not sure what it does specifically.
-// TODO: Unclear how this function is used, why it is used, and by who.
-bool ClientsManager::isClientPlayer(int clientID)
+bool ClientsManager::isClientAlreadyPlayer(const int clientID) const
 {
     bool foundClientInplayerIDtoGameIDMap = playerIDtoGameIDMap.find(clientID) != playerIDtoGameIDMap.end();
     return foundClientInplayerIDtoGameIDMap;
 }
 
-void ClientsManager::addPlayerToGame(int clientID, int clientGameCode)
+bool ClientsManager::addPlayerToGame(const int clientID, const int clientGameCode)
 {
+    // Guard Clause 
+    if (isClientAlreadyPlayer(clientID)) {
+        return false;
+    } 
+
+    // Main Logic
     playerIDtoGameIDMap[clientID] = clientGameCode;
+
+    // Successful Execution
+    return true; 
 }
 
-int ClientsManager::getGameContainerIDofPlayer(int clientID)
+int ClientsManager::getGameContainerIDofPlayer(const int clientID)
 {
     return playerIDtoGameIDMap[clientID];
 }
 
-void ClientsManager::setOwnerOfGameContainer(int clientID, int gameContainerID)
+bool ClientsManager::doesGameContainerIDHaveOwner(const int gameContainerID) {
+    bool gameContainerIDHasOwner = ownerIDtoGameIDMap.count(gameContainerID) > 0;
+
+    return gameContainerIDHasOwner;
+}
+
+bool ClientsManager::setOwnerOfGameContainer(const int clientID, const int gameContainerID)
 {
+    // Guard Clause 
+    if (doesGameContainerIDHaveOwner(gameContainerID)) {
+        return false;
+    }
+
     ownerIDtoGameIDMap[clientID] = gameContainerID;
+
+    return true;
 }

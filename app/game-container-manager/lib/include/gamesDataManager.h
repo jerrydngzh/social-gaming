@@ -1,6 +1,6 @@
 /* TODO Code Review Interface General Notes
 - Stringview vs String. This may not be correct, as Mike noted.
--  Documentation could have been more informative to clarify the design and context.
+- Documentation could have been more informative to clarify the design and context.
 - There are not enough comments and documentation to understand the decision-making
 process behind this design choice. Although the design is clear, more expressive
 documentation could help reviewers and developers understand the code functionality
@@ -22,7 +22,8 @@ and context better.
     - What it's For:
     This Game Container is a Stub for the future Real GameContainer which will support playing an actual game.
     This stub helps to test that the serverProcessors can send data objects to, and recieve data objects from a Game Container.
-    - How to Use: Whenever a GameContainer needs to be pinged, a Data Object should be passed into the game containers process(dataObject) parameter.
+    - How to Use:
+    Whenever a GameContainer needs to be pinged, a Data Object should be passed into the game containers process(dataObject) parameter.
     The return value of the function should be a DataObject as well.
 */
 class GameContainer
@@ -108,15 +109,26 @@ private:
 class ClientsManager
 {
 public:
-    bool isClientPlayer(int clientID);
 
-    void addPlayerToGame(int clientID, int clientGameCode);
+    /* isClientAlreadyPlayer
+        What it Does: It will search through the clientToGame Map and see if the client is already a player in a game.
+        How it's Used: It can be used for validation in server Processes. 
+    */
+    [[nodiscard]]
+    bool isClientAlreadyPlayer(const int clientID) const;
 
-    int getGameContainerIDofPlayer(int clientID);
+    [[nodiscard]]
+    bool addPlayerToGame(const int clientID, const int clientGameCode);
 
-    void setOwnerOfGameContainer(int clientID, int gameContainerID);
+    [[nodiscard]]
+    int getGameContainerIDofPlayer(const int clientID);
+
+    [[nodiscard]]
+    bool setOwnerOfGameContainer(const int clientID, const int gameContainerID);
 
 private:
     std::unordered_map<int, int> playerIDtoGameIDMap;
     std::unordered_map<int, int> ownerIDtoGameIDMap;
+
+    bool doesGameContainerIDHaveOwner(const int gameContainerID);
 };
