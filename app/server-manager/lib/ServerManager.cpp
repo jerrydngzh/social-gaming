@@ -49,6 +49,11 @@ void ServerManager::startServer()
             C2SDTO requestDTO = messageDTOToServerProcessorDTO(request);
             S2CDTO responseDTO;
 
+            /* TODO: 
+                Encapsulate Command Processing in its own Class. 
+                Create Map To automate the switch case - so that this code 
+                does not need to be rewritten every single time we add a new command processor. 
+            */ 
             // Figures out what process to run depending on the `command`
             Command command = InputCommandMap[requestDTO.command];
             switch (command)

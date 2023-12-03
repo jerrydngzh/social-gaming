@@ -1,3 +1,7 @@
+/* TODO Code Review Interface General Notes
+- Stringview vs String. This may not be correct, as Mike noted. 
+*/ 
+
 #pragma once
 
 #include <iostream>
@@ -7,6 +11,8 @@
 #include <memory>
 #include <algorithm>
 
+// "object" classes -- i.e. single unit of data
+// TODO: C2SDTO is not a clear name
 struct C2SDTO
 {
     int clientID;
@@ -14,6 +20,8 @@ struct C2SDTO
     std::string data;
 };
 
+// TODO: S2CDTO is not a clear name, avoid abbreviations -> creates confusion
+// espeically when you have multiple DTOs
 struct S2CDTO
 {
     std::vector<int> clientIDs;
@@ -21,6 +29,7 @@ struct S2CDTO
     std::string data;
 };
 
+// Andy's Note: This Game Container is a Stub for future game container. 
 class GameContainer
 {
 public:
@@ -31,6 +40,8 @@ private:
     int gameContainerID;
 };
 
+// "manager" classes -- i.e. manages a collection of objects
+// TODO: Consider making Clients Manager a component of GameContainerManager. 
 class GameContainerManager
 {
 public:
@@ -53,6 +64,24 @@ private:
     std::unordered_map<int, GameContainer *> gameContainerMap;
 };
 
+// TODO: maybe turn this into a map of users
+//       maps have O(1) lookup time, 
+//       modification of particular user is O(1) as well 
+//       as we just lookup and then modify the specific field we want
+//
+// clientId -> user object
+// as we pass down the clientId from the layer above, we can just use that to lookup the user
+
+/* TODO: Be able to provide multiple way information. 
+    For example, ClientsManager should be able to answer "whats the owner of this game AND what game(s) does the player own."
+    The same can be restated for players and games. 
+*/
+
+/* TODO: ClientsManager Validation and consistent State Change 
+    The clientsManager should be responsible for maintaining a consistent and valid state at all times. 
+    If a user attempts to violate this, their actions should be stopped. 
+    For example, currently it is possible to set two owners of a game. 
+*/
 class ClientsManager
 {
 public:
@@ -69,6 +98,10 @@ private:
     std::unordered_map<int, int> ownerIDtoGameIDMap;
 };
 
+
+// TODO: Processor Classes should be placed in their own file. 
+
+// "processor" classes -- i.e. processes data and returns data
 class CreateProcessor
 {
 public:
@@ -87,6 +120,9 @@ private:
     S2CDTO invalidCreateCommandResponder(const C2SDTO &requestDTO);
 };
 
+
+/* The joinPipeline method has a conversion from string to int. There doesn't seem
+to be any checking for validity here, possibly resulting in undefined behavior. */
 class JoinProcessor
 {
 public:

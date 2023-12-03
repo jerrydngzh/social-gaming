@@ -12,7 +12,6 @@ int GameContainer::getGameContainerID() const {
 GameContainerManager::GameContainerManager()
 {
     // Constructor implementation
-    
 }
 
 int GameContainerManager::createGameContainer()
@@ -165,12 +164,18 @@ bool JoinProcessor::isClientAlreadyPlayer(int clientID)
     return clientsManager.isClientPlayer(clientID);
 }
 
+
+/* TODO: Using stoi and such in logic heavy code is inadvisable, since it can crash. Consider parsing the
+int and storing it beforehand, wherever c2sDTO.data is first initialized, rather than parsing it
+here. This brings the added benefit of not storing a string that should be an int, which saves on
+memory and processing. (stringly typed APIs) */
 bool JoinProcessor::isJoinCommandValid(const C2SDTO &requestDTO)
 {
     int gameContainerID = std::stoi(requestDTO.data);
     return (gameContainerExists(gameContainerID) && !isClientAlreadyPlayer(requestDTO.clientID));
 }
 
+// TODO: See Above 
 S2CDTO JoinProcessor::joinGame(const C2SDTO &requestDTO)
 {
     int gameContainerID = std::stoi(requestDTO.data);
