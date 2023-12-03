@@ -1,6 +1,11 @@
 /* TODO Code Review Interface General Notes
-- Stringview vs String. This may not be correct, as Mike noted. 
-*/ 
+- Stringview vs String. This may not be correct, as Mike noted.
+-  Documentation could have been more informative to clarify the design and context.
+- There are not enough comments and documentation to understand the decision-making
+process behind this design choice. Although the design is clear, more expressive
+documentation could help reviewers and developers understand the code functionality
+and context better.
+*/
 
 #pragma once
 
@@ -11,37 +16,23 @@
 #include <memory>
 #include <algorithm>
 
-// "object" classes -- i.e. single unit of data
-// TODO: C2SDTO is not a clear name
-struct C2SDTO
-{
-    int clientID;
-    std::string command;
-    std::string data;
-};
-
-// TODO: S2CDTO is not a clear name, avoid abbreviations -> creates confusion
-// espeically when you have multiple DTOs
-struct S2CDTO
-{
-    std::vector<int> clientIDs;
-    std::string command;
-    std::string data;
-};
+//#include "ClientToServerDataObject.h"
+//#include "ServerToClientDataObject.h"
 
 // Andy's Note: This Game Container is a Stub for future game container. 
 class GameContainer
 {
 public:
-    GameContainer(int gameContainerID);
-    int getGameContainerID() const;
+    explicit GameContainer(int gameContainerID);
+    [[nodiscard]] int getGameContainerID() const;
 
 private:
     int gameContainerID;
 };
 
 // "manager" classes -- i.e. manages a collection of objects
-// TODO: Consider making Clients Manager a component of GameContainerManager. 
+// TODO: Consider making Clients Manager a component of GameContainerManager.
+// TODO: More Comments are Needed
 class GameContainerManager
 {
 public:
@@ -60,7 +51,6 @@ public:
 private:
     int numberOfGameContainers = 0;
     std::vector<std::unique_ptr<GameContainer>> gameContainerVector;
-    // std::vector<int> gameContainerVector;
     std::unordered_map<int, GameContainer *> gameContainerMap;
 };
 
@@ -82,6 +72,17 @@ private:
     If a user attempts to violate this, their actions should be stopped. 
     For example, currently it is possible to set two owners of a game. 
 */
+// TODO: More Comments are Needed
+/* TODO: Design is Too Specific
+    which seems to make it hard to extend and add more functionalities later. For example,
+    the design is just handling the roles of players and owners for now, and it may need to
+    add more independent objects and methods for other roles such as audiences. What if
+    an owner or an audience wants to become a player in the middle of gameplay? There
+    aren’t any clear patterns that can support this functionality easily. It may be worth
+    considering applying polymorphism in this design. Some other design patterns could
+    also be a helpful addition to the refactoring process of this design because the current
+    solution may make things difficult to refactor
+*/
 class ClientsManager
 {
 public:
@@ -96,77 +97,4 @@ public:
 private:
     std::unordered_map<int, int> playerIDtoGameIDMap;
     std::unordered_map<int, int> ownerIDtoGameIDMap;
-};
-
-
-// TODO: Processor Classes should be placed in their own file. 
-
-// "processor" classes -- i.e. processes data and returns data
-class CreateProcessor
-{
-public:
-    CreateProcessor(GameContainerManager &gameContainerManager, ClientsManager &clientsManager);
-
-    S2CDTO processCreateCommand(const C2SDTO &requestDTO);
-
-private:
-    GameContainerManager &gameContainerManager;
-    ClientsManager &clientsManager;
-
-    bool isCreateCommandValid(const C2SDTO &requestDTO);
-
-    S2CDTO createGame(const C2SDTO &requestDTO);
-
-    S2CDTO invalidCreateCommandResponder(const C2SDTO &requestDTO);
-};
-
-
-/* The joinPipeline method has a conversion from string to int. There doesn't seem
-to be any checking for validity here, possibly resulting in undefined behavior. */
-class JoinProcessor
-{
-public:
-    JoinProcessor(GameContainerManager &gameContainerManager, ClientsManager &clientsManager);
-
-    S2CDTO processJoinCommand(const C2SDTO &requestDTO);
-
-private:
-    GameContainerManager &gameContainerManager;
-    ClientsManager &clientsManager;
-
-    bool gameContainerExists(int gameContainerID);
-
-    bool isClientAlreadyPlayer(int clientID);
-
-    bool isJoinCommandValid(const C2SDTO &requestDTO);
-
-    S2CDTO joinGame(const C2SDTO &requestDTO);
-
-    S2CDTO invalidJoinCommandResponder(const C2SDTO &requestDTO);
-};
-
-class InputProcessor
-{
-public:
-    InputProcessor(GameContainerManager &gameContainerManager, ClientsManager &clientsManager);
-
-    S2CDTO processInputCommand(const C2SDTO &requestDTO);
-
-private:
-    GameContainerManager &gameContainerManager;
-    ClientsManager &clientsManager;
-
-    bool isClientPlayer(int clientID);
-
-    bool isInputCommandValid(const C2SDTO &requestDTO);
-
-    S2CDTO stubGameRoomManagerProcessor(const C2SDTO &requestDTO);
-
-    S2CDTO invalidInputCommandResponder(const C2SDTO &requestDTO);
-};
-
-class InvalidCommandProcessor
-{
-public:
-    S2CDTO processInvalidCommand(const C2SDTO &requestDTO);
 };

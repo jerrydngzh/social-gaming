@@ -82,6 +82,6 @@ private:
     getHTTPMessage(const char *htmlLocation);
 
     // DTO Adaptors
-    C2SDTO messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message);
-    std::deque<MessageProcessors::ResponseMessageDTO> serverProcessorDTOToMessageDTO(const S2CDTO &message);
+    ClientsToServerDataObject messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message);
+    std::deque<MessageProcessors::ResponseMessageDTO> serverProcessorDTOToMessageDTO(const ServerToClientsDataObject &message);
 };

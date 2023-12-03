@@ -46,8 +46,8 @@ void ServerManager::startServer()
 
             // NOTE: ServerProcessor execution control flow is inlined 
             // into ServerManager, as opposed to a separate class.
-            C2SDTO requestDTO = messageDTOToServerProcessorDTO(request);
-            S2CDTO responseDTO;
+            ClientsToServerDataObject requestDTO = messageDTOToServerProcessorDTO(request);
+            ServerToClientsDataObject responseDTO;
 
             /* TODO: 
                 Encapsulate Command Processing in its own Class. 
@@ -195,16 +195,16 @@ ServerManager::buildOutgoing(const std::deque<MessageProcessors::ResponseMessage
     return outgoing;
 }
 
-C2SDTO ServerManager::messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message)
+ClientsToServerDataObject ServerManager::messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message)
 {
-    C2SDTO requestDTO;
+    ClientsToServerDataObject requestDTO;
     requestDTO.clientID = message.clientId;
     requestDTO.command = message.command;
     requestDTO.data = message.data;
     return requestDTO;
 }
 
-std::deque<MessageProcessors::ResponseMessageDTO> ServerManager::serverProcessorDTOToMessageDTO(const S2CDTO &message)
+std::deque<MessageProcessors::ResponseMessageDTO> ServerManager::serverProcessorDTOToMessageDTO(const ServerToClientsDataObject &message)
 {
     std::deque<MessageProcessors::ResponseMessageDTO> responses;
 

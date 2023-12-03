@@ -16,7 +16,7 @@ void GameContainer::addPlayerToList(int clientID){
 }
 
 // may also want to get serverDTO in the constructor as well for processing purposes
-GameContainer::GameContainer(int ownerId,int inviteCode,std::vector<int> playerList2 /*static game file*/, C2SDTO serverDTO2) : ownerID(0), gameInviteCode(0), playerList(playerList2), serverDTO(serverDTO2) {
+GameContainer::GameContainer(int ownerId, int inviteCode, std::vector<int> playerList2 /*static game file*/, ClientsToServerDataObject serverDTO2) : ownerID(0), gameInviteCode(0), playerList(playerList2), serverDTO(serverDTO2) {
     // The configuration we are expecting is the one included in this file (Our code)
     // but currently it returns the configuration in game-container (Mike's code)
     // we want to move the two lines of ocde below to serverplatform
@@ -60,7 +60,7 @@ DTOtoGameContainerManager GameContainer::GameContainerProcessor(const DtoFromGam
     return newDto;
 }
 
-DTOtoGameContainerManager GameContainer::proccessCommandAndGetNextRequest(const C2SDTO& serverDTO)
+DTOtoGameContainerManager GameContainer::proccessCommandAndGetNextRequest(const ClientsToServerDataObject& serverDTO)
 {
     if (serverDTO.command == "JOIN")
     {

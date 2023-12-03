@@ -7,33 +7,30 @@
 #include <memory>
 #include <algorithm>
 
-struct C2SDTO
-{
+struct ClientsToServerDataObject {
     int clientID;
     std::string command;
     std::string data;
 };
 
-struct S2CDTO
-{
+struct ServerToClientsDataObject {
     std::vector<int> clientIDs;
     std::string command;
     std::string data;
 };
 
-class GameContainer
-{
-    public:
+class GameContainer {
+public:
     GameContainer(int gameContainerID);
+
     int getGameContainerID() const;
 
-    private:
+private:
     int gameContainerID;
 
 };
 
-class GameContainerManager
-{
+class GameContainerManager {
 public:
     GameContainerManager();
 
@@ -51,11 +48,10 @@ private:
     int numberOfGameContainers = 0;
     std::vector<std::unique_ptr<GameContainer>> gameContainerVector;
     // std::vector<int> gameContainerVector;
-    std::unordered_map<int, GameContainer*> gameContainerMap;
+    std::unordered_map<int, GameContainer *> gameContainerMap;
 };
 
-class ClientsManager
-{
+class ClientsManager {
 public:
     bool isClientPlayer(int clientID);
 
@@ -70,30 +66,28 @@ private:
     std::unordered_map<int, int> ownerIDtoGameIDMap;
 };
 
-class CreateProcessor
-{
+class CreateProcessor {
 public:
     CreateProcessor(GameContainerManager &gameContainerManager, ClientsManager &clientsManager);
 
-    S2CDTO processCreateCommand(const C2SDTO &requestDTO);
+    ServerToClientsDataObject processCreateCommand(const ClientsToServerDataObject &requestDTO);
 
 private:
     GameContainerManager &gameContainerManager;
     ClientsManager &clientsManager;
 
-    bool isCreateCommandValid(const C2SDTO &requestDTO);
+    bool isCreateCommandValid(const ClientsToServerDataObject &ClientToServerDataObject);
 
-    S2CDTO createGame(const C2SDTO &requestDTO);
+    ServerToClientsDataObject createGame(const ClientsToServerDataObject &requestDTO);
 
-    S2CDTO invalidCreateCommandResponder(const C2SDTO &requestDTO);
+    ServerToClientsDataObject invalidCreateCommandResponder(const ClientsToServerDataObject &requestDTO);
 };
 
-class JoinProcessor
-{
+class JoinProcessor {
 public:
     JoinProcessor(GameContainerManager &gameContainerManager, ClientsManager &clientsManager);
 
-    S2CDTO processJoinCommand(const C2SDTO &requestDTO);
+    ServerToClientsDataObject processJoinCommand(const ClientsToServerDataObject &requestDTO);
 
 private:
     GameContainerManager &gameContainerManager;
@@ -103,19 +97,18 @@ private:
 
     bool isClientAlreadyPlayer(int clientID);
 
-    bool isJoinCommandValid(const C2SDTO &requestDTO);
+    bool isJoinCommandValid(const ClientsToServerDataObject &requestDTO);
 
-    S2CDTO joinGame(const C2SDTO &requestDTO);
+    ServerToClientsDataObject joinGame(const ClientsToServerDataObject &requestDTO);
 
-    S2CDTO invalidJoinCommandResponder(const C2SDTO &requestDTO);
+    ServerToClientsDataObject invalidJoinCommandResponder(const ClientsToServerDataObject &requestDTO);
 };
 
-class InputProcessor
-{
+class InputProcessor {
 public:
     InputProcessor(GameContainerManager &gameContainerManager, ClientsManager &clientsManager);
 
-    S2CDTO processInputCommand(const C2SDTO &requestDTO);
+    ServerToClientsDataObject processInputCommand(const ClientsToServerDataObject &requestDTO);
 
 private:
     GameContainerManager &gameContainerManager;
@@ -123,15 +116,14 @@ private:
 
     bool isClientPlayer(int clientID);
 
-    bool isInputCommandValid(const C2SDTO &requestDTO);
+    bool isInputCommandValid(const ClientsToServerDataObject &requestDTO);
 
-    S2CDTO stubGameRoomManagerProcessor(const C2SDTO &requestDTO);
+    ServerToClientsDataObject stubGameRoomManagerProcessor(const ClientsToServerDataObject &requestDTO);
 
-    S2CDTO invalidInputCommandResponder(const C2SDTO &requestDTO);
+    ServerToClientsDataObject invalidInputCommandResponder(const ClientsToServerDataObject &requestDTO);
 };
 
-class InvalidCommandProcessor
-{
+class InvalidCommandProcessor {
 public:
-    S2CDTO processInvalidCommand(const C2SDTO &requestDTO);
+    ServerToClientsDataObject processInvalidCommand(const ClientsToServerDataObject &requestDTO);
 };

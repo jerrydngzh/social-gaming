@@ -52,3 +52,4 @@
 
 # build directories
 *build/
+app/cmake-build-debug
