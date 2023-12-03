@@ -12,15 +12,30 @@ and context better.
 #include "ServerToClientsDataObject.h"
 #include "ClientToServerDataObject.h"
 
-// a processor interface
 // TODO: unsure if pimpl is needed / is done correctnly here
+
+/* ProcessorBase
+    - What it's For:
+    When a server recieves a message from the client, the message will be of some specific command type.
+    Each command type requires the server to run a set of logical steps, then return some value to the client or multiple clients.
+    We call the these steps a Process, and the code that manages that logic a Processor.
+    ProcessorBase is an interface for Processors. All processors should derive from it.
+    - How to Use:
+    When a new type of command is introduced, its logic should be encapsulated in a
+    class that derives from ProcessorBase. It should then implement the processor method.
+*/
 class ProcessorBase
 {
 public:
     ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO);
 };
 
-// TODO: More Comments are Needed
+/* CreateProcessor
+    - What it's For:
+    Handles the logic for when a Client wishes to start a game. E.G. Create RockPaperScissors Game.
+    - How to Use:
+    Provide a command=CREATE ClientToServerDataObject to the process method.
+*/
 class CreateProcessor : public ProcessorBase
 {
 public:
@@ -46,7 +61,13 @@ private:
 
 /* TODO: The joinPipeline method has a conversion from string to int. There doesn't seem
 to be any checking for validity here, possibly resulting in undefined behavior. */
-// TODO: More Comments are Needed
+
+/* JoinProcessor
+    - What it's For:
+    Handles the logic for when a Client wishes to join a game. E.G. Join GameRoom 3.
+    - How to Use:
+    Provide a command=JOIN ClientToServerDataObject to the process method.
+*/
 class JoinProcessor : public ProcessorBase
 {
 public:
@@ -74,7 +95,12 @@ private:
     ServerToClientsDataObject invalidJoinCommandResponder(const ClientToServerDataObject &requestDTO);
 };
 
-// TODO: More Comments are Needed
+/* InputProcessor
+    - What it's For:
+    Handles the logic for when a Client sends game inputs. E.G. "Rock" in RockPaperScissors Game.
+    - How to Use:
+    Provide a command=INPUT ClientToServerDataObject to the process method.
+*/
 class InputProcessor : public ProcessorBase
 {
 public:
@@ -100,6 +126,15 @@ private:
     ServerToClientsDataObject invalidInputCommandResponder(const ClientToServerDataObject &requestDTO);
 };
 
+/* InvalidCommandProcessor
+    - What it's For:
+    Handles the case when a client messages command is not a recognized command by the server
+    - How to Use:
+    Call InvalidCommandProcessor's process method on DataObjects with unrecognized commands.
+    Ex.
+    if (serverCommands.find(command) == notFound),
+        ServerToClientsDataObject responseDataObject = invalidCommandProcessor.process(requestDataObject);
+*/
 class InvalidCommandProcessor : public ProcessorBase
 {
 public:

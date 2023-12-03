@@ -82,22 +82,22 @@ int main()
         // Figures out what process to run depending on the Command.
         if (requestDTO.command == "CREATE")
         {
-            ServerToClientsDataObject responseDTO = createProcessor.processCreateCommand(requestDTO);
+            ServerToClientsDataObject responseDTO = createProcessor.process(requestDTO);
             messageProcessorSendMessage(responseDTO);
         }
         else if (requestDTO.command == "JOIN")
         {
-            ServerToClientsDataObject responseDTO = joinProcessor.processJoinCommand(requestDTO);
+            ServerToClientsDataObject responseDTO = joinProcessor.process(requestDTO);
             messageProcessorSendMessage(responseDTO);
         }
         else if (requestDTO.command == "INPUT")
         {
-            ServerToClientsDataObject responseDTO = inputProcessor.processInputCommand(requestDTO);
+            ServerToClientsDataObject responseDTO = inputProcessor.process(requestDTO);
             messageProcessorSendMessage(responseDTO);
         }
         else
         {
-            ServerToClientsDataObject responseDTO = invalidCommandProcessor.processInvalidCommand(requestDTO);
+            ServerToClientsDataObject responseDTO = invalidCommandProcessor.process(requestDTO);
             messageProcessorSendMessage(responseDTO);
         }
     }

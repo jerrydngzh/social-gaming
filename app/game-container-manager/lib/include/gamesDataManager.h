@@ -16,7 +16,15 @@ and context better.
 #include <memory>
 #include <algorithm>
 
-// Andy's Note: This Game Container is a Stub for future game container.
+// TODO: The DataObjects used to communicate between ServerProcessor and GameContainer is undefined.
+
+/* GameContainer
+    - What it's For:
+    This Game Container is a Stub for the future Real GameContainer which will support playing an actual game.
+    This stub helps to test that the serverProcessors can send data objects to, and recieve data objects from a Game Container.
+    - How to Use: Whenever a GameContainer needs to be pinged, a Data Object should be passed into the game containers process(dataObject) parameter.
+    The return value of the function should be a DataObject as well.
+*/
 class GameContainer
 {
 public:
@@ -30,6 +38,15 @@ private:
 // "manager" classes -- i.e. manages a collection of objects
 // TODO: Consider making Clients Manager a component of GameContainerManager.
 // TODO: More Comments are Needed
+
+/* GameContainerManager
+    - What it's For:
+    The GameContainerManager handles the creation, deletion, modification, and message transfers of
+    all GameContainers.
+    - How to Use:
+    The GameContainerManager should be constructed at a high level, and dependency injected into
+    classes which wish to call its functionality.
+*/
 class GameContainerManager
 {
 public:
@@ -79,6 +96,14 @@ private:
     considering applying polymorphism in this design. Some other design patterns could
     also be a helpful addition to the refactoring process of this design because the current
     solution may make things difficult to refactor
+*/
+
+/* ClientsManager
+    - What it's For:
+    The ClientsManager keeps track of data about clients, and their relationships to game containers
+    - How to Use:
+    The ClientsManager should be constructed at a high level, and dependency injected into
+    classes which wish to call its functionality.
 */
 class ClientsManager
 {
