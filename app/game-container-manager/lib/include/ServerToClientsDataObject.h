@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <vector>
 
@@ -16,11 +18,13 @@ struct ServerToClientsDataObject
     const std::string data;
 
     ServerToClientsDataObject(const std::vector<uintptr_t> clientIDs, const std::string command, const std::string data)
-            : clientIDs(clientIDs), command(command), data(data) {}
+        : clientIDs(clientIDs), command(command), data(data) {}
 
-    void printData() const {
+    void printData() const
+    {
         std::cout << "ClientIDs: ";
-        for (const auto& clientID: clientIDs) {
+        for (const auto &clientID : clientIDs)
+        {
             std::cout << clientID << " ";
         }
         std::cout << ", command: " << command << ", data: " << data << std::endl;

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 
 /* ClientToServerDataObject
@@ -14,9 +16,10 @@ struct ClientToServerDataObject
     const std::string data;
 
     ClientToServerDataObject(const uintptr_t clientID, const std::string command, const std::string data)
-    : clientID(clientID), command(command), data(data) {}
+        : clientID(clientID), command(command), data(data) {}
 
-    void printData() const {
+    void printData() const
+    {
         std::cout << "clientID: " << clientID << ", command: " << command << ", data: " << data << std::endl;
     }
 };

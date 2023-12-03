@@ -16,10 +16,7 @@ and context better.
 #include <memory>
 #include <algorithm>
 
-//#include "ClientToServerDataObject.h"
-//#include "ServerToClientDataObject.h"
-
-// Andy's Note: This Game Container is a Stub for future game container. 
+// Andy's Note: This Game Container is a Stub for future game container.
 class GameContainer
 {
 public:
@@ -55,22 +52,22 @@ private:
 };
 
 // TODO: maybe turn this into a map of users
-//       maps have O(1) lookup time, 
-//       modification of particular user is O(1) as well 
+//       maps have O(1) lookup time,
+//       modification of particular user is O(1) as well
 //       as we just lookup and then modify the specific field we want
 //
 // clientId -> user object
 // as we pass down the clientId from the layer above, we can just use that to lookup the user
 
-/* TODO: Be able to provide multiple way information. 
+/* TODO: Be able to provide multiple way information.
     For example, ClientsManager should be able to answer "whats the owner of this game AND what game(s) does the player own."
-    The same can be restated for players and games. 
+    The same can be restated for players and games.
 */
 
-/* TODO: ClientsManager Validation and consistent State Change 
-    The clientsManager should be responsible for maintaining a consistent and valid state at all times. 
-    If a user attempts to violate this, their actions should be stopped. 
-    For example, currently it is possible to set two owners of a game. 
+/* TODO: ClientsManager Validation and consistent State Change
+    The clientsManager should be responsible for maintaining a consistent and valid state at all times.
+    If a user attempts to violate this, their actions should be stopped.
+    For example, currently it is possible to set two owners of a game.
 */
 // TODO: More Comments are Needed
 /* TODO: Design is Too Specific
