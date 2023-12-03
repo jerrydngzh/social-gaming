@@ -9,6 +9,8 @@ In this file, we demonstrate how the Server Processor would be used in the Serve
 #include <memory>
 
 #include "gameContainerManager.h"
+#include "ClientToServerDataObject.h"
+#include "ServerToClientsDataObject.h"
 
 // DUMMY FUNCTION - SERVES EXAMPLE ONLY
 // Dummy Function which replicates when the Server Platform gets a message from the client,
@@ -31,10 +33,7 @@ ClientToServerDataObject messageProcessorGetMessage()
     std::cout << "Enter client data: ";
     std::cin >> clientData;
 
-    ClientToServerDataObject c2sDTO;
-    c2sDTO.clientID = clientID;
-    c2sDTO.command = clientCommand;
-    c2sDTO.data = clientData;
+    ClientToServerDataObject c2sDTO = {clientID, clientCommand, clientData};
 
     return c2sDTO;
 }
@@ -77,28 +76,29 @@ int main()
 
     while (true)
     {
-        ClientsToServerDataObject requestDTO = messageProcessorGetMessage();
-        ServerToClientsDataObject responseDTO;
+        ClientToServerDataObject requestDTO = messageProcessorGetMessage();
 
         // Figures out what process to run depending on the Command.
         if (requestDTO.command == "CREATE")
         {
-            responseDTO = createProcessor.processCreateCommand(requestDTO);
+            ServerToClientsDataObject responseDTO = createProcessor.processCreateCommand(requestDTO);
+            messageProcessorSendMessage(responseDTO);
         }
         else if (requestDTO.command == "JOIN")
         {
-            responseDTO = joinProcessor.processJoinCommand(requestDTO);
+            ServerToClientsDataObject responseDTO = joinProcessor.processJoinCommand(requestDTO);
+            messageProcessorSendMessage(responseDTO);
         }
         else if (requestDTO.command == "INPUT")
         {
-            responseDTO = inputProcessor.processInputCommand(requestDTO);
+            ServerToClientsDataObject responseDTO = inputProcessor.processInputCommand(requestDTO);
+            messageProcessorSendMessage(responseDTO);
         }
         else
         {
-            responseDTO = invalidCommandProcessor.processInvalidCommand(requestDTO);
+            ServerToClientsDataObject responseDTO = invalidCommandProcessor.processInvalidCommand(requestDTO);
+            messageProcessorSendMessage(responseDTO);
         }
-
-        messageProcessorSendMessage(responseDTO);
     }
 
     return 0;
