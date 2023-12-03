@@ -1,8 +1,7 @@
 #include "ServerManager.h"
 
 const char *htmlLoc = "./app/server-platform/index.html";
-const std::string DISCONNECT = "DISCONNECT";
-const std::string NEW_CONNECTION = "NEW_CONNECTION";
+
 
 ServerManager::ServerManager(const unsigned short port)
     : gameContainerManager(), clientsManager(), createProcessor(this->gameContainerManager, this->clientsManager),
@@ -51,21 +50,21 @@ void ServerManager::startServer()
             S2CDTO responseDTO;
 
             // Figures out what process to run depending on the `command`
-            if (requestDTO.command == "CREATE")
+            Command command = InputCommandMap[requestDTO.command];
+            switch (command)
             {
-                responseDTO = createProcessor.processCreateCommand(requestDTO);
-            }
-            else if (requestDTO.command == "JOIN")
-            {
-                responseDTO = joinProcessor.processJoinCommand(requestDTO);
-            }
-            else if (requestDTO.command == "INPUT")
-            {
-                responseDTO = inputProcessor.processInputCommand(requestDTO);
-            }
-            else
-            {
-                responseDTO = invalidCommandProcessor.processInvalidCommand(requestDTO);
+                case Command::CREATE:
+                    responseDTO = createProcessor.processCreateCommand(requestDTO);
+                    break;
+                case Command::JOIN:
+                    responseDTO = joinProcessor.processJoinCommand(requestDTO);
+                    break;
+                case Command::INPUT:
+                    responseDTO = inputProcessor.processInputCommand(requestDTO);
+                    break;
+                default:
+                    responseDTO = invalidCommandProcessor.processInvalidCommand(requestDTO);
+                    break;
             }
 
             std::deque<MessageProcessors::ResponseMessageDTO> responses = serverProcessorDTOToMessageDTO(responseDTO);
@@ -87,19 +86,22 @@ void ServerManager::onConnect(networking::Connection c)
     clients.push_back(c);
 
     std::deque<Message> outgoing;
+    std::string_view outgoingCommand = OutputCommandMap[Command::NEW_CONNECTION]; 
 
     MessageProcessors::ResponseMessageDTO response;
     std::stringstream message;
     message << "Welcome to the server!" << std::endl
-            << "Please enter one following commands to interact with the server:" << std::endl
-            << "1. CREATE -- To create a new game room" << std::endl
-            << "2. JOIN <room-code> -- To join an existing game room" << std::endl;
+            << "Please enter one of the following commands to interact with the server:" << std::endl
+            << "1. \"" << OutputCommandMap[Command::CREATE] << "\"" << std::endl 
+            << "\t -> To create a new game room." << std::endl
+            << "2. \"" << OutputCommandMap[Command::JOIN] <<  " <room-code>\"" <<  std::endl
+            << "\t -> To join an existing game room." << std::endl;
 
     response.clientId = c.id;
     response.messageStatus = true;
     response.messageResult = message.str();
-    response.command = NEW_CONNECTION;
-    response.commandData = NEW_CONNECTION;
+    response.command = outgoingCommand;
+    response.commandData = outgoingCommand;
 
     outgoing.push_back({c, message.str()});
     server->send(outgoing);
@@ -140,8 +142,9 @@ ServerManager::processMessages(const std::deque<Message> &incoming)
             std::cout << "Message from " << connection.id << ": " << message.text << "\n";
 
             MessageProcessors::RequestMessageDTO request = messageProcessors->processIncomingMessage(message.text);
+            Command command = InputCommandMap[request.command];
 
-            if (request.command == DISCONNECT)
+            if (command == Command::DISCONNECT)
             {
                 this->server->disconnect(connection);
             }
@@ -187,16 +190,16 @@ ServerManager::buildOutgoing(const std::deque<MessageProcessors::ResponseMessage
     return outgoing;
 }
 
-ServerProcessor::C2SDTO ServerManager::messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message)
+C2SDTO ServerManager::messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message)
 {
-    ServerProcessor::C2SDTO requestDTO;
+    C2SDTO requestDTO;
     requestDTO.clientID = message.clientId;
     requestDTO.command = message.command;
     requestDTO.data = message.data;
     return requestDTO;
 }
 
-std::deque<MessageProcessors::ResponseMessageDTO> ServerManager::serverProcessorDTOToMessageDTO(const ServerProcessor::S2CDTO &message)
+std::deque<MessageProcessors::ResponseMessageDTO> ServerManager::serverProcessorDTOToMessageDTO(const S2CDTO &message)
 {
     std::deque<MessageProcessors::ResponseMessageDTO> responses;
 
