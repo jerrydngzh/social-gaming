@@ -14,7 +14,15 @@ using networking::Connection;
 using networking::Message;
 using networking::Server;
 
-using namespace ServerProcessor;
+enum class Command
+{
+    CREATE,
+    JOIN,
+    INPUT,
+    INVALID,
+    DISCONNECT,
+    NEW_CONNECTION
+};
 
 class ServerManager
 {
@@ -24,6 +32,7 @@ public:
     void startServer();
 
 private:
+    // ===================== DATA =====================
     struct MessageResult
     {
         std::string result;
@@ -31,6 +40,21 @@ private:
     };
 
     std::vector<Connection> clients;
+
+    std::unordered_map<std::string, Command> InputCommandMap{
+        {"CREATE", Command::CREATE},
+        {"JOIN", Command::JOIN},
+        {"INPUT", Command::INPUT},
+        {"DISCONNECT", Command::DISCONNECT},
+        {"NEW_CONNECTION", Command::NEW_CONNECTION}};
+
+    std::unordered_map<Command, std::string> OutputCommandMap{
+        { Command::CREATE, "CREATE",},
+        { Command::JOIN, "JOIN",},
+        { Command::INPUT, "INPUT",},
+        { Command::INVALID, "INVALID",},
+        { Command::DISCONNECT, "DISCONNECT",},
+        { Command::NEW_CONNECTION, "NEW_CONNECTION"}};
 
     // ===================== SERVICES =====================
     std::unique_ptr<Server> server;
@@ -59,5 +83,5 @@ private:
 
     // DTO Adaptors
     C2SDTO messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message);
-    std::deque<MessageProcessors::ResponseMessageDTO> serverProcessorDTOToMessageDTO(const ServerProcessor::S2CDTO &message);
+    std::deque<MessageProcessors::ResponseMessageDTO> serverProcessorDTOToMessageDTO(const S2CDTO &message);
 };

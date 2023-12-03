@@ -27,7 +27,6 @@ target_link_libraries(server-manager-lib
     game-container-manager-lib
     networking
     message-processors-lib
-    game-container-manager-lib
 )
 
 #include header
