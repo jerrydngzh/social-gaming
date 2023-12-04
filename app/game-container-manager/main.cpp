@@ -8,18 +8,21 @@ In this file, we demonstrate how the Server Processor would be used in the Serve
 #include <vector>
 #include <memory>
 
-#include "gameContainerManager.h"
+#include "gamesDataManager.h"
+#include "serverProcessors.h"
+#include "ClientToServerDataObject.h"
+#include "ServerToClientsDataObject.h"
 
 // DUMMY FUNCTION - SERVES EXAMPLE ONLY
 // Dummy Function which replicates when the Server Platform gets a message from the client,
 // processes it into a DTO, and returns it.
-C2SDTO messageProcessorGetMessage()
+ClientToServerDataObject messageProcessorGetMessage()
 {
     // Get Client ID
     std::string clientIDstring = "";
     std::cout << "Enter clientID: ";
     std::cin >> clientIDstring;
-    int clientID = std::stoi(clientIDstring);
+    uintptr_t clientID = std::stoi(clientIDstring);
 
     // Get Client Command
     std::string clientCommand = "";
@@ -31,10 +34,7 @@ C2SDTO messageProcessorGetMessage()
     std::cout << "Enter client data: ";
     std::cin >> clientData;
 
-    C2SDTO c2sDTO;
-    c2sDTO.clientID = clientID;
-    c2sDTO.command = clientCommand;
-    c2sDTO.data = clientData;
+    ClientToServerDataObject c2sDTO = {clientID, clientCommand, clientData};
 
     return c2sDTO;
 }
@@ -42,10 +42,10 @@ C2SDTO messageProcessorGetMessage()
 // DUMMY FUNCTION - SERVES EXAMPLE ONLY
 // Dummy Function which replicates when the Server Processor returns a DTO,
 // It should process the DTO, sending the correct message to the correct clients.
-void messageProcessorSendMessage(S2CDTO message)
+void messageProcessorSendMessage(ServerToClientsDataObject message)
 {
     std::cout << "Message to be sent to clients: ";
-    for (int clientID : message.clientIDs)
+    for (uintptr_t clientID : message.clientIDs)
     {
         std::cout << std::to_string(clientID);
     }
@@ -77,28 +77,32 @@ int main()
 
     while (true)
     {
-        C2SDTO requestDTO = messageProcessorGetMessage();
-        S2CDTO responseDTO;
+        ClientToServerDataObject requestDTO = messageProcessorGetMessage();
 
         // Figures out what process to run depending on the Command.
         if (requestDTO.command == "CREATE")
         {
-            responseDTO = createProcessor.processCreateCommand(requestDTO);
+            ServerToClientsDataObject responseDTO = createProcessor.process(requestDTO);
+            messageProcessorSendMessage(responseDTO);
         }
         else if (requestDTO.command == "JOIN")
         {
-            responseDTO = joinProcessor.processJoinCommand(requestDTO);
+            ServerToClientsDataObject responseDTO = joinProcessor.process(requestDTO);
+            messageProcessorSendMessage(responseDTO);
         }
         else if (requestDTO.command == "INPUT")
         {
-            responseDTO = inputProcessor.processInputCommand(requestDTO);
+            ServerToClientsDataObject responseDTO = inputProcessor.process(requestDTO);
+            messageProcessorSendMessage(responseDTO);
         }
         else
         {
-            responseDTO = invalidCommandProcessor.processInvalidCommand(requestDTO);
+            ServerToClientsDataObject responseDTO = invalidCommandProcessor.process(requestDTO);
+            messageProcessorSendMessage(responseDTO);
         }
 
-        messageProcessorSendMessage(responseDTO);
+        clientsManager.displayPlayerGameMap();
+        clientsManager.displayOwnerGameMap();
     }
 
     return 0;

@@ -1,7 +1,10 @@
 #include "Server.h"
 
 #include "messageProcessor.h"
-#include "gameContainerManager.h"
+#include "serverProcessors.h"
+#include "gamesDataManager.h"
+#include "ServerToClientsDataObject.h"
+#include "ClientToServerDataObject.h"
 
 #include <fstream>
 #include <iostream>
@@ -82,6 +85,6 @@ private:
     getHTTPMessage(const char *htmlLocation);
 
     // DTO Adaptors
-    C2SDTO messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message);
-    std::deque<MessageProcessors::ResponseMessageDTO> serverProcessorDTOToMessageDTO(const S2CDTO &message);
+    ClientToServerDataObject messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message);
+    std::deque<MessageProcessors::ResponseMessageDTO> serverProcessorDTOToMessageDTO(const ServerToClientsDataObject &message);
 };

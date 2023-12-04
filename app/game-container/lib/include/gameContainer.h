@@ -11,7 +11,7 @@
 class GameContainer
 {
 public:
-    GameContainer(int ownerId,int inviteCode,std::vector<int> playerList2,  C2SDTO serverDTO2);
+    GameContainer(int ownerId, int inviteCode, std::vector<int> playerList2, ClientsToServerDataObject serverDTO2);
 
     DTOtoGameContainerManager GameContainerProcessor(const DtoFromGame& requestDTO);
     void interpeterCommunication(GameState gs);
@@ -19,7 +19,7 @@ public:
     bool validateInput(std::string input);
 
     // this is the function gamecontainer manager should call from out side
-    DTOtoGameContainerManager proccessCommandAndGetNextRequest(const C2SDTO& serverDTO);
+    DTOtoGameContainerManager proccessCommandAndGetNextRequest(const ClientsToServerDataObject& serverDTO);
 
     // helper functions that can be used for calling
     int getOwnerID() const { return ownerID; }
@@ -35,7 +35,7 @@ private:
     int gameInviteCode;
     std::vector<int> playerList; // list of clientIds
     Setting *config;
-    C2SDTO serverDTO;
+    ClientsToServerDataObject serverDTO;
     std::variant<int, bool> myVariant = static_cast<int>(42);
     std::tuple<int, int> myTuple = std::make_tuple(1, 2);
     Setting::Kind kind = Setting::STRING;
