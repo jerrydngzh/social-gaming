@@ -2,10 +2,7 @@
 
 // CreateProcessor Implementation
 CreateProcessor::CreateProcessor(GameContainerManager &gameContainerManager, ClientsManager &clientsManager)
-    : gameContainerManager(gameContainerManager), clientsManager(clientsManager)
-{
-    // Constructor implementation
-}
+    : gameContainerManager(gameContainerManager), clientsManager(clientsManager) {}
 
 ServerToClientsDataObject CreateProcessor::process(const ClientToServerDataObject &requestDTO)
 {
@@ -23,14 +20,18 @@ ServerToClientsDataObject CreateProcessor::process(const ClientToServerDataObjec
 
 bool CreateProcessor::isCreateCommandValid(const ClientToServerDataObject &requestDTO)
 {
-    // Stub Function
-    return true;
+    if (requestDTO.command == "CREATE"){
+        return true;
+    } else {
+        return false;
+    }
 }
 
 ServerToClientsDataObject CreateProcessor::createGame(const ClientToServerDataObject &requestDTO)
 {
+    // 
     int gameContainerID = gameContainerManager.createGameContainer();
-    std::cout << "DEBUG LOG: gameContainerID " << gameContainerID << "\n";
+    // std::cout << "DEBUG LOG: gameContainerID " << gameContainerID << "\n";
     // TODO setOwnerOfGameContainer failing
     bool validCreateGame = clientsManager.setOwnerOfGameContainer(requestDTO.clientID, gameContainerID);
 
@@ -60,10 +61,7 @@ ServerToClientsDataObject CreateProcessor::invalidCreateCommandResponder(const C
 
 // JoinProcessor Implementation
 JoinProcessor::JoinProcessor(GameContainerManager &gameContainerManager, ClientsManager &clientsManager)
-    : gameContainerManager(gameContainerManager), clientsManager(clientsManager)
-{
-    // Constructor implementation
-}
+    : gameContainerManager(gameContainerManager), clientsManager(clientsManager) {}
 
 ServerToClientsDataObject JoinProcessor::process(const ClientToServerDataObject &requestDTO)
 {
@@ -81,7 +79,7 @@ ServerToClientsDataObject JoinProcessor::process(const ClientToServerDataObject 
 
 bool JoinProcessor::gameContainerExists(int gameContainerID)
 {
-    return gameContainerManager.doesGameContainerIDExist(gameContainerID);
+    return gameContainerManager.doesGameContainerExist(gameContainerID);
 }
 
 bool JoinProcessor::isClientAlreadyPlayer(int clientID)

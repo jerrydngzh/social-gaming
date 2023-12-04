@@ -50,8 +50,8 @@ public:
     // }
 
 private:
-    GameContainerManager &gameContainerManager;
-    ClientsManager &clientsManager;
+    GameContainerManager &gameContainerManager; // game data API
+    ClientsManager &clientsManager; // client data API -- TODO: will probably merge into game data API
 
     ServerToClientsDataObject createProcessImpl(const ClientToServerDataObject &requestDTO);
 

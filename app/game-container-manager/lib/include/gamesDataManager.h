@@ -32,8 +32,15 @@ public:
     explicit GameContainer(int gameContainerID);
     [[nodiscard]] int getGameContainerID() const;
 
+    // Used to add a player to a game. Returns status of operation as string. 
+    std::string addPlayer(const int clientID); 
+
 private:
+    [[nodiscard]]
+    bool isClientAlreadyPlayer(const int clientID) const;
+
     int gameContainerID;
+    std::vector<int> playerIDs;
 };
 
 // "manager" classes -- i.e. manages a collection of objects
@@ -55,18 +62,33 @@ public:
 
     int createGameContainer();
 
-    bool doesGameContainerIDExist(int gameContainerID);
+    bool doesGameContainerExist(const int gameContainerID) const;
 
-    std::string addPlayerToGame(int clientID, int gameContainerID);
+    /* addPlayerToGame
+        - What it's For: 
+        Adds the player to the game container that corresponds to the correct ID.
+        - How it's Used:
+        When a player is added, this function should be called with the clientID of the player we're
+        adding and the gameContainerID of the game container we're adding them to.
+    */ 
+    std::string addPlayerToGame(const int clientID, const int gameContainerID);
 
     std::string giveGameContainerPlayerInput(int gameContainerID, int clientID, std::string data);
 
-    // GameContainer getGameContainer(int gameContainerID);
-
 private:
-    int numberOfGameContainers = 0;
-    std::vector<std::unique_ptr<GameContainer>> gameContainerVector;
-    std::unordered_map<int, GameContainer *> gameContainerMap;
+    // Used to generate gameContainerID's. 
+    int gameContainerIdIndex = 0;
+
+    /* constructNewGameContainerID
+        - What it's For: 
+        Each time we make a gameContainer, we need to make a new unique game container so that 
+        clients can be associated with their gameContainers. 
+        - How it's Used:
+        When a new gameContainer is created, we should call this function to get a new gameContainerID.
+    */ 
+    int constructNewGameContainerID();
+
+    std::unordered_map<int, std::unique_ptr<GameContainer>> gameContainerMap;
 };
 
 // TODO: maybe turn this into a map of users
