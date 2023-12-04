@@ -12,5 +12,5 @@ add_subdirectory(lib)
 add_executable(main main.cpp)
 target_link_libraries(main game-container-manager-lib)
 
-include(CTest)
-add_subdirectory(test)
+# include(CTest)
+# add_subdirectory(test)

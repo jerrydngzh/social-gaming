@@ -22,7 +22,7 @@ ClientToServerDataObject messageProcessorGetMessage()
     std::string clientIDstring = "";
     std::cout << "Enter clientID: ";
     std::cin >> clientIDstring;
-    int clientID = std::stoi(clientIDstring);
+    uintptr_t clientID = std::stoi(clientIDstring);
 
     // Get Client Command
     std::string clientCommand = "";
@@ -45,7 +45,7 @@ ClientToServerDataObject messageProcessorGetMessage()
 void messageProcessorSendMessage(ServerToClientsDataObject message)
 {
     std::cout << "Message to be sent to clients: ";
-    for (int clientID : message.clientIDs)
+    for (uintptr_t clientID : message.clientIDs)
     {
         std::cout << std::to_string(clientID);
     }
@@ -100,6 +100,9 @@ int main()
             ServerToClientsDataObject responseDTO = invalidCommandProcessor.process(requestDTO);
             messageProcessorSendMessage(responseDTO);
         }
+
+        clientsManager.displayPlayerGameMap();
+        clientsManager.displayOwnerGameMap();
     }
 
     return 0;

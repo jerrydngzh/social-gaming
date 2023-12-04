@@ -126,6 +126,10 @@ public:
     [[nodiscard]]
     bool setOwnerOfGameContainer(const int clientID, const int gameContainerID);
 
+    void displayPlayerGameMap() const;
+    void displayOwnerGameMap() const;
+
+
 private:
     std::unordered_map<int, int> playerIDtoGameIDMap;
     std::unordered_map<int, int> ownerIDtoGameIDMap;

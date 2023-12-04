@@ -30,7 +30,8 @@ bool CreateProcessor::isCreateCommandValid(const ClientToServerDataObject &reque
 ServerToClientsDataObject CreateProcessor::createGame(const ClientToServerDataObject &requestDTO)
 {
     int gameContainerID = gameContainerManager.createGameContainer();
-    // TODO - No Discard
+    std::cout << "DEBUG LOG: gameContainerID " << gameContainerID << "\n";
+    // TODO setOwnerOfGameContainer failing
     bool validCreateGame = clientsManager.setOwnerOfGameContainer(requestDTO.clientID, gameContainerID);
 
     if (validCreateGame) {

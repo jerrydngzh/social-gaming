@@ -27,7 +27,7 @@ and context better.
 class ProcessorBase
 {
 public:
-    ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO);
+    virtual ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO) = 0;
 };
 
 /* CreateProcessor
@@ -41,10 +41,13 @@ class CreateProcessor : public ProcessorBase
 public:
     CreateProcessor(GameContainerManager &gameContainerManager, ClientsManager &clientsManager);
 
-    ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO)
-    {
-        return createProcessImpl(requestDTO);
-    }
+
+    ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO) override;
+
+    // ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO)
+    // {
+    //     return createProcessImpl(requestDTO);
+    // }
 
 private:
     GameContainerManager &gameContainerManager;
@@ -73,10 +76,12 @@ class JoinProcessor : public ProcessorBase
 public:
     JoinProcessor(GameContainerManager &gameContainerManager, ClientsManager &clientsManager);
 
-    ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO)
-    {
-        return joinProcessImpl(requestDTO);
-    }
+    ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO) override;
+
+    // ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO)
+    // {
+    //     return joinProcessImpl(requestDTO);
+    // }
 
 private:
     GameContainerManager &gameContainerManager;
@@ -106,10 +111,12 @@ class InputProcessor : public ProcessorBase
 public:
     InputProcessor(GameContainerManager &gameContainerManager, ClientsManager &clientsManager);
 
-    ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO)
-    {
-        return inputProcessImpl(requestDTO);
-    }
+    ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO) override;
+
+    // ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO)
+    // {
+    //     return inputProcessImpl(requestDTO);
+    // }
 
 private:
     GameContainerManager &gameContainerManager;
@@ -138,10 +145,12 @@ private:
 class InvalidCommandProcessor : public ProcessorBase
 {
 public:
-    ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO)
-    {
-        return invalidCommandImpl(requestDTO);
-    }
+    ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO) override;
+
+    // ServerToClientsDataObject process(const ClientToServerDataObject &requestDTO)
+    // {
+    //     return invalidCommandImpl(requestDTO);
+    // }
 
 private:
     ServerToClientsDataObject invalidCommandImpl(const ClientToServerDataObject &requestDTO);

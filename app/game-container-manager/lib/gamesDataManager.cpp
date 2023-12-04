@@ -100,10 +100,18 @@ int ClientsManager::getGameContainerIDofPlayer(const int clientID)
     return playerIDtoGameIDMap[clientID];
 }
 
+// Possible Error? 
 bool ClientsManager::doesGameContainerIDHaveOwner(const int gameContainerID) {
-    bool gameContainerIDHasOwner = ownerIDtoGameIDMap.count(gameContainerID) > 0;
+    std::cout << "DEBUG LOG: ownerIDtoGameIDMap.count(gameContainerID)" << ownerIDtoGameIDMap.count(gameContainerID) << "\n";
 
-    return gameContainerIDHasOwner;
+    // bool gameContainerIDHasOwner = ownerIDtoGameIDMap.count(gameContainerID) > 0;
+    for (auto item : ownerIDtoGameIDMap) {
+        if (item.second == gameContainerID) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool ClientsManager::setOwnerOfGameContainer(const int clientID, const int gameContainerID)
@@ -116,4 +124,21 @@ bool ClientsManager::setOwnerOfGameContainer(const int clientID, const int gameC
     ownerIDtoGameIDMap[clientID] = gameContainerID;
 
     return true;
+}
+
+
+void ClientsManager::displayPlayerGameMap() const {
+    std::cout << "Player ID to Game ID Map:" << std::endl;
+    for (const auto& entry : playerIDtoGameIDMap) {
+        std::cout << "Player ID: " << entry.first << ", Game ID: " << entry.second << std::endl;
+    }
+    std::cout << std::endl;
+}
+
+void ClientsManager::displayOwnerGameMap() const {
+    std::cout << "Owner ID to Game ID Map:" << std::endl;
+    for (const auto& entry : ownerIDtoGameIDMap) {
+        std::cout << "Owner ID: " << entry.first << ", Game ID: " << entry.second << std::endl;
+    }
+    std::cout << std::endl;
 }

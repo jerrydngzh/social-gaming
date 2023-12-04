@@ -20,6 +20,7 @@ struct ServerToClientsDataObject
     ServerToClientsDataObject(const std::vector<uintptr_t> clientIDs, const std::string command, const std::string data)
         : clientIDs(clientIDs), command(command), data(data) {}
 
+    // NOTE: a DTO shouldn't have any logic, but this is just for debugging
     void printData() const
     {
         std::cout << "ClientIDs: ";
