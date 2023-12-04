@@ -1,8 +1,18 @@
 // Purpose of the deserilizer is to read the game data from mikes data structure and initialize GameState with it
 // Will basically have factory methods that return a ready GameState object
 
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
 #include "gameState.h"
 // #include staticDataStructure
+
+extern "C" {
+TSLanguage* tree_sitter_socialgaming();
+}
+
+std::string readFile(const std::string& filepath);
 
 class GameStateFactory {
     // THIS CURRENTLY STUBS ROCK PAPER SCISSORS!
@@ -29,6 +39,28 @@ class GameStateFactory {
         // Per Player
         gameState.addPerPlayer(new IntegerValue("wins", 0));
 
+        // Rule Tree
+        ts::Language language = tree_sitter_socialgaming();
+        ts::Parser parser{language};
+        ts::Tree* tree = new ts::Tree(parser.parseString(readFile("test-game-files/rock-paper-scissors.game")));
+
+        gameState.setRuleTree(tree);
+
         return gameState;
     }
 };
+
+std::string readFile(const std::string& filepath) {
+    std::ifstream file;
+    file.open(filepath);
+
+    if (!file.is_open()) {
+        throw std::invalid_argument("Error opening file. Check if file path is correct");
+    }
+
+    std::ostringstream buffer;
+    buffer << file.rdbuf();
+    std::string fileContents = buffer.str();
+
+    return fileContents;
+}
