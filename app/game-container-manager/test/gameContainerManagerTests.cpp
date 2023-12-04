@@ -1,13 +1,17 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "gameContainerManager.h"
+#include "ClientToServerDataObject.h" // c2sdto
+#include "ServerToClientsDataObject.h" // s2cdto
+#include "serverProcessors.h"
+#include "gamesDataManager.h"
 
-
+// Done! 
 TEST(gameContainerManager, POC) {
     EXPECT_TRUE(true);
 } // POC
 
+// Done! 
 TEST(DummyTestSuite, DummyTest) {
     // Arrange 
     int x = 1;
@@ -18,8 +22,9 @@ TEST(DummyTestSuite, DummyTest) {
 
     // Assert 
     EXPECT_EQ(result, 2);
-}
+};
 
+// Done! 
 TEST(ComponentTest, InitializationTest) {
     ASSERT_NO_THROW({
         GameContainerManager gameContainerManager;
@@ -32,151 +37,150 @@ TEST(ComponentTest, InitializationTest) {
     });
 }
 
-
-TEST(ComponentTest, CreateGameContainer){
-
-    GameContainerManager gameContainerManager;
-    int containerID = gameContainerManager.createGameContainer();
-    ASSERT_EQ(containerID, 0);
-    ASSERT_TRUE(gameContainerManager.doesGameContainerIDExist(containerID));
-}
-
-
-
+// Done! But can be improved
 TEST(gameContainerManagerTest, CreateGameContainer){
-
     GameContainerManager gameContainerManager;
     int containerID = gameContainerManager.createGameContainer();
     ASSERT_EQ(containerID, 0);
+    // should also check that a game container is constructed? 
 };
 
-// TEST(gameContainerManagerTest, DoesGameContainerIDExist_Success){
+// Done! 
+TEST(gameContainerManagerTest, DoesGameContainerIDExist_Success){
+    GameContainerManager gameContainerManager;
+    int containerID = gameContainerManager.createGameContainer();
+    ASSERT_TRUE(gameContainerManager.doesGameContainerExist(containerID));
+};
 
-//     GameContainerManager gameContainerManager;
-//     int containerID = gameContainerManager.createGameContainer();
-//     ASSERT_TRUE(gameContainerManager.doesGameContainerIDExist(containerID));
-// };
-
+// Done! 
 TEST(GameContainerManagerTest, DoesGameContainerIDExist_Failure) {
     int containerID = 42;  
     GameContainerManager gameContainerManager;
-    bool exists = gameContainerManager.doesGameContainerIDExist(containerID);
+    bool exists = gameContainerManager.doesGameContainerExist(containerID);
     ASSERT_FALSE(exists);
 };
 
+// Needs work 
+// Maybe Not works and thats ok! 
 TEST(GameContainerManagerTest, addPlayerToGame) { 
     GameContainerManager gameContainerManager;
-    int clientID = 1;
+    uintptr_t clientID = 1;
     int containerID = gameContainerManager.createGameContainer();
     std::string result = gameContainerManager.addPlayerToGame(clientID, containerID);
+
+    // instead, check the gameContainer to see if the player is now in the game
+
     std::string expected = "client id " + std::to_string(clientID) + " added to game " + std::to_string(containerID) + "\n";
     ASSERT_EQ(result, expected);
 };
 
+// Done! 
 TEST(GameContainerManagerTest, GiveGameContainerPlayerInput) {    
     GameContainerManager gameContainerManager;
     int containerID = gameContainerManager.createGameContainer();
-    int clientID = 1;
+    uintptr_t clientID = 1;
     std::string inputData = "Some input data";
     std::string result = gameContainerManager.giveGameContainerPlayerInput(containerID, clientID, inputData);
     std::string expected = "gameContainer " + std::to_string(containerID) + " received player " + std::to_string(clientID) + " input: " + inputData + "\n";
     ASSERT_EQ(result, expected);   
 };
 
+// Done!
 TEST(ClientsManagerTest, IsClientPlayer_Positive) {  
-    int clientID = 1;
+    uintptr_t clientID = 1;
     int clientGameCode = 0;
     ClientsManager clientsManager;
-    clientsManager.addPlayerToGame(clientID, clientGameCode);
-    bool isPlayer = clientsManager.isClientPlayer(clientID);
+
+    bool addPlayerSuccess = clientsManager.addPlayerToGame(clientID, clientGameCode); // here
+    ASSERT_TRUE(addPlayerSuccess);
+    
+    bool isPlayer = clientsManager.isClientAlreadyPlayer(clientID);
     ASSERT_TRUE(isPlayer);
 };
 
+// Done!
 TEST(ClientsManagerTest, IsClientPlayer_Negative) {
-    int clientID = 1;
+    uintptr_t clientID = 1;
     ClientsManager clientsManager;
-    bool isPlayer = clientsManager.isClientPlayer(clientID);
+    bool isPlayer = clientsManager.isClientAlreadyPlayer(clientID);
     ASSERT_FALSE(isPlayer);
 };
 
+// Done!
 TEST(ClientsManagerTest, GetGameContainerIDofPlayer) {
-    int clientID = 1;
+    uintptr_t clientID = 1;
     int gameContainerID = 42; 
     ClientsManager clientsManager;
-    clientsManager.addPlayerToGame(clientID, gameContainerID);
+    bool addPlayerSuccess = clientsManager.addPlayerToGame(clientID, gameContainerID); // refactored! may need to change response 
+    ASSERT_TRUE(addPlayerSuccess);
+
     int retrievedGameContainerID = clientsManager.getGameContainerIDofPlayer(clientID);
     ASSERT_EQ(retrievedGameContainerID, gameContainerID);
 };
 
-
+// TODO: write a GetOwnerofGameContainer function, then complete test. 
 //Maybe add a GetOwnerofGameContainer function
 //Also, initialize ownerIDtoGameIDMap in ClientsManager constructor
-TEST(ClientsManagerTest, SetOwnerOfGameContainer) {
-    int clientID = 1;
-    int gameContainerID = 42; // A random game container ID
-    ClientsManager clientsManager;
-    clientsManager.setOwnerOfGameContainer(clientID, gameContainerID);
-    // ASSERT_TRUE(clientsManager.ownerIDtoGameIDMap.find(clientID) != clientsManager.ownerIDtoGameIDMap.end());
-    // ASSERT_EQ(clientsManager.ownerIDtoGameIDMap[clientID], gameContainerID);
-};
+// TEST(ClientsManagerTest, SetOwnerOfGameContainer) {
+//     int clientID = 1;
+//     int gameContainerID = 42; // A random game container ID
+//     ClientsManager clientsManager;
+//     clientsManager.setOwnerOfGameContainer(clientID, gameContainerID);
+//     // ASSERT_TRUE(clientsManager.ownerIDtoGameIDMap.find(clientID) != clientsManager.ownerIDtoGameIDMap.end());
+//     // ASSERT_EQ(clientsManager.ownerIDtoGameIDMap[clientID], gameContainerID);
+// };
 
-//Fix IscreateCommandValid stub 
+// Done!
 TEST(CreateProcessor, processCreateCommand) {
-    C2SDTO requestDTO;
-    requestDTO.clientID = 1;
-    requestDTO.command = "create";
-    requestDTO.data = "Some create data";
+    ClientToServerDataObject requestDTO = {1, "CREATE", "Some create data"};
 
     GameContainerManager gameContainerManager;
     ClientsManager clientsManager;
     CreateProcessor createProcessor(gameContainerManager, clientsManager);
-    S2CDTO responseDTO = createProcessor.processCreateCommand(requestDTO);
+    ServerToClientsDataObject responseDTO = createProcessor.process(requestDTO);
 
     ASSERT_EQ(responseDTO.clientIDs.size(), 1);
     ASSERT_EQ(responseDTO.clientIDs[0], requestDTO.clientID);
-    ASSERT_EQ(responseDTO.command, "create");
+    ASSERT_EQ(responseDTO.command, "CREATE");
     ASSERT_EQ(responseDTO.data, "Response data from createGame");
 };
 
-//Fix IscreateCommandValid stub 
+// TODO no blockers
 TEST(CreateProcessor, isCreateCommandValid) {
-    
+    // TODO
 };
 
-
+// Done!
 TEST(CreateProcessor, createGame) {
     GameContainerManager gameContainerManager;
     ClientsManager clientsManager;
     CreateProcessor createProcessor(gameContainerManager, clientsManager);
 
-    C2SDTO requestDTO;
-    requestDTO.clientID = 1;
-    requestDTO.command = "create";
-    requestDTO.data = "Some create data";
+    ClientToServerDataObject requestDTO = {1, "CREATE", "Some create data"};
 
-    // S2CDTO responseDTO = createProcessor.createGame(&requestDTO);
-    S2CDTO responseDTO;
+    ServerToClientsDataObject responseDTO = createProcessor.createGame(requestDTO);  // Private Methods
+  
     ASSERT_EQ(responseDTO.clientIDs.size(), 1);
     ASSERT_EQ(responseDTO.clientIDs[0], requestDTO.clientID);
     ASSERT_EQ(responseDTO.command, "CREATE ROOM COMMAND SUCCESS");
     ASSERT_FALSE(responseDTO.data.empty());
 
 };
-//It's a stub function
+
+// This can now be written 
 TEST(CreateProcessor, invalidCreateCommandResponder) {
     
 };
 
+
+// DONE! 
 TEST(JoinProcessor, processJoinCommand) {
     GameContainerManager gameContainerManager;
     ClientsManager clientsManager;
     JoinProcessor joinProcessor(gameContainerManager, clientsManager);
-    C2SDTO requestDTO;
-    requestDTO.clientID = 1;
-    requestDTO.command = "join";
-    requestDTO.data = "123";
+    ClientToServerDataObject requestDTO = {1, "JOIN", "123"};
 
-    S2CDTO responseDTO = joinProcessor.processJoinCommand(requestDTO);
+    ServerToClientsDataObject responseDTO = joinProcessor.process(requestDTO);
 
     ASSERT_EQ(responseDTO.clientIDs.size(), 1);
     ASSERT_EQ(responseDTO.clientIDs[0], requestDTO.clientID);
@@ -185,69 +189,73 @@ TEST(JoinProcessor, processJoinCommand) {
     ASSERT_FALSE(responseDTO.data.empty()); 
 };
 
+// Done!
 TEST(JoinProcessor, gameContainerExists) {
 
     GameContainerManager gameContainerManager;
     ClientsManager clientsManager;
     JoinProcessor joinProcessor(gameContainerManager, clientsManager);
     int existingGameContainerID = gameContainerManager.createGameContainer();
-    // bool exists = joinProcessor.gameContainerExists(existingGameContainerID);
-    // ASSERT_TRUE(exists);
+    bool exists = joinProcessor.gameContainerExists(existingGameContainerID);
+    ASSERT_TRUE(exists);
 };
 
+// Done
 TEST(JoinProcessor, isClientAlreadyPlayer) {
     
     ClientsManager clientsManager;
     GameContainerManager gameContainerManager;
     JoinProcessor joinProcessor(gameContainerManager, clientsManager);
-    int clientID = 1;
+    uintptr_t clientID = 1;
     int gameContainerID = 456; 
-    clientsManager.addPlayerToGame(clientID, gameContainerID);
+    // clientsManager.addPlayerToGame(clientID, gameContainerID);
 
-    // bool alreadyPlayer = joinProcessor.isClientAlreadyPlayer(clientID);
-    // ASSERT_TRUE(alreadyPlayer);
+    bool addPlayerSuccess = clientsManager.addPlayerToGame(clientID, gameContainerID);
+    ASSERT_TRUE(addPlayerSuccess);
+
+    bool alreadyPlayer = joinProcessor.isClientAlreadyPlayer(clientID);
+    ASSERT_TRUE(alreadyPlayer);
 };
 
 TEST(JoinProcessor, isJoinCommandValid) {
     
 };
 
+// DONE!
 TEST(JoinProcessor, joinGame) {
     GameContainerManager gameContainerManager;
     ClientsManager clientsManager;
     JoinProcessor joinProcessor(gameContainerManager, clientsManager);
-    C2SDTO requestDTO;
-    requestDTO.clientID = 1;
-    requestDTO.command = "join";
-    requestDTO.data = "123"; 
-
-    S2CDTO responseDTO = joinProcessor.processJoinCommand(requestDTO);
+    
+    ClientToServerDataObject requestDTO = {1, "JOIN", "123"};
+    
+    ServerToClientsDataObject responseDTO = joinProcessor.process(requestDTO);
 
     ASSERT_EQ(responseDTO.clientIDs.size(), 1);
     ASSERT_EQ(responseDTO.clientIDs[0], requestDTO.clientID);
     ASSERT_EQ(responseDTO.command, "JOIN ROOM COMMAND SUCCESS");
     
     ASSERT_FALSE(responseDTO.data.empty()); 
-    
 };
 
+// Done!
 TEST(JoinProcessor, invalidJoinCommandResponder_ClientAlreadyPlayer) {
     GameContainerManager gameContainerManager;
     ClientsManager clientsManager;
     JoinProcessor joinProcessor(gameContainerManager, clientsManager);
     int existingGameContainerID = gameContainerManager.createGameContainer();
-    int clientID = 1;
+    uintptr_t clientID = 1;
 
     // Add the player to the game (simulate a client already being a player)
-    clientsManager.addPlayerToGame(clientID, existingGameContainerID);
+    // clientsManager.addPlayerToGame(clientID, existingGameContainerID);
+    bool addPlayerSuccess = clientsManager.addPlayerToGame(clientID, existingGameContainerID);
+    ASSERT_TRUE(addPlayerSuccess);
+    
 
-    C2SDTO requestDTO;
-    requestDTO.clientID = clientID;
-    requestDTO.command = "join";
-    requestDTO.data = std::to_string(existingGameContainerID);
-
-    S2CDTO responseDTO;
-    // S2CDTO responseDTO = joinProcessor.invalidJoinCommandResponder(requestDTO);
+    ClientToServerDataObject requestDTO = {clientID, "JOIN", std::to_string(existingGameContainerID)};
+ 
+     // ServerToClientsDataObject responseDTO;
+    ServerToClientsDataObject responseDTO = joinProcessor.invalidJoinCommandResponder(requestDTO); // private method
 
     ASSERT_EQ(responseDTO.command, "INVALID JOIN COMMAND");
     ASSERT_EQ(responseDTO.clientIDs.size(), 1);
@@ -256,22 +264,23 @@ TEST(JoinProcessor, invalidJoinCommandResponder_ClientAlreadyPlayer) {
     ASSERT_FALSE(responseDTO.data.empty()); // There should be an error message
 };
 
+//Done!
 TEST(InputProcessor, processInputCommand) {
     GameContainerManager gameContainerManager;
     ClientsManager clientsManager;
     InputProcessor inputProcessor(gameContainerManager, clientsManager);
     
     int existingGameContainerID = gameContainerManager.createGameContainer();
-    int clientID = 1;
+    uintptr_t clientID = 1;
 
-    clientsManager.addPlayerToGame(clientID, existingGameContainerID);
+    // clientsManager.addPlayerToGame(clientID, existingGameContainerID);
 
-    C2SDTO requestDTO;
-    requestDTO.clientID = clientID;
-    requestDTO.command = "input";
-    requestDTO.data = "Some input data";
+    bool addPlayerSuccess = clientsManager.addPlayerToGame(clientID, existingGameContainerID);
+    ASSERT_TRUE(addPlayerSuccess);
 
-    S2CDTO responseDTO = inputProcessor.processInputCommand(requestDTO);
+    ClientToServerDataObject requestDTO = {clientID, "INPUT", "Some input data"};
+
+    ServerToClientsDataObject responseDTO = inputProcessor.process(requestDTO); 
 
     ASSERT_EQ(responseDTO.command, "VALID INPUT COMMAND");
     ASSERT_EQ(responseDTO.clientIDs.size(), 1);
@@ -281,68 +290,73 @@ TEST(InputProcessor, processInputCommand) {
                                       " input: " + requestDTO.data) != std::string::npos);
 };
 
+// Done!
 TEST(InputProcessor, isClientPlayer) {
     
     GameContainerManager gameContainerManager;
     ClientsManager clientsManager;
     InputProcessor inputProcessor(gameContainerManager, clientsManager);
         
-    int clientID = 1;
+    uintptr_t clientID = 1;
     int gameContainerID = gameContainerManager.createGameContainer();
 
-    clientsManager.addPlayerToGame(clientID, gameContainerID);
+    // clientsManager.addPlayerToGame(clientID, gameContainerID);
 
-    // bool isPlayer = inputProcessor.isClientPlayer(clientID);
+    bool addPlayerSuccess = clientsManager.addPlayerToGame(clientID, gameContainerID); // here
+    ASSERT_TRUE(addPlayerSuccess);
 
-    // ASSERT_TRUE(isPlayer);
+    bool isPlayer = inputProcessor.isClientPlayer(clientID);
+
+    ASSERT_TRUE(isPlayer);
 };
 
+// Done!
 TEST(InputProcessor, isInputCommandValid) {
        
     GameContainerManager gameContainerManager;
     ClientsManager clientsManager;
     InputProcessor inputProcessor(gameContainerManager, clientsManager);
         
-    int clientID = 1;
+    uintptr_t clientID = 1;
     int gameContainerID = gameContainerManager.createGameContainer();
 
-    clientsManager.addPlayerToGame(clientID, gameContainerID);
+    // clientsManager.addPlayerToGame(clientID, gameContainerID);
 
-    C2SDTO requestDTO;
-    requestDTO.clientID = clientID;
-    requestDTO.command = "input";
-    requestDTO.data = "Some input data";
+    bool addPlayerSuccess = clientsManager.addPlayerToGame(clientID, gameContainerID); // here
+    ASSERT_TRUE(addPlayerSuccess);
 
-    // bool isValid = inputProcessor.isInputCommandValid(requestDTO);
+    ClientToServerDataObject requestDTO = {clientID, "INPUT", "Some input data"};
 
-    // ASSERT_TRUE(isValid);
+    bool isValid = inputProcessor.isInputCommandValid(requestDTO);
+
+    ASSERT_TRUE(isValid);
 };
 
+// Done!
 TEST(InputProcessor, invalidInputCommandResponder) {
 
     GameContainerManager gameContainerManager;
     ClientsManager clientsManager;
     InputProcessor inputProcessor(gameContainerManager, clientsManager);
  
-    int clientID = 1;
+    uintptr_t clientID = 1;
     int gameContainerID = gameContainerManager.createGameContainer();
 
-    clientsManager.addPlayerToGame(clientID, gameContainerID);
+    // clientsManager.addPlayerToGame(clientID, gameContainerID);
 
-    C2SDTO requestDTO;
-    requestDTO.clientID = clientID;
-    requestDTO.command = "invalid_input";
-    requestDTO.data = "Some invalid input data";
+    bool addPlayerSuccess = clientsManager.addPlayerToGame(clientID, gameContainerID); // here
+    ASSERT_TRUE(addPlayerSuccess);
 
-    // S2CDTO responseDTO = inputProcessor.invalidInputCommandResponder(requestDTO);
+    ClientToServerDataObject requestDTO = {clientID, "INVALID_INPUT", "Some invalid input data"};
+    ServerToClientsDataObject responseDTO = inputProcessor.invalidInputCommandResponder(requestDTO);
 
-    //  ASSERT_EQ(responseDTO.clientIDs.size(), 1);
-    // ASSERT_EQ(responseDTO.clientIDs[0], clientID);
-    // ASSERT_EQ(responseDTO.command, "INVALID INPUT COMMAND");
-    // ASSERT_EQ(responseDTO.data, "");
-};
+    ASSERT_EQ(responseDTO.clientIDs.size(), 1);
+    ASSERT_EQ(responseDTO.clientIDs[0], clientID);
+    ASSERT_EQ(responseDTO.command, "INVALID INPUT COMMAND");
+    ASSERT_EQ(responseDTO.data, "");
+}
 
-//stub 
+// Need to implement;
 TEST(InputProcessor, processInvalidCommand) {
     
 };
