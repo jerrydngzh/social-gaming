@@ -46,7 +46,7 @@ void ServerManager::startServer()
 
             // NOTE: ServerProcessor execution control flow is inlined 
             // into ServerManager, as opposed to a separate class.
-            ClientsToServerDataObject requestDTO = messageDTOToServerProcessorDTO(request);
+            ClientToServerDataObject requestDTO = messageDTOToServerProcessorDTO(request);
             ServerToClientsDataObject responseDTO;
 
             /* TODO: 
@@ -56,24 +56,24 @@ void ServerManager::startServer()
             */ 
             // Figures out what process to run depending on the `command`
             Command command = InputCommandMap[requestDTO.command];
+
             switch (command)
             {
                 case Command::CREATE:
-                    responseDTO = createProcessor.processCreateCommand(requestDTO);
+                    responseDTO = createProcessor.process(requestDTO);
                     break;
                 case Command::JOIN:
-                    responseDTO = joinProcessor.processJoinCommand(requestDTO);
+                    responseDTO = joinProcessor.process(requestDTO);
                     break;
                 case Command::INPUT:
-                    responseDTO = inputProcessor.processInputCommand(requestDTO);
+                    responseDTO = inputProcessor.process(requestDTO);
                     break;
                 default:
-                    responseDTO = invalidCommandProcessor.processInvalidCommand(requestDTO);
+                    responseDTO = invalidCommandProcessor.process(requestDTO);
                     break;
             }
 
             std::deque<MessageProcessors::ResponseMessageDTO> responses = serverProcessorDTOToMessageDTO(responseDTO);
-
             const auto outgoing = buildOutgoing(responses);
             this->server->send(outgoing);
         }
@@ -195,12 +195,12 @@ ServerManager::buildOutgoing(const std::deque<MessageProcessors::ResponseMessage
     return outgoing;
 }
 
-ClientsToServerDataObject ServerManager::messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message)
+ClientToServerDataObject ServerManager::messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message)
 {
-    ClientsToServerDataObject requestDTO;
-    requestDTO.clientID = message.clientId;
-    requestDTO.command = message.command;
-    requestDTO.data = message.data;
+    uintptr_t clientID = message.clientId;
+    std::string command = message.command;
+    std::string data = message.data;
+    ClientToServerDataObject requestDTO = {clientID, command, data};
     return requestDTO;
 }
 

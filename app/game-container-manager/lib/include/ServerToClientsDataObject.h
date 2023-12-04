@@ -13,10 +13,11 @@
 
 struct ServerToClientsDataObject
 {
-    const std::vector<uintptr_t> clientIDs;
-    const std::string command;
-    const std::string data;
+    std::vector<uintptr_t> clientIDs;
+    std::string command;
+    std::string data;
 
+    ServerToClientsDataObject() {};
     ServerToClientsDataObject(const std::vector<uintptr_t> clientIDs, const std::string command, const std::string data)
         : clientIDs(clientIDs), command(command), data(data) {}
 
