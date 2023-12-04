@@ -8,7 +8,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 add_library(game-container-manager-lib)
 target_sources(game-container-manager-lib
   PRIVATE
-    gameContainerManager.cpp
+    gamesDataManager.cpp
+    serverProcessors.cpp
 )
 target_include_directories(game-container-manager-lib
   PUBLIC

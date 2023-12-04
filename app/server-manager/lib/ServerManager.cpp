@@ -46,29 +46,34 @@ void ServerManager::startServer()
 
             // NOTE: ServerProcessor execution control flow is inlined 
             // into ServerManager, as opposed to a separate class.
-            C2SDTO requestDTO = messageDTOToServerProcessorDTO(request);
-            S2CDTO responseDTO;
+            ClientToServerDataObject requestDTO = messageDTOToServerProcessorDTO(request);
+            ServerToClientsDataObject responseDTO;
 
+            /* TODO: 
+                Encapsulate Command Processing in its own Class. 
+                Create Map To automate the switch case - so that this code 
+                does not need to be rewritten every single time we add a new command processor. 
+            */ 
             // Figures out what process to run depending on the `command`
             Command command = InputCommandMap[requestDTO.command];
+
             switch (command)
             {
                 case Command::CREATE:
-                    responseDTO = createProcessor.processCreateCommand(requestDTO);
+                    responseDTO = createProcessor.process(requestDTO);
                     break;
                 case Command::JOIN:
-                    responseDTO = joinProcessor.processJoinCommand(requestDTO);
+                    responseDTO = joinProcessor.process(requestDTO);
                     break;
                 case Command::INPUT:
-                    responseDTO = inputProcessor.processInputCommand(requestDTO);
+                    responseDTO = inputProcessor.process(requestDTO);
                     break;
                 default:
-                    responseDTO = invalidCommandProcessor.processInvalidCommand(requestDTO);
+                    responseDTO = invalidCommandProcessor.process(requestDTO);
                     break;
             }
 
             std::deque<MessageProcessors::ResponseMessageDTO> responses = serverProcessorDTOToMessageDTO(responseDTO);
-
             const auto outgoing = buildOutgoing(responses);
             this->server->send(outgoing);
         }
@@ -190,16 +195,16 @@ ServerManager::buildOutgoing(const std::deque<MessageProcessors::ResponseMessage
     return outgoing;
 }
 
-C2SDTO ServerManager::messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message)
+ClientToServerDataObject ServerManager::messageDTOToServerProcessorDTO(const MessageProcessors::RequestMessageDTO &message)
 {
-    C2SDTO requestDTO;
-    requestDTO.clientID = message.clientId;
-    requestDTO.command = message.command;
-    requestDTO.data = message.data;
+    uintptr_t clientID = message.clientId;
+    std::string command = message.command;
+    std::string data = message.data;
+    ClientToServerDataObject requestDTO = {clientID, command, data};
     return requestDTO;
 }
 
-std::deque<MessageProcessors::ResponseMessageDTO> ServerManager::serverProcessorDTOToMessageDTO(const S2CDTO &message)
+std::deque<MessageProcessors::ResponseMessageDTO> ServerManager::serverProcessorDTOToMessageDTO(const ServerToClientsDataObject &message)
 {
     std::deque<MessageProcessors::ResponseMessageDTO> responses;
 

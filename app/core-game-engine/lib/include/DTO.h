@@ -61,7 +61,7 @@ struct DTOtoGameContainerManager {
     GameRequest request; // general request such as players request, may not need this
 };
 
-struct C2SDTO
+struct ClientsToServerDataObject
 {
     int clientID;
     std::string command;
