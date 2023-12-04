@@ -20,8 +20,17 @@ set_target_properties(game-state-lib PROPERTIES
   CXX_STANDARD 20
 )
 
+target_link_libraries(game-state-lib
+  tree-sitter-json
+  tree-sitter-sg
+  cpp-tree-sitter
+)
+
 #include header
 target_include_directories(game-state-lib
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  PRIVATE
+  ${tree-sitter-json_SOURCE_DIR} # This points to the include directory of tree-sitter-json
+  ${tree-sitter-sg_SOURCE_DIR} # This points to the include directory of tree-sitter-json
 )

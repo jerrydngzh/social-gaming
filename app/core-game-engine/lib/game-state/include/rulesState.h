@@ -6,14 +6,20 @@
 
 class RulesState {
    public:
-    const ts::Tree& tree;
-    ts::Node* currentNode;
+    // Rules position
+    ts::Tree* tree = nullptr;
+    ts::Node* currentNode = nullptr;
     std::map<ts::Node*, Value*> instructionState;
+    bool isParallel = false;
 
-    RulesState();
+    // IO
+    std::map<int, Value*> requests;
+
+    RulesState(){};
     ~RulesState() {
         for (auto& [node, value] : instructionState) {
             delete value;
         }
+        delete tree;
     }
 };
