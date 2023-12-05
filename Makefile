@@ -33,6 +33,10 @@ test-client:
 	@echo "[INFO] client tests commencing..." ; \
 	cd $(CLIENT_BUILD_DIR) && bin/tests-client
 
+#******************************
+#		CLIENT MANAGER
+#******************************
+# cannot build as independent component, only available through integrated build
 
 #******************************
 #	   CORE GAME ENGINE
