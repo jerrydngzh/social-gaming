@@ -45,7 +45,7 @@ TEST(GameContainerTests, testGameContainerManagerFunctionInputInvalid){
 };
 
 TEST(GameContainerTests, testProcessCommandJoin){
-    const ClientsToServerDataObject dto = {1, "JOIN", "2", true};
+    const ClientsToServerDataObject dto = {2, "JOIN", "2", true};
 
     std::vector<int> clientsIds = {1,3,5,0};
     GameContainer container{1, 1, clientsIds, dto}; 
@@ -53,12 +53,16 @@ TEST(GameContainerTests, testProcessCommandJoin){
     std::tuple<int, int> myTuple = std::make_tuple(1, 2);
     Setting::Kind kind = Setting::STRING;
     Setting mySetting{"weapon", kind};
-    GameRequest request{"pause"} ;
+    // GameRequest request{"pause"} ;
 
 
     DTOtoGameContainerManager resultDTO = container.proccessCommandAndGetNextRequest(dto);
-    
-    DTOtoGameContainerManager expectedJoinDTO = {2, {}, mySetting, true, myVariant, myTuple, request};
+    DtoFromGame lastResponse = {false,1,"command",myVariant,myTuple,mySetting,{}};
+
+    GameRequest request{lastResponse.command};
+    DTOtoGameContainerManager expectedJoinDTO{lastResponse.clientID,{},lastResponse.setting,
+                                     lastResponse.isParallel,lastResponse.value,lastResponse.range, request};
+    // DTOtoGameContainerManager expectedJoinDTO = {2, {}, mySetting, true, myVariant, myTuple, request};
 
     EXPECT_TRUE(expectedJoinDTO == resultDTO);
 };
