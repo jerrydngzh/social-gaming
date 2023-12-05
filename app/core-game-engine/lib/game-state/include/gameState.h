@@ -10,8 +10,10 @@
 
 class GameState {
    public:
+    GameState() = default;
     ~GameState();
 
+    // Fields holding the state
     std::map<std::string, Setting*> settings;
     std::map<int, MemberState*> audience;
     std::map<int, MemberState*> players;
@@ -28,7 +30,9 @@ class GameState {
     void addPerPlayer(Value* value);
     void addPerAudience(Value* value);
 
-    // Methods for interacting with Game Container
+    void setRuleTree(ts::Tree* tree);
+
+    // Methods used in the game lobby
 
     //   Configuration
     void addSetting(Setting* setting);
@@ -36,4 +40,12 @@ class GameState {
     //   Players
     void addPlayer(MemberState* player);
     void addAudience(MemberState* audience);
+
+    // Methods used in execution of the game
+
+    void resolveRequest(int client, std::string response);
+    void resolveRequest(int client, int response);
+    void resolveRequest(int client, bool response);
+
+    bool shouldResume();
 };
