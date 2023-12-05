@@ -49,6 +49,7 @@ private:
 // and resolve dependency issues
 class Interpreter {
 public:
+    Interpreter() = default;
     DtoFromGame run(GameState gs){
         // will either return the apropriate value
         // or take in a repsonse dto which it will then proporgate by reference
