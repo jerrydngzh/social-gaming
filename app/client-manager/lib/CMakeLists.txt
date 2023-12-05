@@ -26,8 +26,8 @@ find_package(Threads REQUIRED)
 
 target_link_libraries(client-manager-lib
   PRIVATE
-    networking
     message-processors-lib
+    networking
     ${CURSES_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
 )

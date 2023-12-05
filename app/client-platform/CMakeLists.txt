@@ -11,6 +11,7 @@ set_target_properties(ClientPlatform
 
 target_link_libraries(ClientPlatform
   networking
+  message-processors-lib
   client-manager-lib
 )
 
