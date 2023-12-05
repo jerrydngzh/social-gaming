@@ -1,6 +1,7 @@
 // TODO: Remove dead code, aka commented out code.
 #include "gamesDataManager.h"
 
+
 GameContainer::GameContainer(int gameContainerID) {}
 
 int GameContainer::getGameContainerID() const
@@ -27,6 +28,9 @@ std::string GameContainer::addPlayer(const int clientID) {
     return response;
 }
 
+const std::vector<int>& GameContainer::getPlayers() const {
+        return playerIDs;
+}
 
 // GameContainerManager Implementation
 GameContainerManager::GameContainerManager() {}
@@ -61,6 +65,15 @@ bool GameContainerManager::doesGameContainerExist(const int gameContainerID) con
     auto it = gameContainerMap.find(gameContainerID);
     bool doesGameContainerExist = (it != gameContainerMap.end());
     return doesGameContainerExist;
+}
+
+GameContainer* GameContainerManager::getGameContainer(int gameContainerID) {
+        auto it = gameContainerMap.find(gameContainerID);
+        if (it != gameContainerMap.end()) {
+            return it->second.get();
+        } else {
+            return nullptr; // Game container with the specified ID not found
+        }
 }
 
 // TODO: This does not currently do what it is supposed to do.
