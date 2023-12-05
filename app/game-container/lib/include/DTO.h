@@ -18,6 +18,10 @@ struct ClientData {
 
 struct GameRequest {
     std::string request;
+
+    bool operator==(const GameRequest& other) const {
+        return request == other.request;
+    }
 };
 
 struct DtoFromGame {
@@ -73,6 +77,16 @@ struct DTOtoGameContainerManager {
     std::variant<int, bool> value;
     std::tuple<int, int> range;
     GameRequest request; // general request such as players request, may not need this
+
+    bool operator==(const DTOtoGameContainerManager& other) const {
+        return clientId == other.clientId &&
+               playerList == other.playerList &&
+               setting == other.setting &&
+               isParallel == other.isParallel &&
+               value == other.value &&
+               range == other.range &&
+               request == other.request;
+    }
 };
 
 struct ClientsToServerDataObject

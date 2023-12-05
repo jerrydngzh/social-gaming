@@ -25,6 +25,7 @@ public:
     int getOwnerID() const { return ownerID; }
     int getGameInviteCode() const { return gameInviteCode; }
     const std::vector<int> &getPlayerList() const { return playerList; }
+    void addValidInput(std::string s);
 
 private:
     void addPlayerToList(int clientID);
@@ -42,6 +43,7 @@ private:
     Setting mySetting{"weapon", kind};
     DtoFromGame lastResponse = {false,1,"command",myVariant,myTuple,mySetting,{}};
     
+    
 };
 
 // Stub class for interpreter as 
@@ -49,6 +51,7 @@ private:
 // and resolve dependency issues
 class Interpreter {
 public:
+    Interpreter() = default;
     DtoFromGame run(GameState gs){
         // will either return the apropriate value
         // or take in a repsonse dto which it will then proporgate by reference

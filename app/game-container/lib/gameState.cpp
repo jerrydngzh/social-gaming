@@ -1,4 +1,5 @@
 #include "gameState.h"
+#include <iostream>
 
 // Destructor
 
@@ -27,11 +28,13 @@ GameState::~GameState() {
 
 void GameState::addConstant(Value* value) {
     value->isConst = true;
-    values[value->name] = value;
+    values.insert(std::make_pair(value->name, value));
+    // values [value->name] = value;
 }
 
 void GameState::addVariable(Value* value) {
-    values[value->name] = value;
+    values.insert(std::make_pair(value->name, value));
+    //values[value->name] = value;
 }
 
 void GameState::addPerPlayer(Value* value) {

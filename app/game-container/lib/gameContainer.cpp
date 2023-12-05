@@ -31,9 +31,9 @@ GameContainer::GameContainer(int ownerId, int inviteCode, std::vector<int> playe
 
 
     // processing of the dto object
-    ClientData clData = {serverDTO.data};
+    ClientData clientData = {serverDTO.data};
     InputOrJoin binaryEnum = JOIN;
-    DTOtoGame dtoGame = {serverDTO.clientID,binaryEnum,clData};
+    DTOtoGame dtoGame = {serverDTO.clientID, binaryEnum, clientData};
     
     interpeterCommunication(game);
 };
@@ -67,9 +67,9 @@ DTOtoGameContainerManager GameContainer::proccessCommandAndGetNextRequest(const 
         MemberState newUser{"temp", serverDTO.clientID};
         if(serverDTO.isPlayer){
             addPlayerToList(serverDTO.clientID);
-            game.addPlayer(&newUser);
+            // game.addPlayer(&newUser);
         } else{
-            game.addAudience(&newUser);
+            // game.addAudience(&newUser);
         }
         
     }
@@ -81,7 +81,7 @@ DTOtoGameContainerManager GameContainer::proccessCommandAndGetNextRequest(const 
         Setting::Kind kind = Setting::STRING;
         if(validateInput(serverDTO.command)){
             Setting newSetting{serverDTO.data, kind};
-            game.addSetting(&newSetting);
+            // game.addSetting(&newSetting);
         } 
         // If the input is not valid we need to send the response back to game container manager
         // Without running interpreter
@@ -94,5 +94,7 @@ DTOtoGameContainerManager GameContainer::proccessCommandAndGetNextRequest(const 
     DTOtoGameContainerManager dto = GameContainerProcessor(lastResponse);
     return dto;
 }
-
+void GameContainer::addValidInput(std::string s){
+    lastResponse.validInputs.push_back(s);
+}
 
