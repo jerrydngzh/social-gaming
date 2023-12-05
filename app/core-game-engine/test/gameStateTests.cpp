@@ -1,5 +1,6 @@
 #include "deserializer.h"
 #include "gameState.h"
+#include "util.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -7,7 +8,17 @@
 //      GLOBAL VARIABLES
 //******************************
 
+static const std::string FILE_LOCATION = "test-game-files/rock-paper-scissors.game";
 static const bool TEST_PRINT = false;
+
+//******************************
+//          SETUP
+//******************************
+
+// get the file contents
+static std::string init() {
+    return parseGAMEFromFile(FILE_LOCATION);
+}
 
 //******************************
 //           TESTS
@@ -61,9 +72,12 @@ TEST(gameState, initialization) {
     EXPECT_EQ(iS->value, 2);
 }
 
-TEST(gameState, factroy) {
+TEST(gameState, factory) {
+    std::string fileContents = init();
+    std::unique_ptr<StaticGameData> gameData = std::make_unique<StaticGameData>(fileContents);
+
     GameStateFactory gSF;
-    GameState gS = gSF.createInitialGameState();
+    GameState gS = gSF.createInitialGameState(gameData);
 
     EXPECT_EQ(gS.values["weapons"]->kind, Value::Kind::LIST);
 }

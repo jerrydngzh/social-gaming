@@ -11,7 +11,7 @@
 
 static const std::string FILE_LOCATION = "test-game-files/rock-paper-scissors.game";
 static const std::string LIBRARY_TYPE = "constants";
-static const bool TEST_PRINT = true;
+static const bool TEST_PRINT = false;
 
 //******************************
 //          SETUP

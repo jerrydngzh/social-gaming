@@ -19,6 +19,8 @@ class GameLibrary {
         GameLibrary(const std::vector<Mapping> &data);
         ~GameLibrary();
         
+        Mapping getMapping(int index) const;
+
         std::variant<std::string, int, bool> lookup(const std::string pathToFind);
         void print() const;
 };
