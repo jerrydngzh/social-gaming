@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 #include <string_view>
+#include "DTO.h"
 
 #include "gameState.h"
 
@@ -24,5 +25,5 @@ class Interpreter {
     Interpreter();
     ~Interpreter();
 
-    void run(GameState gs);
+    DtoFromGame run(GameState* gs);
 };

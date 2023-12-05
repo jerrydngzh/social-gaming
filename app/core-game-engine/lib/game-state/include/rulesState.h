@@ -8,7 +8,8 @@ class RulesState {
    public:
     // Rules position
     ts::Tree* tree = nullptr;
-    ts::Node* currentNode = nullptr;
+    ts::Node currentNode = ts::Node(TSNode());
+    ts::Node nextNode = ts::Node(TSNode());
     std::map<ts::Node*, Value*> instructionState;
     bool isParallel = false;
 

@@ -4,21 +4,70 @@ extern "C" {
 TSLanguage* tree_sitter_socialgaming();
 }
 
+DtoFromGame requestInputChoice(int clientID, std::string prompt, std::vector<std::string> choices, int timeout);
+DtoFromGame requestInputText(int clientID, std::string prompt, int timeout);
+DtoFromGame requestInputRange(int clientID, std::string prompt, int min, int max, int timeout);
+DtoFromGame requestInputVote(int clientID, std::string prompt, std::vector<std::string> choices, int timeout);
+DtoFromGame outputMessage(int clientID, std::string message, int timeout);
+DtoFromGame outputScores(std::map<int, int> scores);
+DtoFromGame nullDto();
+DtoFromGame endGameDto();
+
 const ts::Language Interpreter::language = tree_sitter_socialgaming();
 
-void Interpreter::run(GameState gs) {
-    ts::Node n = *gs.rulesState.currentNode;
-    const ts::Symbol type = n.getSymbol();
+//Game state is manipulated throught the interpreter proccess
+GameState* gs;
+//The request variable is set once the interpreter needs to request user input
+DtoFromGame request = nullDto();
 
-    auto actionIt = Interpreter::actions.find(type);
+DtoFromGame Interpreter::run(GameState* gameStatePointer) {
+    gs = gameStatePointer;
+    request = nullDto();
 
-    if (actionIt != Interpreter::actions.end()) {
-        Action* action = actionIt->second;
-        action->execute(n);
-    } else {
-        // Handle other symbols as needed
-        std::cout << "Unimplemented node type: " << n.getType() << " (" << n.getSymbol() << ")" << std::endl;
+    //Loop through rules until we have a request for user input
+    while (request.command == "null") {
+        //First update the current rule we are at
+        if (gs->rulesState.currentNode.getID() == gs->rulesState.nextNode.getID()) {
+            //Default recursion
+            ts::Node n = gs->rulesState.currentNode;
+
+            if (n.getNumNamedChildren() > 0) {
+                gs->rulesState.currentNode = n.getChild(0);
+            } else
+            if (!n.getNextSibling().isNull()) {
+                gs->rulesState.currentNode = n.getNextSibling();
+            } else 
+            {
+                n = n.getParent();
+                while(n.getNextSibling().isNull()) {
+                    //If we reach the root while looking for next rule, no more rules left to interpret, end game
+                    if (n.getID() == gs->rulesState.tree->getRootNode().getID()) {
+                        return endGameDto();
+                    }
+                    n = n.getParent();
+                }
+                gs->rulesState.currentNode = n.getNextSibling();
+            }
+        } else {
+            gs->rulesState.currentNode = gs->rulesState.nextNode;
+        }
+
+        //Execute the next rule
+        ts::Node n = gs->rulesState.currentNode;
+
+        //Find and execute assoiciated action with the symbol of this node.
+        const ts::Symbol type = n.getSymbol();
+        auto actionIt = Interpreter::actions.find(type);
+
+        if (actionIt != Interpreter::actions.end()) {
+            Action* action = actionIt->second;
+            action->execute(n);
+        } else {
+            // Handle other symbols as needed
+            std::cout << "Unimplemented node type: " << n.getType() << " (" << n.getSymbol() << ")" << std::endl;
+        }
     }
+    return request;
 }
 
 ts::Symbol Interpreter::toSymbol(const std::string_view& symbolName) {
@@ -78,3 +127,17 @@ const std::map<ts::Symbol, Interpreter::Action*> Interpreter::actions = {
     {toSymbol("rule"), new RuleAction()},
     // Add more symbols and corresponding action objects
 };
+DtoFromGame requestInputChoice(Value* target, int clientID, std::string prompt, std::vector<std::string> choices, int timeout){
+    gs->rulesState.requests.insert(std::make_pair(clientID, target));
+    return DtoFromGame{gs->rulesState.isParallel, clientID, "INPUT",false,{0,0},Setting("null", Setting::Kind::INTEGER), choices};
+}
+DtoFromGame outputMessage(Value* target, int clientID, std::string message, int timeout){
+    gs->rulesState.requests.insert(std::make_pair(clientID, target));
+    return DtoFromGame{gs->rulesState.isParallel, clientID, "INPUT",false,{0,0},Setting("null", Setting::Kind::INTEGER), {}};
+}
+DtoFromGame nullDto(){
+    return DtoFromGame{false, 0, "null", false, {0,0}, Setting("null", Setting::Kind::INTEGER), {}};
+}
+DtoFromGame endGameDto(){
+    return DtoFromGame{false, 0, "GAMEEND", false, {0,0}, Setting("null", Setting::Kind::INTEGER), {}};
+}
