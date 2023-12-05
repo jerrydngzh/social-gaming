@@ -15,4 +15,5 @@ private:
     std::unique_ptr<MessageProcessors::ClientMessageProcessor> clientMessageProcessor;
 
     void textEntryHandler(const std::string& s);
+    MessageProcessors::ClientRequestMessageDTO matchCommandToRequest(std::string_view message);
 };

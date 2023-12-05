@@ -12,7 +12,6 @@ const std::string JSON_DATA_ACCESSOR = "data";
 
 RequestMessageDTO MessageProcessor::processRequestMessageImpl(std::string_view message) {
     json jsonObj = json::parse(message);
-    // uintptr_t clientId = jsonObj[JSON_CLIENT_ID_ACCESSOR];
     std::string command = jsonObj[JSON_COMMAND_ACCESSOR];
     
     // NOTE: we're passing down data as a string to be processed in the 
@@ -58,7 +57,7 @@ ClientResponseMessageDTO ClientMessageProcessor::processIncomingServerResponseMe
     return clientResponseMessageDTO;
 }
 
-std::string ClientMessageProcessor::processOutgoingClientRequestMessageImpl(const ClientRequestMessageDTO& message) {
+std::string ClientMessageProcessor::buildOutgoingClientMessageImpl(const ClientRequestMessageDTO& message) {
     std::string command = message.command;
     std::string data = message.data;
 

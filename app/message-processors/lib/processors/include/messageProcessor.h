@@ -46,16 +46,18 @@ struct ClientResponseMessageDTO {
 
 class ClientMessageProcessor {
     public:
+        // TODO: unit test this
         ClientResponseMessageDTO processIncomingServerMessage(std::string_view message) {
             return processIncomingServerResponseMessageImpl(message);
         }
         
-        std::string processOutgoingClientMessage(ClientRequestMessageDTO message) {
-            return processOutgoingClientRequestMessageImpl(message);
+        // TODO: unit test this
+        std::string buildOutgoingClientMessage(ClientRequestMessageDTO message) {
+            return buildOutgoingClientMessageImpl(message);
         }
     private:
         ClientResponseMessageDTO processIncomingServerResponseMessageImpl(std::string_view message);
-        std::string processOutgoingClientRequestMessageImpl(const ClientRequestMessageDTO& message);
+        std::string buildOutgoingClientMessageImpl(const ClientRequestMessageDTO& message);
 };
 
 }

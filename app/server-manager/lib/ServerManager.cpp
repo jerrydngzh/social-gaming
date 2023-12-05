@@ -2,7 +2,6 @@
 
 const char *htmlLoc = "./app/server-platform/index.html";
 
-
 ServerManager::ServerManager(const unsigned short port)
     : gameContainerManager(), clientsManager(), createProcessor(this->gameContainerManager, this->clientsManager),
       joinProcessor(this->gameContainerManager, this->clientsManager), invalidCommandProcessor(),
@@ -39,38 +38,55 @@ void ServerManager::startServer()
 
         // single execution of requests based on batch of incoming messages
         for (const auto &request : incomingMessages)
-        {   
+        {
             // const auto messageResult = this->serverProcessor->execute(incomingMessages);
             // const auto outgoing = buildOutgoing(messageResult);
             // this->server->send(outgoing);
 
-            // NOTE: ServerProcessor execution control flow is inlined 
+            // NOTE: ServerProcessor execution control flow is inlined
             // into ServerManager, as opposed to a separate class.
             ClientToServerDataObject requestDTO = messageDTOToServerProcessorDTO(request);
             ServerToClientsDataObject responseDTO;
 
-            /* TODO: 
-                Encapsulate Command Processing in its own Class. 
-                Create Map To automate the switch case - so that this code 
-                does not need to be rewritten every single time we add a new command processor. 
-            */ 
+            /* TODO:
+                Encapsulate Command Processing in its own Class.
+                Create Map To automate the switch case - so that this code
+                does not need to be rewritten every single time we add a new command processor.
+            */
             // Figures out what process to run depending on the `command`
             Command command = InputCommandMap[requestDTO.command];
 
+            // TODO: Handle commands from client
+            /*
+                USERNAME -- returns a username to map to client on server 
+
+                then immediately the server will return the response MENU_SELECT
+                which will append the following message to be sent:
+                // << "Please enter one of the following commands to interact with the server:" << std::endl
+                // << "1. \"" << OutputCommandMap[Command::CREATE] << "\"" << std::endl
+                // << "\t -> To create a new game room." << std::endl
+                // << "2. \"" << OutputCommandMap[Command::JOIN] <<  std::endl
+                // << "\t -> To join an existing game room." << std::endl;
+
+                SELECT_CREATE -> sever: return list of games available
+                    --> followed by CREATE {attached to message is the game file} to parse / select 
+                SELECT_JOIN -> server: ask for a room code to join
+                    --> followed by JOIN {contains the game room code for client to join}
+            */
             switch (command)
             {
-                case Command::CREATE:
-                    responseDTO = createProcessor.process(requestDTO);
-                    break;
-                case Command::JOIN:
-                    responseDTO = joinProcessor.process(requestDTO);
-                    break;
-                case Command::INPUT:
-                    responseDTO = inputProcessor.process(requestDTO);
-                    break;
-                default:
-                    responseDTO = invalidCommandProcessor.process(requestDTO);
-                    break;
+            case Command::CREATE:
+                responseDTO = createProcessor.process(requestDTO);
+                break;
+            case Command::JOIN:
+                responseDTO = joinProcessor.process(requestDTO);
+                break;
+            case Command::INPUT:
+                responseDTO = inputProcessor.process(requestDTO);
+                break;
+            default:
+                responseDTO = invalidCommandProcessor.process(requestDTO);
+                break;
             }
 
             std::deque<MessageProcessors::ResponseMessageDTO> responses = serverProcessorDTOToMessageDTO(responseDTO);
@@ -91,17 +107,13 @@ void ServerManager::onConnect(networking::Connection c)
     clients.push_back(c);
 
     std::deque<Message> outgoing;
-    std::string_view outgoingCommand = OutputCommandMap[Command::NEW_CONNECTION]; 
+    std::string_view outgoingCommand = OutputCommandMap[Command::NEW_CONNECTION];
 
+    // TODO: move this to messageProcessing ?
     MessageProcessors::ResponseMessageDTO response;
     std::stringstream message;
     message << "Welcome to the server!" << std::endl
             << "Please enter a username: " << std::endl;
-            // << "Please enter one of the following commands to interact with the server:" << std::endl
-            // << "1. \"" << OutputCommandMap[Command::CREATE] << "\"" << std::endl 
-            // << "\t -> To create a new game room." << std::endl
-            // << "2. \"" << OutputCommandMap[Command::JOIN] <<  " <room-code>\"" <<  std::endl
-            // << "\t -> To join an existing game room." << std::endl;
 
     response.clientId = c.id;
     response.messageStatus = true;

@@ -42,7 +42,7 @@ void ClientManager::startClient()
                 chatWindow->displayText("FAILED: " + serverResponse.messageResult);
             }
 
-            // TODO: handle the command returned from server response
+            // TODO: process incoming messages, handle the command from server
             // TODO: introduce a map for command to enum
             /*
             switch (serverResponse.command)
@@ -71,15 +71,18 @@ void ClientManager::textEntryHandler(const std::string &s)
     }
     else
     {
-        // TODO: match the enum to command string
-        // flow the command to the message processor
+        // TODO: flow the logic here, matching commands
+
+
+
         MessageProcessors::ClientRequestMessageDTO requestDTO = matchCommandToRequest(s);
-        std::string outgoingMessage = this->clientMessageProcessor->processOutgoingClientMessage(requestDTO);
+        std::string outgoingMessage = this->clientMessageProcessor->buildOutgoingClientMessage(requestDTO);
         client->send(outgoingMessage);
     }
 }
 
-// TODO: 
+// TODO: unit test this
+// TODO: look at the pending command sent from the server, and match it against a corresponding command to be sent back out
 /*
     client server interaction:
     1a. server starts up, waits for a client
@@ -113,10 +116,24 @@ void ClientManager::textEntryHandler(const std::string &s)
         a. SERVER_RESPONSE: game start, enter something (based on the message displayed)
         b. CLIENT_REQUEST: enter that thing
             - server will do validation on the message 
+
+
+    TYPES OF COMMANDS FOR CLIENT FROM SERVER:
+    1. NEW_CONNECTION -> supply a username
+    2. *MENU_SELECT -> contains a message expecting client to enter "1" to create or "2" join a game
+        - 1 -> sends command SELECT_CREATE: server responds with more info about the creation menu
+        - 2 -> sends command SELECT_JOIN: server asks for game code
+    3. ?START -> if owner, starts the game
+    4. *INPUT -> input something according to the messageResult/commandData from server
+    5. *INFO -> just displays info, expects no commands for client 
+    6. *GAME_END -> ends the game
 */
-MessageProcessors::ClientRequestMessageDTO matchCommandToRequest(std::string message)
+MessageProcessors::ClientRequestMessageDTO ClientManager::matchCommandToRequest(std::string_view message)
 {
     MessageProcessors::ClientRequestMessageDTO requestDTO;
+
+    // TODO: insert logic here to handle deciding which command to attach, to send out
+
     requestDTO.command = "test";
     requestDTO.data = message;
     return requestDTO;
