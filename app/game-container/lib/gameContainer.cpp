@@ -94,5 +94,7 @@ DTOtoGameContainerManager GameContainer::proccessCommandAndGetNextRequest(const 
     DTOtoGameContainerManager dto = GameContainerProcessor(lastResponse);
     return dto;
 }
-
+void GameContainer::addValidInput(std::string s){
+    lastResponse.validInputs.push_back(s);
+}
 

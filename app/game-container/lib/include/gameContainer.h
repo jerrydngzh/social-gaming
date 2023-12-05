@@ -25,6 +25,7 @@ public:
     int getOwnerID() const { return ownerID; }
     int getGameInviteCode() const { return gameInviteCode; }
     const std::vector<int> &getPlayerList() const { return playerList; }
+    void addValidInput(std::string s);
 
 private:
     void addPlayerToList(int clientID);
@@ -41,6 +42,7 @@ private:
     Setting::Kind kind = Setting::STRING;
     Setting mySetting{"weapon", kind};
     DtoFromGame lastResponse = {false,1,"command",myVariant,myTuple,mySetting,{}};
+    
     
 };
 

@@ -25,6 +25,9 @@ class Setting {
         }
         return *this;
     }
+    bool operator==(const Setting& other) const {
+        return name == other.name && kind == other.kind;
+    }
 };
 
 class BooleanSetting : public Setting {
