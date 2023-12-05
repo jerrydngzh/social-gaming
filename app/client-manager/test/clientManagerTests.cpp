@@ -4,9 +4,10 @@
 #include "ClientManager.h"
 
 
-// TODO: server manager tests require mocks for:
-//       server, game engine, message processor, and server processor
+// TODO: client manager tests require mocks for:
+//       client, message processor
 TEST(ClientManagerTests, POC)
 {
     EXPECT_TRUE(true);
 } // POC
+

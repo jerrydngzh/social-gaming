@@ -96,11 +96,12 @@ void ServerManager::onConnect(networking::Connection c)
     MessageProcessors::ResponseMessageDTO response;
     std::stringstream message;
     message << "Welcome to the server!" << std::endl
-            << "Please enter one of the following commands to interact with the server:" << std::endl
-            << "1. \"" << OutputCommandMap[Command::CREATE] << "\"" << std::endl 
-            << "\t -> To create a new game room." << std::endl
-            << "2. \"" << OutputCommandMap[Command::JOIN] <<  " <room-code>\"" <<  std::endl
-            << "\t -> To join an existing game room." << std::endl;
+            << "Please enter a username: " << std::endl;
+            // << "Please enter one of the following commands to interact with the server:" << std::endl
+            // << "1. \"" << OutputCommandMap[Command::CREATE] << "\"" << std::endl 
+            // << "\t -> To create a new game room." << std::endl
+            // << "2. \"" << OutputCommandMap[Command::JOIN] <<  " <room-code>\"" <<  std::endl
+            // << "\t -> To join an existing game room." << std::endl;
 
     response.clientId = c.id;
     response.messageStatus = true;

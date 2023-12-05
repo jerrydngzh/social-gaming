@@ -31,5 +31,32 @@ class MessageProcessor {
         std::string processResponseMessageImpl(const ResponseMessageDTO& message);
 };
 
+
+struct ClientRequestMessageDTO {
+    std::string command;
+    std::string data;
+};
+
+struct ClientResponseMessageDTO {
+    bool messageStatus;
+    std::string messageResult;
+    std::string command;
+    std::string commandData;
+};
+
+class ClientMessageProcessor {
+    public:
+        ClientResponseMessageDTO processIncomingServerMessage(std::string_view message) {
+            return processIncomingServerResponseMessageImpl(message);
+        }
+        
+        std::string processOutgoingClientMessage(ClientRequestMessageDTO message) {
+            return processOutgoingClientRequestMessageImpl(message);
+        }
+    private:
+        ClientResponseMessageDTO processIncomingServerResponseMessageImpl(std::string_view message);
+        std::string processOutgoingClientRequestMessageImpl(const ClientRequestMessageDTO& message);
+};
+
 }
 

@@ -45,3 +45,30 @@ std::string MessageProcessor::processResponseMessageImpl(const ResponseMessageDT
     std::string jsonString = jsonStream.str();
     return jsonString;
 }
+
+ClientResponseMessageDTO ClientMessageProcessor::processIncomingServerResponseMessageImpl(std::string_view message) {
+    json jsonObj = json::parse(message);
+    bool messageStatus = jsonObj["messageStatus"];
+    std::string messageResult = jsonObj["messageResult"];
+    std::string command = jsonObj["command"];
+    std::string commandData = jsonObj["commandData"];
+
+    ClientResponseMessageDTO clientResponseMessageDTO{messageStatus, messageResult, command, commandData};
+
+    return clientResponseMessageDTO;
+}
+
+std::string ClientMessageProcessor::processOutgoingClientRequestMessageImpl(const ClientRequestMessageDTO& message) {
+    std::string command = message.command;
+    std::string data = message.data;
+
+    std::stringstream jsonStream; 
+
+    jsonStream << "{";
+    jsonStream << "\"command\":\"" << command << "\",";
+    jsonStream << "\"data\":\"" << data << "\"";
+    jsonStream << "}";
+
+    std::string jsonString = jsonStream.str();
+    return jsonString;
+}
