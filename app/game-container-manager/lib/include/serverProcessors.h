@@ -49,10 +49,6 @@ public:
     //     return createProcessImpl(requestDTO);
     // }
 
-private:
-    GameContainerManager &gameContainerManager; // game data API
-    ClientsManager &clientsManager; // client data API -- TODO: will probably merge into game data API
-
     ServerToClientsDataObject createProcessImpl(const ClientToServerDataObject &requestDTO);
 
     bool isCreateCommandValid(const ClientToServerDataObject &requestDTO);
@@ -60,6 +56,10 @@ private:
     ServerToClientsDataObject createGame(const ClientToServerDataObject &requestDTO);
 
     ServerToClientsDataObject invalidCreateCommandResponder(const ClientToServerDataObject &requestDTO);
+
+private:
+    GameContainerManager &gameContainerManager; // game data API
+    ClientsManager &clientsManager; // client data API -- TODO: will probably merge into game data API
 };
 
 /* TODO: The joinPipeline method has a conversion from string to int. There doesn't seem
@@ -83,10 +83,6 @@ public:
     //     return joinProcessImpl(requestDTO);
     // }
 
-private:
-    GameContainerManager &gameContainerManager;
-    ClientsManager &clientsManager;
-
     ServerToClientsDataObject joinProcessImpl(const ClientToServerDataObject &requestDTO);
 
     bool gameContainerExists(int gameContainerID);
@@ -98,6 +94,10 @@ private:
     ServerToClientsDataObject joinGame(const ClientToServerDataObject &requestDTO);
 
     ServerToClientsDataObject invalidJoinCommandResponder(const ClientToServerDataObject &requestDTO);
+
+private:
+    GameContainerManager &gameContainerManager;
+    ClientsManager &clientsManager;
 };
 
 /* InputProcessor
@@ -118,9 +118,6 @@ public:
     //     return inputProcessImpl(requestDTO);
     // }
 
-private:
-    GameContainerManager &gameContainerManager;
-    ClientsManager &clientsManager;
 
     ServerToClientsDataObject inputProcessImpl(const ClientToServerDataObject &requestDTO);
 
@@ -131,6 +128,10 @@ private:
     ServerToClientsDataObject stubGameRoomManagerProcessor(const ClientToServerDataObject &requestDTO);
 
     ServerToClientsDataObject invalidInputCommandResponder(const ClientToServerDataObject &requestDTO);
+
+private:
+    GameContainerManager &gameContainerManager;
+    ClientsManager &clientsManager;
 };
 
 /* InvalidCommandProcessor
@@ -151,7 +152,7 @@ public:
     // {
     //     return invalidCommandImpl(requestDTO);
     // }
+    ServerToClientsDataObject invalidCommandImpl(const ClientToServerDataObject &requestDTO);
 
 private:
-    ServerToClientsDataObject invalidCommandImpl(const ClientToServerDataObject &requestDTO);
 };
