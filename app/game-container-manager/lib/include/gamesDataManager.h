@@ -35,6 +35,8 @@ public:
     // Used to add a player to a game. Returns status of operation as string. 
     std::string addPlayer(const int clientID); 
 
+    const std::vector<int>& getPlayers() const;
+    
 private:
     [[nodiscard]]
     bool isClientAlreadyPlayer(const int clientID) const;
@@ -74,6 +76,10 @@ public:
     std::string addPlayerToGame(const int clientID, const int gameContainerID);
 
     std::string giveGameContainerPlayerInput(int gameContainerID, int clientID, std::string data);
+
+    GameContainer* getGameContainer(int gameContainerID);
+
+
 
 private:
     // Used to generate gameContainerID's. 
