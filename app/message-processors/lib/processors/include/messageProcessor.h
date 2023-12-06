@@ -9,6 +9,7 @@ struct RequestMessageDTO {
     std::string data;
 };
 
+// TODO: refactor messageStatus name, to isRequestSuccessful
 struct ResponseMessageDTO {
     uintptr_t clientId;
     bool messageStatus; //could change to enums [SUCCESS, FAILED]

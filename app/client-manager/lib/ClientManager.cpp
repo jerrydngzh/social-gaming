@@ -39,7 +39,7 @@ void ClientManager::startClient()
             }
             else
             {
-                chatWindow->displayText("FAILED: " + serverResponse.messageResult);
+                chatWindow->displayText("Request failed, please try again: " + serverResponse.messageResult);
             }
 
             // TODO: process incoming messages, handle the command from server
@@ -65,14 +65,14 @@ void ClientManager::startClient()
 void ClientManager::textEntryHandler(const std::string &s)
 {
     // TODO: map for commands
-    if ("exit" == s || "quit" == s)
+    if ("EXIT" == s || "QUIT" == s)
     {
         isClientDone = true;
     }
     else
     {
         // TODO: flow the logic here, matching commands
-
+        
 
 
         MessageProcessors::ClientRequestMessageDTO requestDTO = matchCommandToRequest(s);
@@ -110,13 +110,10 @@ void ClientManager::textEntryHandler(const std::string &s)
     
     4b. display of main screen ??? (for owner)
 
-
-
     5. playing the game -- inputs
         a. SERVER_RESPONSE: game start, enter something (based on the message displayed)
         b. CLIENT_REQUEST: enter that thing
             - server will do validation on the message 
-
 
     TYPES OF COMMANDS FOR CLIENT FROM SERVER:
     1. NEW_CONNECTION -> supply a username

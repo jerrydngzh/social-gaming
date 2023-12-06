@@ -109,19 +109,20 @@ void ServerManager::onConnect(networking::Connection c)
     std::deque<Message> outgoing;
     std::string_view outgoingCommand = OutputCommandMap[Command::NEW_CONNECTION];
 
-    // TODO: move this to messageProcessing ?
     MessageProcessors::ResponseMessageDTO response;
     std::stringstream message;
-    message << "Welcome to the server!" << std::endl
-            << "Please enter a username: " << std::endl;
-
+    message << "Welcome to the server! Please enter a username";
     response.clientId = c.id;
     response.messageStatus = true;
     response.messageResult = message.str();
     response.command = outgoingCommand;
     response.commandData = outgoingCommand;
+    
+    std::string outgoingMessage = this->messageProcessors->processOutgoingMessage(response);
 
-    outgoing.push_back({c, message.str()});
+    std::cout << outgoingMessage << std::endl;
+
+    outgoing.push_back({c, outgoingMessage});
     server->send(outgoing);
 }
 
