@@ -54,11 +54,9 @@ void ServerManager::startServer()
                 does not need to be rewritten every single time we add a new command processor.
             */
             // Figures out what process to run depending on the `command`
-            Command command = InputCommandMap[requestDTO.command];
-
             // TODO: Handle commands from client
             /*
-                USERNAME -- returns a username to map to client on server 
+                USERNAME -- returns a username to map to client on server
 
                 then immediately the server will return the response MENU_SELECT
                 which will append the following message to be sent:
@@ -69,25 +67,27 @@ void ServerManager::startServer()
                 // << "\t -> To join an existing game room." << std::endl;
 
                 SELECT_CREATE -> sever: return list of games available
-                    --> followed by CREATE {attached to message is the game file} to parse / select 
+                    --> followed by CREATE {attached to message is the game file} to parse / select
                 SELECT_JOIN -> server: ask for a room code to join
                     --> followed by JOIN {contains the game room code for client to join}
             */
-            switch (command)
-            {
-            case Command::CREATE:
-                responseDTO = createProcessor.process(requestDTO);
-                break;
-            case Command::JOIN:
-                responseDTO = joinProcessor.process(requestDTO);
-                break;
-            case Command::INPUT:
-                responseDTO = inputProcessor.process(requestDTO);
-                break;
-            default:
-                responseDTO = invalidCommandProcessor.process(requestDTO);
-                break;
-            }
+            if
+
+                switch (command)
+                {
+                case Command::CREATE:
+                    responseDTO = createProcessor.process(requestDTO);
+                    break;
+                case Command::JOIN:
+                    responseDTO = joinProcessor.process(requestDTO);
+                    break;
+                case Command::INPUT:
+                    responseDTO = inputProcessor.process(requestDTO);
+                    break;
+                default:
+                    responseDTO = invalidCommandProcessor.process(requestDTO);
+                    break;
+                }
 
             std::deque<MessageProcessors::ResponseMessageDTO> responses = serverProcessorDTOToMessageDTO(responseDTO);
             const auto outgoing = buildOutgoing(responses);
@@ -117,7 +117,7 @@ void ServerManager::onConnect(networking::Connection c)
     response.messageResult = message.str();
     response.command = outgoingCommand;
     response.commandData = outgoingCommand;
-    
+
     std::string outgoingMessage = this->messageProcessors->processOutgoingMessage(response);
 
     std::cout << outgoingMessage << std::endl;
