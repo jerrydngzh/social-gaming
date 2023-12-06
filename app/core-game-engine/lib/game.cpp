@@ -1,4 +1,4 @@
-#include "game.h"
+/*#include "game.h"
 #include "interpreter.h"
 
 Game::Game(const ts::Tree& tree, std::string_view fileContents, //to remove
@@ -17,7 +17,7 @@ Game::Game(const ts::Tree& tree, std::string_view fileContents, //to remove
     //runner(this, tree)
     {}
 
-Game::Game(std::string_view filename) : 
+Game::Game(std::string_view filename) :
     configurationLibrary(Configuration({})),
     constantsLibrary(Constants({})),
     variablesLibrary(Variables({})),
@@ -86,3 +86,5 @@ DtoFromGame Game::run(DTOtoGame dto){
 //getConfiguration, run
 // Configuration* initialize();
 // outMessage run()
+
+*/
