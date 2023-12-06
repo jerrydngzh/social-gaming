@@ -15,11 +15,13 @@ enum class IncomingCommandType {
 
 enum class OutgoingCommandType {
     QUIT,
-    LEAVE,
     EXIT,
-    MENU_SELECT,
     JOIN,
-    CREATE
+    CREATE,
+    USERNAME,
+    SELECT_CREATE,
+    SELECT_JOIN,
+    INPUT
 };
 
 
@@ -30,11 +32,11 @@ public:
     ClientManager(std::string_view ipAddress, std::string_view port);
 private:
     bool isClientDone = false;
-    IncomingCommandType currentCommand = IncomingCommandType::NEW_CONNECTION;
+    IncomingCommandType currentCommand;
+    OutgoingCommandType outgoingCommand;
 
     const std::unordered_map<std::string, OutgoingCommandType> outgoingCommandMap = {
         {"QUIT", OutgoingCommandType::QUIT},
-        {"LEAVE", OutgoingCommandType::LEAVE},
         {"EXIT", OutgoingCommandType::EXIT},
         {"JOIN", OutgoingCommandType::JOIN},
         {"CREATE", OutgoingCommandType::CREATE}
@@ -46,7 +48,7 @@ private:
         {"MENU_SELECT", IncomingCommandType::MENU_SELECT},
         {"INPUT", IncomingCommandType::INPUT},
         {"INFO", IncomingCommandType::INFO},
-        {"GAME_END", IncomingCommandType::GAME_END}
+        {"GAME_END", IncomingCommandType::GAME_END},
     };
 
     ClientManager* instance = nullptr;

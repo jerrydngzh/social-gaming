@@ -59,31 +59,36 @@ void ClientManager::startClient()
 // to proceed to the next step
 void ClientManager::matchCommandToIncomingCommand(std::string_view command)
 {
-    switch (incomingCommandMap[command])
+
+    if (incomingCommandMap.find(command) != incomingCommandMap.end())
     {
-    case IncomingCommandType::QUIT:
-        isClientDone = true;
-        break;
-    case IncomingCommandType::MENU_SELECT:
-        // results in only SELECT_CREATE or SELECT_JOIN as valid commands
-        currentCommand = IncomingCommandType::MENU_SELECT;
-        break;
-    case IncomingCommandType::INPUT:
-        // enter anything, INPUT command is sent out to server
-        currentCommand = IncomingCommandType::INPUT;
-        break;
-    case IncomingCommandType::INFO:
-        // just display the info, no follow up commands
-        currentCommand = IncomingCommandType::INFO;
-        break;
-    case IncomingCommandType::GAME_END:
-        // game is over, display the results
-        // should send out a command for a new menu?
-        currentCommand = IncomingCommandType::GAME_END;
-        break;
-    default:
+        switch (incomingCommandMap.at(command))
+        {
+        case IncomingCommandType::QUIT:
+            isClientDone = true;
+            break;
+        case IncomingCommandType::MENU_SELECT:
+            // results in only SELECT_CREATE or SELECT_JOIN as valid commands
+            currentCommand = IncomingCommandType::MENU_SELECT;
+            break;
+        case IncomingCommandType::INPUT:
+            // enter anything, INPUT command is sent out to server
+            currentCommand = IncomingCommandType::INPUT;
+            break;
+        case IncomingCommandType::INFO:
+            // just display the info, no follow up commands
+            currentCommand = IncomingCommandType::INFO;
+            break;
+        case IncomingCommandType::GAME_END:
+            // game is over, display the results
+            // should send out a command for a new menu?
+            currentCommand = IncomingCommandType::GAME_END;
+            break;
+        }
+    }
+    else
+    {
         currentCommand = IncomingCommandType::INVALID;
-        break;
     }
 }
 
@@ -111,7 +116,8 @@ void ClientManager::textEntryHandler(const std::string &s)
     }
     else
     {
-        if (currentCommand == IncomingCommandType::MENU_SELECT){
+        if (currentCommand == IncomingCommandType::MENU_SELECT)
+        {
             // expect SELECT_CREATE or SELECT_JOIN
             std::string command = s.substr(0, s.find(" "));
 
@@ -126,10 +132,6 @@ void ClientManager::textEntryHandler(const std::string &s)
             client->send(outgoingMessage);
             return;
         }
-        else if (currentCommand == IncomingCommandType::NEW_CONNECTION){
-            
-        }
-
         client->send(s);
     }
 }

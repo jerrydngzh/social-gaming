@@ -71,10 +71,20 @@ void ServerManager::startServer()
                 SELECT_JOIN -> server: ask for a room code to join
                     --> followed by JOIN {contains the game room code for client to join}
             */
-            if
 
-                switch (command)
+            if (InputCommandMap.find(requestDTO.command) != InputCommandMap.end())
+            {
+                switch (InputCommandMap.at(requestDTO.command))
                 {
+                case Command::USERNAME:
+                    // TODO: match username to client, return a message of the menu -- MENU_SELECT
+                    break;
+                case Command::SELECT_CREATE:
+                    // TODO: return a list of games available
+                    break;
+                case Command::SELECT_JOIN:
+                    // TODO: return a message asking for a room code to join
+                    break;
                 case Command::CREATE:
                     responseDTO = createProcessor.process(requestDTO);
                     break;
@@ -84,10 +94,12 @@ void ServerManager::startServer()
                 case Command::INPUT:
                     responseDTO = inputProcessor.process(requestDTO);
                     break;
-                default:
-                    responseDTO = invalidCommandProcessor.process(requestDTO);
-                    break;
                 }
+            }
+            else
+            {
+                responseDTO = invalidCommandProcessor.process(requestDTO);
+            }
 
             std::deque<MessageProcessors::ResponseMessageDTO> responses = serverProcessorDTOToMessageDTO(responseDTO);
             const auto outgoing = buildOutgoing(responses);
