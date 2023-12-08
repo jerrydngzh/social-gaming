@@ -15,7 +15,7 @@ class GameState {
     std::map<std::string, Setting*> settings;
     std::map<int, MemberState*> audience;
     std::map<int, MemberState*> players;
-    std::map<std::string, Value*> values;
+    std::map<std::string, Value*> values = {};
     RulesState rulesState;
 
     // Methods for initialization

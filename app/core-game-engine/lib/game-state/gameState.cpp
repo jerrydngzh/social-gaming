@@ -1,5 +1,7 @@
 #include "gameState.h"
 
+#include <cassert>
+
 // Destructor
 
 GameState::~GameState() {
@@ -29,7 +31,6 @@ void GameState::addConstant(Value* value) {
     value->isConst = true;
     values[value->name] = value;
 }
-
 void GameState::addVariable(Value* value) {
     values[value->name] = value;
 }
@@ -37,12 +38,16 @@ void GameState::addVariable(Value* value) {
 void GameState::addPerPlayer(Value* value) {
     perPlayerValues[value->name] = value;
 }
-
 void GameState::addPerAudience(Value* value) {
     perAudienceValues[value->name] = value;
 }
 
+void GameState::setRuleTree(ts::Tree* tree) {
+    rulesState.tree = tree;
+}
+
 // Configuration
+
 std::vector<Setting*> GameState::getSettings() const {
     std::vector<Setting*> settingsVector;
     for (auto setting : settings) {
@@ -63,4 +68,28 @@ void GameState::addPlayer(MemberState* player) {
 void GameState::addAudience(MemberState* audienceMember) {
     audienceMember->elements.insert(perAudienceValues.begin(), perAudienceValues.end());
     audience[audienceMember->id] = audienceMember;
+}
+
+// Execution
+void GameState::resolveRequest(int client, std::string response) {
+    Value* target = rulesState.requests[client];
+    assert(target->kind == Value::Kind::STRING && "Response recieved doesn't match target type.");
+    static_cast<StringValue*>(target)->value = response;
+    rulesState.requests.erase(client);
+}
+void GameState::resolveRequest(int client, int response) {
+    Value* target = rulesState.requests[client];
+    assert(target->kind == Value::Kind::INTEGER && "Response recieved doesn't match target type.");
+    static_cast<IntegerValue*>(target)->value = response;
+    rulesState.requests.erase(client);
+}
+void GameState::resolveRequest(int client, bool response) {
+    Value* target = rulesState.requests[client];
+    assert(target->kind == Value::Kind::BOOLEAN && "Response recieved doesn't match target type.");
+    static_cast<BooleanValue*>(target)->value = response;
+    rulesState.requests.erase(client);
+}
+
+bool GameState::shouldResume() {
+    return rulesState.isParallel || rulesState.requests.size() == 0;
 }

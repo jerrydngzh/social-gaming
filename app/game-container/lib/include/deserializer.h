@@ -21,13 +21,13 @@ class GameStateFactory {
 
         ListValue* weapons = new ListValue("weapons", {rock, paper, scissors});
 
-        gameState.addConstant(weapons);
+        // gameState.addConstant(weapons);
 
-        // Variables
-        gameState.addVariable(new ListValue("winners", {}));
+        // // Variables
+        // gameState.addVariable(new ListValue("winners", {}));
 
-        // Per Player
-        gameState.addPerPlayer(new IntegerValue("wins", 0));
+        // // Per Player
+        // gameState.addPerPlayer(new IntegerValue("wins", 0));
 
         return gameState;
     }
