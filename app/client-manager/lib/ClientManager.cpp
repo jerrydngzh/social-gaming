@@ -117,7 +117,7 @@ void ClientManager::textEntryHandler(const std::string &s)
         }
         else
         {
-            // expect INPUT
+            // expect INPUT: <command> <input_data>
             MessageProcessors::ClientRequestMessageDTO requestDTO = matchOutgoingCommandToRequest(s);
             std::string outgoingMessage = this->clientMessageProcessor->buildOutgoingClientMessage(requestDTO);
             client->send(outgoingMessage);
@@ -126,6 +126,7 @@ void ClientManager::textEntryHandler(const std::string &s)
     }
 }
 
+// format of entered text: <command> <message>
 MessageProcessors::ClientRequestMessageDTO ClientManager::matchOutgoingCommandToRequest(std::string_view textEntry)
 {
     MessageProcessors::ClientRequestMessageDTO requestDTO;

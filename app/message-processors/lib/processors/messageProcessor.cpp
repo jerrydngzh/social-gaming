@@ -58,7 +58,6 @@ ClientResponseMessageDTO ClientMessageProcessor::processIncomingServerResponseMe
         incomingDTO.command = command;
         incomingDTO.commandData = commandData;
     } catch (std::exception& e) {
-        std::cout << "exception: " << e.what() << std::endl;
         incomingDTO.messageStatus = false;
         incomingDTO.messageResult = "Error parsing incoming message";
     }
