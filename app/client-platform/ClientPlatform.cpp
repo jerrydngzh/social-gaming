@@ -1,23 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//                         Single Threaded Networking
-//
-// This file is distributed under the MIT License. See the LICENSE file
-// for details.
-/////////////////////////////////////////////////////////////////////////////
-
-
-#include "Client.h"
-#include "ChatWindow.h"
-
 #include <iostream>
 #include <unistd.h>
 
+#include "ClientManager.h"
+#include "ChatWindow.h"
 
 /*
 TODO: 
 - add the main screen display
     - enter a name
     - (C) to create a game
+      - supply a game file (via file directory)
+      - get list of available games
     - (J) to join a game
 */
 int main(int argc, char* argv[]) {
@@ -27,36 +20,9 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  networking::Client client{argv[1], argv[2]};
-  bool done = false;
-  auto onTextEntry = [&done, &client] (std::string text) {
-    if ("exit" == text || "quit" == text) {
-      done = true;
-    } else {
-      client.send(text);
-    }
-  };
-
-  ChatWindow chatWindow(onTextEntry);
-
-  while (!done && !client.isDisconnected()) {
-    try {
-      client.update();
-    } catch (std::exception& e) {
-      chatWindow.displayText("Exception from Client update:");
-      chatWindow.displayText(e.what());
-      done = true;
-    }
-
-    // display incoming messages from server
-    auto response = client.receive();
-    if (!response.empty()) {
-      chatWindow.displayText(response);
-    }
-
-    // send a message to the server
-    chatWindow.update();
-  }
-
+  char* ip = argv[1];
+  std::string_view ipAddress(ip);
+  ClientManager clientManager(ipAddress, argv[2]);
+  clientManager.startClient();
   return 0;
 }

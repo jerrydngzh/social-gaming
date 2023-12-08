@@ -15,6 +15,7 @@ add_subdirectory(networking)
 add_subdirectory(message-processors)
 add_subdirectory(server-manager)
 add_subdirectory(server-platform)
+add_subdirectory(client-manager)
 add_subdirectory(client-platform)
 
 

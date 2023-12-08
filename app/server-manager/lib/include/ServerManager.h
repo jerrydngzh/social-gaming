@@ -24,7 +24,13 @@ enum class Command
     INPUT,
     INVALID,
     DISCONNECT,
-    NEW_CONNECTION
+    NEW_CONNECTION,
+    USERNAME,
+    MENU_SELECT,
+    SELECT_CREATE,
+    SELECT_JOIN,
+    INFO,
+    GAME_END,
 };
 
 class ServerManager
@@ -49,15 +55,17 @@ private:
         {"JOIN", Command::JOIN},
         {"INPUT", Command::INPUT},
         {"DISCONNECT", Command::DISCONNECT},
-        {"NEW_CONNECTION", Command::NEW_CONNECTION}};
+        {"NEW_CONNECTION", Command::NEW_CONNECTION},
+        {"INVALID", Command::INVALID},
+        {"USERNAME", Command::USERNAME}};
 
     std::unordered_map<Command, std::string> OutputCommandMap{
-        { Command::CREATE, "CREATE",},
-        { Command::JOIN, "JOIN",},
-        { Command::INPUT, "INPUT",},
-        { Command::INVALID, "INVALID",},
-        { Command::DISCONNECT, "DISCONNECT",},
-        { Command::NEW_CONNECTION, "NEW_CONNECTION"}};
+        {Command::CREATE, "CREATE"},
+        {Command::JOIN, "JOIN"},
+        {Command::INPUT, "INPUT"},
+        {Command::INVALID, "INVALID"},
+        {Command::DISCONNECT, "DISCONNECT"},
+        {Command::NEW_CONNECTION, "NEW_CONNECTION"}};
 
     // ===================== SERVICES =====================
     std::unique_ptr<Server> server;

@@ -1,6 +1,5 @@
 add_executable(ClientPlatform
   ClientPlatform.cpp
-  ChatWindow.cpp
 )
 
 set_target_properties(ClientPlatform
@@ -10,13 +9,10 @@ set_target_properties(ClientPlatform
                       PREFIX ""
 )
 
-find_package(Curses REQUIRED)
-find_package(Threads REQUIRED)
-
 target_link_libraries(ClientPlatform
   networking
-  ${CURSES_LIBRARIES}
-  ${CMAKE_THREAD_LIBS_INIT}
+  message-processors-lib
+  client-manager-lib
 )
 
 install(TARGETS ClientPlatform

@@ -8,33 +8,6 @@ BUILD_DIR := *build
 TEST_DIR := app
 
 #******************************
-#	        CLIENT
-#******************************
-
-CLIENT_DIR := $(APP_DIR)/client-platform
-CLIENT_BUILD_DIR := client-platform-build
-CLIENT_TEST_DIR := $(CLIENT_DIR)/test
-
-# Creates directory and runs cmake to build the project
-build-client:
-	@echo "[INFO] Building 'client'" ; \
-	echo "[SETUP] Copying '$(TEST_DIR)/gtest' directory to $(CLIENT_TEST_DIR)" ; \
-	cp -r $(TEST_DIR)/gtest $(CLIENT_TEST_DIR) ; \
-	mkdir -p $(CLIENT_BUILD_DIR) ; \
-	cd $(CLIENT_BUILD_DIR) && cmake ../$(CLIENT_DIR)
-
-# Compiles the C++ code for the project
-compile-client:
-	@echo "[INFO] Compiling 'client'" ; \
-	$(MAKE) -C $(CLIENT_BUILD_DIR) --silent
-
-# Runs the test-suite
-test-client:
-	@echo "[INFO] client tests commencing..." ; \
-	cd $(CLIENT_BUILD_DIR) && bin/tests-client
-
-
-#******************************
 #	   CORE GAME ENGINE
 #******************************
 
@@ -185,6 +158,37 @@ test-server:
 
 #******************************
 #		SERVER MANAGER
+#******************************
+# cannot build as independent component, only available through integrated build
+
+#******************************
+#	        CLIENT
+#******************************
+
+CLIENT_DIR := $(APP_DIR)/client-platform
+CLIENT_BUILD_DIR := client-platform-build
+CLIENT_TEST_DIR := $(CLIENT_DIR)/test
+
+# Creates directory and runs cmake to build the project
+build-client:
+	@echo "[INFO] Building 'client'" ; \
+	echo "[SETUP] Copying '$(TEST_DIR)/gtest' directory to $(CLIENT_TEST_DIR)" ; \
+	cp -r $(TEST_DIR)/gtest $(CLIENT_TEST_DIR) ; \
+	mkdir -p $(CLIENT_BUILD_DIR) ; \
+	cd $(CLIENT_BUILD_DIR) && cmake ../$(CLIENT_DIR)
+
+# Compiles the C++ code for the project
+compile-client:
+	@echo "[INFO] Compiling 'client'" ; \
+	$(MAKE) -C $(CLIENT_BUILD_DIR) --silent
+
+# Runs the test-suite
+test-client:
+	@echo "[INFO] client tests commencing..." ; \
+	cd $(CLIENT_BUILD_DIR) && bin/tests-client
+
+#******************************
+#		CLIENT MANAGER
 #******************************
 # cannot build as independent component, only available through integrated build
 
