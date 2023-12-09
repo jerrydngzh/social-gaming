@@ -22,11 +22,11 @@ class ChatWindowImpl;
 
 class ChatWindow {
 public:
-  explicit ChatWindow(std::function<void(std::string)> onTextEntry)
-    : ChatWindow{std::move(onTextEntry), 1}
+  explicit ChatWindow(std::function<void(std::string)> textEntryHandler)
+    : ChatWindow{std::move(textEntryHandler), 1}
       { }
 
-  ChatWindow(std::function<void(std::string)> onTextEntry, int updateDelay);
+  ChatWindow(std::function<void(std::string)> textEntryHandler, int updateDelay);
   // The default constructor is out of line to defer it until the implementation
   // of ChatWindowImpl is known.
   ~ChatWindow();

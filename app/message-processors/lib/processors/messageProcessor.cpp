@@ -12,7 +12,6 @@ const std::string JSON_DATA_ACCESSOR = "data";
 
 RequestMessageDTO MessageProcessor::processRequestMessageImpl(std::string_view message) {
     json jsonObj = json::parse(message);
-    // uintptr_t clientId = jsonObj[JSON_CLIENT_ID_ACCESSOR];
     std::string command = jsonObj[JSON_COMMAND_ACCESSOR];
     
     // NOTE: we're passing down data as a string to be processed in the 
@@ -26,7 +25,6 @@ RequestMessageDTO MessageProcessor::processRequestMessageImpl(std::string_view m
 }
 
 std::string MessageProcessor::processResponseMessageImpl(const ResponseMessageDTO& message) {
-    uintptr_t clientId = message.clientId;
     bool messageStatus = message.messageStatus;
     std::string_view messageResult = message.messageResult;
     std::string_view command = message.command;
@@ -35,11 +33,46 @@ std::string MessageProcessor::processResponseMessageImpl(const ResponseMessageDT
     std::stringstream jsonStream; 
 
     jsonStream << "{";
-    jsonStream << "\"clientId\":" << clientId << ",";
     jsonStream << "\"messageStatus\":" << std::boolalpha << messageStatus << ",";
     jsonStream << "\"messageResult\":\"" << messageResult << "\",";
     jsonStream << "\"command\":\"" << command << "\",";
     jsonStream << "\"commandData\":\"" << commandData << "\"";
+    jsonStream << "}";
+
+    std::string jsonString = jsonStream.str();
+    return jsonString;
+}
+
+ClientResponseMessageDTO ClientMessageProcessor::processIncomingServerResponseMessageImpl(std::string_view message) {
+    ClientResponseMessageDTO incomingDTO;
+    try {
+        json jsonObj = json::parse(message);
+
+        bool messageStatus = jsonObj["messageStatus"];
+        std::string messageResult = jsonObj["messageResult"];
+        std::string command = jsonObj["command"];
+        std::string commandData = jsonObj["commandData"];
+
+        incomingDTO.messageStatus = messageStatus;
+        incomingDTO.messageResult = messageResult;
+        incomingDTO.command = command;
+        incomingDTO.commandData = commandData;
+    } catch (std::exception& e) {
+        incomingDTO.messageStatus = false;
+        incomingDTO.messageResult = "Error parsing incoming message";
+    }
+    return incomingDTO;
+}
+
+std::string ClientMessageProcessor::buildOutgoingClientMessageImpl(const ClientRequestMessageDTO& message) {
+    std::string command = message.command;
+    std::string data = message.data;
+
+    std::stringstream jsonStream; 
+
+    jsonStream << "{";
+    jsonStream << "\"command\":\"" << command << "\",";
+    jsonStream << "\"data\":\"" << data << "\"";
     jsonStream << "}";
 
     std::string jsonString = jsonStream.str();

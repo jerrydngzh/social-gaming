@@ -20,7 +20,7 @@
 
 class ChatWindowImpl {
 public:
-  ChatWindowImpl(std::function<void(std::string)> onTextEntry, int updateDelay);
+  ChatWindowImpl(std::function<void(std::string)> textEntryHandler, int updateDelay);
   ~ChatWindowImpl();
   ChatWindowImpl(ChatWindowImpl&) = delete;
   ChatWindowImpl(ChatWindowImpl&&) = delete;
@@ -40,7 +40,7 @@ public:
   void displayText(const std::string& text);
 
 private:
-  std::function<void(std::string)> onTextEntry;
+  std::function<void(std::string)> textEntryHandler;
 
   int parentX   = 0;
   int parentY   = 0;
@@ -57,9 +57,9 @@ private:
 };
 
 
-ChatWindowImpl::ChatWindowImpl(std::function<void(std::string)> onTextEntry,
+ChatWindowImpl::ChatWindowImpl(std::function<void(std::string)> textEntryHandler,
                                int updateDelay)
-  : onTextEntry{std::move(onTextEntry)} {
+  : textEntryHandler{std::move(textEntryHandler)} {
   initscr();
   noecho();
   halfdelay(updateDelay);
@@ -126,7 +126,7 @@ ChatWindowImpl::processInput(int key) {
     case '\n':
       // Requesting validation synchs the seen field & the buffer.
       form_driver(entryForm, REQ_VALIDATION);
-      onTextEntry(getFieldString());
+      textEntryHandler(getFieldString());
       move(1, 1);
       set_field_buffer(entryField, 0, "");
       refresh();
@@ -183,9 +183,9 @@ ChatWindowImpl::getFieldString() const {
 ////////////////////////////////////////////////////////////////////////////////
 
 
-ChatWindow::ChatWindow(std::function<void(std::string)> onTextEntry,
+ChatWindow::ChatWindow(std::function<void(std::string)> textEntryHandler,
                        int updateDelay)
-  : impl{std::make_unique<ChatWindowImpl>(std::move(onTextEntry), updateDelay)}
+  : impl{std::make_unique<ChatWindowImpl>(std::move(textEntryHandler), updateDelay)}
     { }
 
 
