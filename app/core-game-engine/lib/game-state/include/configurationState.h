@@ -7,8 +7,8 @@
 
 class Setting {
    public:
-    const std::string name;
-    const enum Kind {
+    std::string name;
+    enum Kind {
         BOOLEAN,
         INTEGER,
         STRING,

@@ -26,7 +26,21 @@ struct DtoFromGame {
     std::string command;
     std::variant<int, bool> value;
     std::tuple<int, int> range; // in the case of bool its one
-    std::vector<Setting*> settings;
+    Setting setting;
+    std::vector<std::string> validInputs;
+
+    DtoFromGame& operator=(const DtoFromGame& other) {
+        if (this != &other) {
+            isParallel = other.isParallel;
+            clientID = other.clientID;
+            command = other.command;
+            value = other.value;
+            range = other.range;
+            setting = other.setting;
+            validInputs = other.validInputs;
+        }
+        return *this;
+    }
 };
 
 struct DTOtoGame {
@@ -66,4 +80,5 @@ struct ClientsToServerDataObject
     int clientID;
     std::string command;
     std::string data;
+    bool isPlayer;
 };

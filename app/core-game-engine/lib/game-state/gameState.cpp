@@ -1,6 +1,15 @@
 #include "gameState.h"
 
 #include <cassert>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
+std::string fileToString(const std::string& filepath);
+
+extern "C" {
+TSLanguage* tree_sitter_socialgaming();
+}
 
 // Destructor
 
@@ -42,8 +51,17 @@ void GameState::addPerAudience(Value* value) {
     perAudienceValues[value->name] = value;
 }
 
-void GameState::setRuleTree(ts::Tree* tree) {
+void GameState::setGameFile(std::string path) {
+    // Rule Tree
+    ts::Language language = tree_sitter_socialgaming();
+    ts::Parser parser{language};
+    std::string fileContents = fileToString(path);
+    ts::Tree* tree = new ts::Tree(parser.parseString(fileContents));
+
+    rulesState.rawGameFile = fileContents;
     rulesState.tree = tree;
+    rulesState.currentNode = tree->getRootNode().getChildByFieldName("rules");
+    rulesState.nextNode = rulesState.currentNode;
 }
 
 // Configuration
@@ -92,4 +110,19 @@ void GameState::resolveRequest(int client, bool response) {
 
 bool GameState::shouldResume() {
     return rulesState.isParallel || rulesState.requests.size() == 0;
+}
+
+std::string fileToString(const std::string& filepath) {
+    std::ifstream file;
+    file.open(filepath);
+
+    if (!file.is_open()) {
+        throw std::invalid_argument("Error opening file. Check if file path is correct");
+    }
+
+    std::ostringstream buffer;
+    buffer << file.rdbuf();
+    std::string fileContents = buffer.str();
+
+    return fileContents;
 }
