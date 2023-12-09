@@ -7,6 +7,7 @@
 class RulesState {
    public:
     // Rules position
+    std::string rawGameFile;
     ts::Tree* tree = nullptr;
     ts::Node currentNode = ts::Node(TSNode());
     ts::Node nextNode = ts::Node(TSNode());

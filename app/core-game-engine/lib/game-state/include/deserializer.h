@@ -2,35 +2,11 @@
 // Will basically have factory methods that return a ready GameState object
 #pragma once
 
-#include <fstream>
-#include <iostream>
-#include <sstream>
-
 #include "gameState.h"
 // #include staticDataStructure
 
-extern "C" {
-TSLanguage* tree_sitter_socialgaming();
-}
-
 class GameStateFactory {
     // THIS CURRENTLY STUBS ROCK PAPER SCISSORS!
-   private:
-    static std::string fileToString(const std::string& filepath) {
-        std::ifstream file;
-        file.open(filepath);
-
-        if (!file.is_open()) {
-            throw std::invalid_argument("Error opening file. Check if file path is correct");
-        }
-
-        std::ostringstream buffer;
-        buffer << file.rdbuf();
-        std::string fileContents = buffer.str();
-
-        return fileContents;
-    }
-
    public:
     static GameState createInitialGameState(/*StaticData d*/) {
         GameState gameState;
@@ -54,12 +30,7 @@ class GameStateFactory {
         // Per Player
         gameState.addPerPlayer(new IntegerValue("wins", 0));
 
-        // Rule Tree
-        ts::Language language = tree_sitter_socialgaming();
-        ts::Parser parser{language};
-        ts::Tree* tree = new ts::Tree(parser.parseString(fileToString("test-game-files/rock-paper-scissors.game")));
-
-        gameState.setRuleTree(tree);
+                gameState.setGameFile("test-game-files/rock-paper-scissors.game");
 
         return gameState;
     }

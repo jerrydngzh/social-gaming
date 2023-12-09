@@ -1,5 +1,7 @@
 #include "interpreter.h"
 
+#include <cassert>
+
 extern "C" {
 TSLanguage* tree_sitter_socialgaming();
 }
@@ -12,6 +14,13 @@ DtoFromGame outputMessage(int clientID, std::string message, int timeout);
 DtoFromGame outputScores(std::map<int, int> scores);
 DtoFromGame nullDto();
 DtoFromGame endGameDto();
+
+std::string getValue(ts::Node node);
+
+Value* parseExpression(ts::Node node);
+Value* parseQualifiedIdentifier(ts::Node node);
+
+void printNode(std::string message, ts::Node node);
 
 const ts::Language Interpreter::language = tree_sitter_socialgaming();
 
@@ -120,16 +129,123 @@ class ForAction : public Interpreter::Action {
     void execute(const ts::Node& node) override {
         // std::cout << node.getSExpr().get();
         //  First initialize identifier
-        std::cout << "FOR: " << node.getChild(0).getType() << std::endl;
-        std::cout << "IDENTIFIER: " << node.getChild(1).getType() << std::endl;
-        std::cout << "IN: " << node.getChild(2).getType() << std::endl;
-        std::cout << "LIST: " << node.getChild(3).getType() << std::endl;
-        std::cout << "BODY: " << node.getChild(4).getType() << std::endl;
+        printNode("FOR", node.getChild(0));
+        printNode("IDENTIFIER", node.getChild(1));
+        printNode("IN", node.getChild(2));
+        printNode("LIST", node.getChild(3));
+        printNode("BODY", node.getChild(4));
         return;
     }
 };
 
-class InputAction : public Interpreter::Action {
+class DiscardAction : public Interpreter::Action {
+   public:
+    void execute(const ts::Node& node) override {
+        printNode("DISCARD", node.getChild(0));
+        printNode("EXPRESSION", node.getChild(1));
+        printNode("LIST", node.getChild(3));
+        printNode("TERMINATOR", node.getChild(4));
+
+        std::string targetListName = getValue(node.getChild(3));
+
+        assert(gs->values.at(targetListName)->kind == Value::Kind::LIST);
+
+        MapValue* targetList = (MapValue*)(gs->values.at(targetListName));
+
+        Value* expression = parseExpression(node.getChild(1));
+        assert(expression->kind == Value::Kind::INTEGER);
+
+        int numToDiscard = ((IntegerValue*)expression)->value;
+        delete expression;  // TODO: Smart Pointers
+
+        // erase first numToDiscard elements of targetList (discard n elements)
+        auto it = targetList->value.begin();
+        while (numToDiscard-- > 0 && it != targetList->value.end()) {
+            it = targetList->value.erase(it);
+        }
+
+        return;
+    }
+};
+
+class AssignmentAction : public Interpreter::Action {
+   public:
+    void execute(const ts::Node& node) override {
+        printNode("ASSIGNMENT", node);
+        printNode("TARGET", node.getChild(0));
+        printNode("ASSIGNMENT OPERATOR", node.getChild(1));
+        printNode("EXPRESSION", node.getChild(2));
+        printNode("TERMINATOR", node.getChild(3));
+
+        Value* target = parseQualifiedIdentifier(node.getChild(0));
+
+        Value* newValue = parseExpression(node.getChild(2));
+        delete newValue;  // TODO: smart pointers
+
+        // target = newValue; TODO: need to implement =operator to assign new value
+
+        return;
+    }
+};
+
+class MessageAction : public Interpreter::Action {
+   public:
+    void execute(const ts::Node& node) override {
+        printNode("MESSAGE", node);
+        printNode("MESSAGE", node.getChild(0));
+        printNode("TARGET", node.getChild(1));
+        printNode("STRING", node.getChild(2));
+        printNode("TERMINATOR", node.getChild(3));
+
+        Value* message = parseExpression(node.getChild(0));
+        assert(message->kind == Value::Kind::STRING || true);  // TODO parseExpression string
+        std::string outMessage = "";
+
+        for (auto p : gs->players) {
+            gs->rulesState.isParallel = true;
+            request = outputMessage(p.second->id, outMessage, 0);
+        }
+        return;
+    }
+};
+
+class InputChoiceAction : public Interpreter::Action {
+   public:
+    void execute(const ts::Node& node) override {
+        printNode("INPUT CHOICE", node);
+        printNode("INPUT CHOICE", node.getChild(0));
+        printNode("TO", node.getChild(1));
+        printNode("TARGET", node.getChild(2));
+        printNode("PROMPT", node.getChild(3));
+        printNode("STRING", node.getChild(4));
+        printNode("CHOICES", node.getChild(5));
+        printNode("OPTION LIST", node.getChild(6));
+        printNode("TARGET", node.getChild(7));
+        printNode("IDENTIFIER", node.getChild(8));
+        printNode("TIMEOUT", node.getChild(9));
+        printNode("EXPRESSION", node.getChild(10));
+        return;
+    }
+};
+
+// TODO
+class ExtendAction : public Interpreter::Action {
+   public:
+    void execute(const ts::Node& node) override {
+        return;
+    }
+};
+
+// TODO
+class MatchAction : public Interpreter::Action {
+   public:
+    void execute(const ts::Node& node) override {
+        return;
+    }
+};
+
+// TODO
+class ScoresAction : public Interpreter::Action {
    public:
     void execute(const ts::Node& node) override {
         return;
@@ -144,14 +260,17 @@ const std::map<ts::Symbol, Interpreter::Action*> Interpreter::actions = {
     {ts::Symbol(98), new RecurseAction()},  // Outermost rules node (98)
     {toSymbol("rule"), new RecurseAction()},
     {toSymbol("for"), new ForAction()},
+    {toSymbol("discard"), new DiscardAction()},
+    {toSymbol("assignment"), new AssignmentAction()},
+    {toSymbol("message"), new MessageAction()},
+    {toSymbol("input_choice"), new InputChoiceAction()},
     // Add more symbols and corresponding action objects
 };
 DtoFromGame requestInputChoice(Value* target, int clientID, std::string prompt, std::vector<std::string> choices, int timeout) {
     gs->rulesState.requests.insert(std::make_pair(clientID, target));
     return DtoFromGame{gs->rulesState.isParallel, clientID, "INPUT", false, {0, 0}, Setting("null", Setting::Kind::INTEGER), choices};
 }
-DtoFromGame outputMessage(Value* target, int clientID, std::string message, int timeout) {
-    gs->rulesState.requests.insert(std::make_pair(clientID, target));
+DtoFromGame outputMessage(int clientID, std::string message, int timeout) {
     return DtoFromGame{gs->rulesState.isParallel, clientID, "INPUT", false, {0, 0}, Setting("null", Setting::Kind::INTEGER), {}};
 }
 DtoFromGame nullDto() {
@@ -159,4 +278,23 @@ DtoFromGame nullDto() {
 }
 DtoFromGame endGameDto() {
     return DtoFromGame{false, 0, "GAMEEND", false, {0, 0}, Setting("null", Setting::Kind::INTEGER), {}};
+}
+
+std::string getValue(ts::Node node) {
+    return std::string(node.getSourceRange(gs->rulesState.rawGameFile));
+}
+
+Value* parseExpression(ts::Node node) {
+    // TODO: evaluate expressions
+    // TODO: change to smart pointer
+    return new IntegerValue(0);
+}
+
+Value* parseQualifiedIdentifier(ts::Node node) {
+    // TODO: find the value* that this qualified identfier is refering to
+    return nullptr;
+}
+
+void printNode(std::string message, ts::Node node) {
+    std::cout << message << ": " << node.getType() << " Value: " << getValue(node) << std::endl;
 }
