@@ -6,8 +6,8 @@
 #include <map>
 #include <string>
 #include <string_view>
-#include "DTO.h"
 
+#include "DTO.h"
 #include "gameState.h"
 
 // Handles the execution of a game
@@ -22,8 +22,8 @@ class Interpreter {
     const static ts::Language language;
     const static std::map<ts::Symbol, Action*> actions;
     static ts::Symbol toSymbol(const std::string_view& symbolName);
-    Interpreter();
-    ~Interpreter();
+    Interpreter() = delete;
+    ~Interpreter() = delete;
 
-    DtoFromGame run(GameState* gs);
+    static DtoFromGame run(GameState* gs);
 };

@@ -44,8 +44,8 @@ void GameState::addPerAudience(Value* value) {
 
 void GameState::setRuleTree(ts::Tree* tree) {
     rulesState.tree = tree;
-    rulesState.currentNode = tree->getRootNode();
-    rulesState.nextNode = tree->getRootNode();
+    rulesState.currentNode = tree->getRootNode().getChildByFieldName("rules");
+    rulesState.nextNode = rulesState.currentNode;
 }
 
 // Configuration
