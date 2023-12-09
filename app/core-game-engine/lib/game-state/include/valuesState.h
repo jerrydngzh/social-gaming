@@ -53,7 +53,7 @@ class IntegerValue : public Value {
     int value;
     IntegerValue(std::string name, int value) : Value(name, Kind::INTEGER, false), value(value){};
     IntegerValue(int value) : Value(Kind::INTEGER, false), value(value){};
-    ~IntegerValue();
+    ~IntegerValue() = default;
 };
 
 class BooleanValue : public Value {

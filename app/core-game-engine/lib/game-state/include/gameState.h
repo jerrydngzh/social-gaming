@@ -30,7 +30,7 @@ class GameState {
     void addPerPlayer(Value* value);
     void addPerAudience(Value* value);
 
-    void setRuleTree(ts::Tree* tree);
+    void setGameFile(std::string path);
 
     // Methods used in the game lobby
 

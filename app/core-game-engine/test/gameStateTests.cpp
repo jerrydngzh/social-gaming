@@ -62,8 +62,8 @@ TEST(gameState, initialization) {
 }
 
 TEST(gameState, factroy) {
-    GameStateFactory gSF;
-    GameState gS = gSF.createInitialGameState();
+    GameState gS = GameStateFactory::createInitialGameState();
+    gS.addConstant(new BooleanValue("boolTest", true));
 
     EXPECT_EQ(gS.values["weapons"]->kind, Value::Kind::LIST);
 }
